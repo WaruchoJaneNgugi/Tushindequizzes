@@ -50,13 +50,22 @@ export const TopBar: FC = () => {
         useEffect(() => {
             setActiveSidebarFilter(activeFilter || 'all');
         }, [activeFilter]);
-        const handleEditProfile = async (updates) => {
-            // Handle saving profile updates
-            console.log('Saving updates:', updates);
-            // After successful save, close the edit overlay
-            setShowEditProfile(false);
-            // Optionally reopen the profile overlay
-            setShowProfileOverlay(true);
+        const handleEditProfile = async () => {
+            try {
+                // Handle saving profile updates
+                // console.log('Saving updates:', updates);
+
+                // You would typically make an API call here
+                // await api.updateProfile(updates);
+
+                // After successful save, close the edit overlay
+                setShowEditProfile(false);
+                // Optionally reopen the profile overlay
+                setShowProfileOverlay(true);
+            } catch (error) {
+                console.error('Failed to update profile:', error);
+                // Handle error (you might want to show an error message in the UI)
+            }
         };
 
         const toggleAuthModal = (mode: 'login' | 'signup') => {
