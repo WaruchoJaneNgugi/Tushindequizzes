@@ -58,7 +58,7 @@ export const GameGrid = () => {
                     {filteredGames.length > 0 ? (
                         filteredGames.map((card) => (
                             <div
-                                className="game-card"
+                                className="main-game-card"
                                 key={card.id}
                                 onClick={() => handleGameCardClick(card)}
                             >

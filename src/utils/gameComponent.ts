@@ -17,6 +17,7 @@
 import { MainGameLayout } from "../Games/BibleQuiz/MainGameLayout.tsx";
 import { type ComponentType } from 'react';
 import Quest from "../Games/WordQuest/components/Quest.tsx";
+import {MathQuiz} from "../Games/MathQuiz/MathQuiz.tsx";
 
 // Create a placeholder component for missing games
 // const PlaceholderGame = () => {
@@ -30,8 +31,8 @@ import Quest from "../Games/WordQuest/components/Quest.tsx";
 
 export const gameComponents: Record<string, ComponentType<{}>> = {
     'bible-quiz': MainGameLayout,
-    'word-quest':Quest
-    // 'chemsha-bongo': PlaceholderGame, // Add placeholder
+    'word-quest':Quest,
+    'math-quiz':MathQuiz
 };
 
 export const getGameComponent = (gameId: string | number): ComponentType<{}> | null => {

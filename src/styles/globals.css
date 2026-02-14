@@ -1194,7 +1194,7 @@ input:-webkit-autofill:active {
 /*}*/
 
 /* Game Card Styles */
-.game-card {
+.main-game-card {
     background: transparent;
     border-radius: 12px;
     overflow: hidden;
@@ -1207,7 +1207,7 @@ input:-webkit-autofill:active {
     /*height: 100%;*/
 }
 
-.game-card:hover {
+.main-game-card:hover {
     display: flex;
     align-items: center;
     transform: translateY(-4px);
@@ -1263,7 +1263,7 @@ input:-webkit-autofill:active {
     border-radius: 10px;
 }
 
-.game-card:hover .game-card-image {
+.main-game-card:hover .game-card-image {
     transform: scale(1.05);
 }
 
