@@ -86,7 +86,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                   <div className="profile-dropdown">
                     <div className="dropdown-header">
                       <p className="dropdown-user-name">{user.name}</p>
-                      <p className="dropdown-user-email">{user.email}</p>
+                      {/*<p className="dropdown-user-email">{user.email}</p>*/}
                     </div>
                     <div className="dropdown-divider"></div>
                     <button

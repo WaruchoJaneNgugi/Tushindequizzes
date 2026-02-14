@@ -9,8 +9,8 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
-  const [isOTPSent, setIsOTPSent] = useState(false);
+  // const [otp, setOtp] = useState('');
+  // const [isOTPSent, setIsOTPSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -71,47 +71,47 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   };
 
 
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!otp || otp.length !== 6) {
-      setError('Please enter a valid 6-digit OTP code');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setSuccessMessage('');
-
-    try {
-      const response = await apiService.verifyOTP(phoneNumber, otp);
-
-      if (!response.success) {
-        setError(response.error || 'Invalid OTP. Please try again.');
-        return;
-      }
-
-      if (response.data?.token) {
-        // Set the token
-        apiService.setToken(response.data.token);
-
-        // Create admin user with the phone number
-        const adminUser: AdminUser = {
-          id: 'admin-otp-verified',
-          name: 'Admin User',
-          phone: phoneNumber,
-        };
-
-        onLogin(adminUser);
-        setSuccessMessage('OTP verified successfully! Redirecting...');
-      }
-    } catch (err) {
-      console.error('OTP verification error:', err);
-      setError(`OTP verification failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleVerifyOTP = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //
+  //   // if (!otp || otp.length !== 6) {
+  //   //   setError('Please enter a valid 6-digit OTP code');
+  //   //   return;
+  //   // }
+  //
+  //   setLoading(true);
+  //   setError('');
+  //   setSuccessMessage('');
+  //
+  //   try {
+  //     const response = await apiService.verifyOTP(phoneNumber);
+  //
+  //     if (!response.success) {
+  //       setError(response.error || 'Invalid OTP. Please try again.');
+  //       return;
+  //     }
+  //
+  //     if (response.data?.token) {
+  //       // Set the token
+  //       apiService.setToken(response.data.token);
+  //
+  //       // Create admin user with the phone number
+  //       const adminUser: AdminUser = {
+  //         id: 'admin-otp-verified',
+  //         name: 'Admin User',
+  //         phone: phoneNumber,
+  //       };
+  //
+  //       onLogin(adminUser);
+  //       setSuccessMessage('OTP verified successfully! Redirecting...');
+  //     }
+  //   } catch (err) {
+  //     console.error('OTP verification error:', err);
+  //     setError(`OTP verification failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
 
 
@@ -130,7 +130,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
           </div>
 
-          <form onSubmit={isOTPSent ? handleVerifyOTP : handleLogin} className="login-form">
+          <form onSubmit={handleLogin} className="login-form">
             {error && (
                 <div className="error-message" style={{
                   background: 'rgba(255, 107, 107, 0.1)',
@@ -168,14 +168,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                   className="form-input"
                   placeholder="1234567890"
                   required
-                  disabled={loading || isOTPSent}
+                  disabled={loading}
               />
               {/*<p className="subtitle fs-xs mt-1">*/}
               {/*  Enter exactly: <strong>1234567890</strong>*/}
               {/*</p>*/}
             </div>
 
-            {!isOTPSent && (
+            {/*{!isOTPSent && (*/}
                 <div className="form-group">
                   <label className="form-label">Password</label>
                   <input
@@ -191,7 +191,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                   {/*  Enter exactly: <strong>password123</strong>*/}
                   {/*</p>*/}
                 </div>
-            )}
+            {/*)}*/}
 
             {/*{isOTPSent && (*/}
             {/*    <div className="form-group">*/}
@@ -238,14 +238,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 style={{ padding: '0.875rem' }}
                 disabled={loading}
             >
-              {loading ? (
+              {loading && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <svg className="icon-sm animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 Processing...
               </span>
-              ) : isOTPSent ? 'Verify OTP' : 'Sign In'}
+              )}
             </button>
 
             {/*{!isOTPSent && (*/}

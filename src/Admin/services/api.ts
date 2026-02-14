@@ -49,9 +49,10 @@ class ApiService {
             Object.entries(headers).forEach(([key, value]) => {
                 if (typeof value === 'string') {
                     normalized[key] = value;
-                } else if (typeof value === 'number' || typeof value === 'boolean') {
-                    normalized[key] = value.toString();
                 }
+                // else if (typeof value === 'number' || typeof value === 'boolean') {
+                //     normalized[key] = value.toString();
+                // }
             });
         }
 

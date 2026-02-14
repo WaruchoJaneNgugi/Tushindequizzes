@@ -194,10 +194,10 @@ const Quizzes: React.FC<QuizzesProps> = ({ quizzes, setQuizzes, categories, ques
               ],
               correctAnswerText: formData.markingAnswer,
               points: 10,
-              gameId: editingQuiz.id,
-              correctAnswer: formData.markingAnswer,
-              createdAt: questionResponse.data.question.createdAt || new Date().toISOString(),
-              updatedAt: questionResponse.data.question.updatedAt
+              // gameId: editingQuiz.id,
+              // correctAnswer: formData.markingAnswer,
+              // createdAt: questionResponse.data.question.createdAt || new Date().toISOString(),
+              // updatedAt: questionResponse.data.question.updatedAt
             };
             setQuestions(prev => [...prev, newQuestion]);
           }
@@ -259,10 +259,10 @@ const Quizzes: React.FC<QuizzesProps> = ({ quizzes, setQuizzes, categories, ques
               ],
               correctAnswerText: formData.markingAnswer,
               points: 10,
-              gameId: newQuiz.id,
-              correctAnswer: formData.markingAnswer,
-              createdAt: questionResponse.data.question.createdAt || new Date().toISOString(),
-              updatedAt: questionResponse.data.question.updatedAt
+              // gameId: newQuiz.id,
+              // correctAnswer: formData.markingAnswer,
+              // createdAt: questionResponse.data.question.createdAt || new Date().toISOString(),
+              // updatedAt: questionResponse.data.question.updatedAt
             };
             setQuestions(prev => [...prev, newQuestion]);
           }
