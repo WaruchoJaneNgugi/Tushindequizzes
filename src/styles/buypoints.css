@@ -232,7 +232,7 @@
 
 .popular-badge {
     position: absolute;
-    top: -10px; /* Adjust position */
+    top: -1px; /* Adjust position */
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);

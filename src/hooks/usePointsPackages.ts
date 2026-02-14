@@ -17,10 +17,10 @@ export const usePointsPackages = (): UsePointsPackagesReturn => {
     const pointsPackages: PointsPackage[] = useMemo(() => [
         { id: 1, points: 7, price: 10, popular: false },
         { id: 2, points: 15, price: 20, popular: false },
-        { id: 3, points: 35, price: 50, popular: true },
-        { id: 4, points: 75, price: 100, popular: false },
-        { id: 5, points: 160, price: 200, popular: false },
-        { id: 6, points: 250, price: 300, popular: false },
+        { id: 3, points: 40, price: 50, popular: false },
+        { id: 4, points: 85, price: 100, popular: true },
+        { id: 5, points: 170, price: 200, popular: false },
+        { id: 6, points: 255, price: 300, popular: false },
     ], []);
 
     const getPackageById = (id: number): PointsPackage | undefined => {
