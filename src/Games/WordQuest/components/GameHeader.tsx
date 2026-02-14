@@ -1,0 +1,96 @@
+import React, {useRef, useEffect, useState} from 'react';
+import type {GameState} from '../types';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+    faLightbulb,
+    faCog,
+    faVolumeXmark,
+    faVolumeHigh,
+    faCircleQuestion,
+    faChevronLeft
+} from '@fortawesome/free-solid-svg-icons';
+
+interface GameHeaderProps {
+    gameState: GameState;
+    isMuted: boolean;
+    onQuit: () => void;
+    onHint: () => void;
+    onToggleMute: () => void;
+    onShowHowTo: () => void;
+}
+
+const GameHeader: React.FC<GameHeaderProps> = ({
+                                                   gameState,
+                                                   isMuted,
+                                                   onQuit,
+                                                   onHint,
+                                                   onToggleMute,
+                                                   onShowHowTo
+                                               }) => {
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const settingsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+                setIsSettingsOpen(false);
+            }
+        };
+        if (isSettingsOpen) document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isSettingsOpen]);
+
+    return (
+        <header className="game-navbar">
+            <div className="nav-left">
+                <button className="nav-icon-btn" onClick={onQuit}>
+                    <FontAwesomeIcon icon={faChevronLeft}/>
+                </button>
+                <div className="nav-meta">
+                    <span className="nav-cat">{gameState.category.name}</span>
+                    <span className="nav-diff">{gameState.difficulty}</span>
+                </div>
+            </div>
+
+            <div className="nav-stats">
+                <div className="stat-pill score-pill">
+                    <span className="label">SCORE</span>
+                    <span className="val">{gameState.score}</span>
+                </div>
+            </div>
+
+            <div className="nav-right">
+                <button className="nav-icon-btn" onClick={onHint} disabled={gameState.status !== 'PLAYING'}>
+                    <FontAwesomeIcon icon={faLightbulb}/>
+                </button>
+                <div className="settings-wrapper" ref={settingsRef}>
+                    <button className={`nav-icon-btn ${isSettingsOpen ? 'active' : ''}`}
+                            onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
+                        <FontAwesomeIcon icon={faCog}/>
+                    </button>
+                    {isSettingsOpen && (
+                        <div className="settings-dropdown">
+                            <button className="dropdown-item" onClick={() => {
+                                onToggleMute();
+                                setIsSettingsOpen(false);
+                            }}>
+                                <FontAwesomeIcon icon={isMuted ? faVolumeXmark : faVolumeHigh}/>
+                                {isMuted ? 'Unmute' : 'Mute'}
+                            </button>
+
+                            <button className="dropdown-item" onClick={() => {
+                                onShowHowTo();
+                                setIsSettingsOpen(false);
+                            }}>
+                                <FontAwesomeIcon icon={faCircleQuestion}/>
+                                How to Play
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </header>
+    );
+};
+
+export default GameHeader;

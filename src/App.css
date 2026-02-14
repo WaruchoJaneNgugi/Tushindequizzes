@@ -1,0 +1,70 @@
+.Main-Container {
+  /*display: flex;*/
+  background: #121d3b;
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Gradient orbs - these will work */
+.Main-Container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+          radial-gradient(circle at 20% 30%, rgba(0, 201, 255, 0.12) 0%, transparent 45%),
+          radial-gradient(circle at 85% 65%, rgba(146, 254, 157, 0.12) 0%, transparent 45%),
+          radial-gradient(circle at 45% 80%, rgba(100, 108, 255, 0.08) 0%, transparent 40%),
+          radial-gradient(circle at 70% 25%, rgba(0, 201, 255, 0.08) 0%, transparent 35%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glowing dots layer */
+.Main-Container::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+          radial-gradient(circle at 10% 20%, rgba(0, 201, 255, 0.4) 0px, transparent 2px),
+          radial-gradient(circle at 25% 60%, rgba(146, 254, 157, 0.4) 0px, transparent 3px),
+          radial-gradient(circle at 70% 40%, rgba(100, 108, 255, 0.4) 0px, transparent 2px),
+          radial-gradient(circle at 85% 80%, rgba(0, 201, 255, 0.3) 0px, transparent 2px),
+          radial-gradient(circle at 40% 30%, rgba(146, 254, 157, 0.3) 0px, transparent 3px),
+          radial-gradient(circle at 90% 15%, rgba(100, 108, 255, 0.4) 0px, transparent 2px),
+          radial-gradient(circle at 15% 90%, rgba(0, 201, 255, 0.3) 0px, transparent 2px),
+          radial-gradient(circle at 55% 70%, rgba(146, 254, 157, 0.3) 0px, transparent 3px),
+          radial-gradient(circle at 95% 50%, rgba(100, 108, 255, 0.4) 0px, transparent 2px);
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+/* Optional twinkling animation for more dynamic effect */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Remove the conflicting background-image from Main-Container */
+.Main-Container {
+  background: #050134;
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,508 @@
+/* ==================== PROFESSIONAL GAMING FILTER DESIGN ==================== */
+/* Premium, clean, gaming-inspired interface with pill-shaped categories */
+
+.games-filter-container {
+    /*max-width: 1600px;*/
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    border:1px solid #1a365e;
+}
+
+/* ===== HERO SECTION ===== */
+.filter-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+    .filter-hero {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(0, 201, 255, 0.15), rgba(146, 254, 157, 0.15));
+    border: 1px solid rgba(0, 201, 255, 0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #00C9FF;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    backdrop-filter: blur(5px);
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+.title-gradient {
+    background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-description {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.5;
+    max-width: 600px;
+}
+.search-filter{
+    display: flex;
+
+}
+
+
+/* ===== SEARCH SECTION - CLEAN & PROMINENT ===== */
+.search-section {
+    width: 100%;
+    /*padding: 0 10px;*/
+    margin-bottom: 5px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 4px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+}
+
+.search-form:focus-within {
+    border-color: rgba(0, 201, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(0, 201, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.search-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 14px 0;
+    font-size: 16px;
+    color: white;
+    min-width: 0;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+}
+
+.search-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-clear:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.search-submit-btn {
+    background: linear-gradient(135deg, #00C9FF, #92FE9D);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.search-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 201, 255, 0.3);
+}
+
+/* ===== CATEGORIES SECTION - PILL DESIGN ===== */
+.categories-section {
+    /*margin-bottom: 4px;*/
+    width: 100%; /* Ensure full width */
+    overflow-x: auto;
+
+}
+.categories-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.categories-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.categories-count {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.categories-pills-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden; /* Prevent vertical scroll */
+    padding: 8px 0 16px; /* Increased bottom padding for scrollbar */
+    margin: 0; /* Remove any margins */
+    width: 100%; /* Full width */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    /*scrollbar-width: thin; !* Firefox *!*/
+    /*scrollbar-color: rgba(0, 201, 255, 0.5) rgba(255, 255, 255, 0.05); !* Firefox *!*/
+
+    /* Force horizontal scrolling */
+    white-space: nowrap;
+    flex-wrap: nowrap; /* Prevent wrapping */
+
+    /* Ensure it doesn't get constrained */
+    /*min-width: 100%;*/
+    max-width: 100%;
+}
+
+/* Webkit scrollbar styling (Chrome, Safari, Edge) */
+.categories-pills-container::-webkit-scrollbar {
+    height: 4px;
+    display: block; /* Force display on mobile */
+}
+
+.categories-pills-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.categories-pills-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #00C9FF, #92FE9D);
+    border-radius: 10px;
+}
+
+.categories-pills-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #00b8e6, #83e68f);
+}
+
+.category-pill {
+    display: inline-flex; /* Changed from flex to inline-flex */
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+    backdrop-filter: blur(5px);
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.category-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 201, 255, 0.3);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.category-pill.active {
+    background: linear-gradient(135deg, #00C9FF, #92FE9D);
+    border-color: transparent;
+    color: #0f172a;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0, 201, 255, 0.3);
+}
+
+.pill-icon {
+    font-size: 16px;
+}
+
+.pill-label {
+    font-weight: 500;
+}
+
+.pill-active-indicator {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 4px;
+    background: linear-gradient(90deg, #00C9FF, #92FE9D);
+    border-radius: 4px;
+    animation: slideIn 0.3s ease;
+}
+
+/* ===== SEARCH RESULTS BAR ===== */
+.search-results-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(0, 201, 255, 0.1), rgba(146, 254, 157, 0.1));
+    border: 1px solid rgba(0, 201, 255, 0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
+}
+
+.results-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.results-icon {
+    font-size: 18px;
+}
+
+.results-text {
+    color: white;
+    font-size: 15px;
+}
+
+.results-text strong {
+    color: #00C9FF;
+    font-weight: 600;
+}
+
+.clear-search-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 8px 18px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== DESKTOP STYLES ===== */
+@media (min-width: 1024px) {
+    .games-filter-container {
+        padding: 32px 28px;
+    }
+
+    .search-form {
+        max-width: 800px;
+    }
+
+    .categories-pills-container {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+
+    .category-pill {
+        padding: 12px 24px;
+        font-size: 15px;
+    }
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+@media (max-width: 640px) {
+    /*.games-filter-container {*/
+    /*    padding: 16px 16px;*/
+    /*}*/
+
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .search-submit-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+
+    .search-input {
+        padding: 12px 0;
+        font-size: 15px;
+    }
+
+    .category-pill {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .pill-icon {
+        font-size: 14px;
+    }
+
+    .search-results-bar {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .clear-search-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-description {
+       display: none;
+    }
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .search-form {
+        flex-wrap: wrap;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    /*.search-icon {*/
+    /*    display: none;*/
+    /*}*/
+
+    .search-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 8px;
+    }
+
+    .search-clear {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .search-submit-btn {
+        width: 100%;
+        padding: 14px;
+    }
+}
+@media (max-width: 768px) {
+    .categories-pills-container {
+        gap: 10px;
+        padding: 8px 4px 16px;
+        /* Ensure it takes full width of viewport */
+        width: calc(100% - 8px);
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+
+    /* Make sure parent doesn't restrict scrolling */
+    .categories-section {
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* Ensure games-filter-container doesn't clip */
+    .games-filter-container {
+        overflow-x: hidden; /* Don't clip child scrollable areas */
+        width: 100%;
+    }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+    .category-pill {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .categories-pills-container {
+        gap: 8px;
+    }
+}

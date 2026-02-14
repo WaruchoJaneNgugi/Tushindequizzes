@@ -1,0 +1,273 @@
+/* Featured Games Section */
+.featured-games-section {
+    max-width: 1600px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+    position: relative;
+    overflow: hidden; /* Prevent any overflow from this section */
+}
+
+.featured-header {
+    text-align: left;
+    margin-bottom: 25px;
+    padding-left: 10px;
+    width: 100%;
+    overflow: hidden; /* Ensure header stays contained */
+}
+
+.featured-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    justify-content: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.featured-icon {
+    font-size: 1.8rem;
+    -webkit-text-fill-color: initial;
+    color: #ff6b6b;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.featured-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    max-width: 100%;
+    margin: 0;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Featured Games Horizontal Scroll Container */
+.featured-games-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; /* Container hides overflow */
+}
+
+.featured-games-scroll-wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0 30px 0;
+    overflow-x: auto; /* This allows horizontal scrolling INSIDE the container */
+    overflow-y: hidden; /* Hide vertical scroll */
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox - hide scrollbar */
+    -ms-overflow-style: none; /* IE and Edge - hide scrollbar */
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Featured Game Card - Horizontal Layout */
+.featured-game-card {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    width: calc(33.333% - 14px); /* 3 cards with gaps */
+    min-width: 300px; /* Minimum width */
+    flex: 0 0 auto; /* Don't grow or shrink */
+}
+
+/* Alternative: Fixed number of visible cards */
+.featured-game-card.fixed-width {
+    width: 320px; /* Fixed width */
+    flex: 0 0 auto;
+}
+
+/* Professional scroll indication */
+.featured-games-scroll-wrapper {
+    position: relative;
+}
+
+/* Add gradient fade on edges to indicate scroll */
+.featured-games-container::before,
+.featured-games-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 30px; /* Match scroll wrapper padding */
+    width: 60px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.featured-games-container::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0) 100%);
+}
+
+.featured-games-container::after {
+    right: 0;
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+/* Navigation arrows for horizontal scroll - ALWAYS VISIBLE for professional UX */
+.featured-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.8; /* Always visible but subtle */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.featured-nav-arrow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+    opacity: 1;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.featured-nav-prev {
+    left: 20px;
+}
+
+.featured-nav-next {
+    right: 20px;
+}
+
+/* Disable arrows when at scroll boundaries */
+.featured-nav-arrow.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Content inside cards - ensure it doesn't overflow */
+.featured-game-content {
+    padding: 20px;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.featured-game-title {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    line-height: 1.3;
+    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.featured-game-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 2.8em;
+    width: 100%;
+}
+
+/* Professional responsive adjustments */
+@media (max-width: 1200px) {
+    .featured-game-card {
+        width: calc(50% - 10px); /* 2 cards on medium screens */
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .featured-games-section {
+        padding: 0 15px;
+    }
+
+    .featured-game-card {
+        width: calc(100% - 20px); /* 1 card on mobile */
+        min-width: 280px;
+        max-width: 100%;
+    }
+
+    .featured-nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .featured-nav-prev {
+        left: 10px;
+    }
+
+    .featured-nav-next {
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .featured-games-section {
+        padding: 0 10px;
+    }
+
+    .featured-title {
+        font-size: 1.5rem;
+    }
+
+    .featured-game-card {
+        min-width: 260px;
+    }
+}
+
+/* Professional touch device support */
+@media (hover: none) and (pointer: coarse) {
+    .featured-games-scroll-wrapper {
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        padding-bottom: 20px;
+    }
+
+    .featured-nav-arrow {
+        display: none; /* Hide arrows on touch devices - use swipe */
+    }
+
+    .featured-games-container::before,
+    .featured-games-container::after {
+        display: none; /* Hide fade on touch devices */
+    }
+}

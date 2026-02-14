@@ -1,0 +1,140 @@
+/* Search Styles - Minimal Addition */
+.search-filter{
+    display: flex;
+    flex-direction: column;
+
+    gap:10px;
+}
+
+@media (min-width: 760px){
+    .search-filter{
+        display: flex;
+        flex-direction: row;
+        gap:10px;
+    }
+}
+.search-toggle-container {
+    display: flex;
+    /*align-items: center;*/
+    place-items: center;
+    gap: 10px;
+    /*border:1px solid white;*/
+    /*margin-left: auto;*/
+}
+
+.search-toggle-btn {
+    background: none;
+    /*border: none;*/
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: #9b9999;
+    border:1px solid rgba(155, 153, 153, 0.52);
+}
+
+.search-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+.search-bar-wrapper {
+    animation: slideIn 0.3s ease-out;
+}
+
+.search-bar-form {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    padding: 5px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.search-bar-input {
+    border: none;
+    outline: none;
+    padding: 8px 4px;
+    font-size: 14px;
+    width: 200px;
+    background: transparent;
+}
+
+.search-bar-input::placeholder {
+    color: #999;
+}
+
+.search-clear-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-clear-button:hover {
+    color: #666;
+}
+
+.search-results-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    margin: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.search-query-text {
+    font-size: 14px;
+    color: #666;
+}
+
+.clear-search-link {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px 8px;
+}
+
+.clear-search-link:hover {
+    color: #333;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-toggle-container {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .search-bar-input {
+        width: 100%;
+        min-width: 150px;
+    }
+}
+
+/*no result message*/
+/* No Results Message - Matches Theme */

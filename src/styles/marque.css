@@ -1,0 +1,190 @@
+/* Category Descriptions Marquee */
+.descriptions-marquee-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 28px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    background: linear-gradient(
+            135deg,
+            rgba(0, 201, 255, 0.08) 0%,
+            rgba(146, 254, 157, 0.08) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.descriptions-marquee-track {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    align-items: center;
+    padding-left: 100%;
+    gap: 60px;
+    animation: descriptionsMarquee 60s linear infinite;
+    will-change: transform;
+}
+
+.descriptions-marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    height: 100%;
+    position: relative;
+}
+
+.description-text {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.2px;
+}
+
+.description-category {
+    background: rgba(0, 201, 255, 0.15);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(0, 201, 255, 0.3);
+}
+
+.description-icon {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-3px) rotate(5deg);
+    }
+}
+
+@keyframes descriptionsMarquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Speed variations */
+.descriptions-marquee-slow {
+    animation-duration: 80s;
+}
+
+.descriptions-marquee-medium {
+    animation-duration: 60s;
+}
+
+.descriptions-marquee-fast {
+    animation-duration: 40s;
+}
+
+/* Pause on hover */
+.descriptions-marquee-container:hover .descriptions-marquee-track {
+    animation-play-state: paused;
+}
+
+.descriptions-marquee-container:hover .description-text {
+    -webkit-text-fill-color: white;
+    color: white;
+}
+
+/* Gradient edges for smooth fade */
+.descriptions-marquee-container::before,
+.descriptions-marquee-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.descriptions-marquee-container::before {
+    left: 0;
+    background: linear-gradient(
+            90deg,
+            var(--bg-color, rgba(15, 23, 42, 1)) 0%,
+            rgba(15, 23, 42, 0) 100%
+    );
+}
+
+.descriptions-marquee-container::after {
+    right: 0;
+    background: linear-gradient(
+            90deg,
+            rgba(15, 23, 42, 0) 0%,
+            var(--bg-color, rgba(15, 23, 42, 1)) 100%
+    );
+}
+
+/* Glowing effect on current category */
+.descriptions-marquee-item.current .description-text {
+    text-shadow: 0 0 20px rgba(0, 201, 255, 0.5);
+}
+
+.descriptions-marquee-item.current .description-category {
+    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    color: #0f172a;
+    box-shadow: 0 0 15px rgba(0, 201, 255, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .descriptions-marquee-container {
+        height: 26px;
+    }
+
+    .description-text {
+        font-size: 0.85rem;
+    }
+
+    .description-category {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+    }
+
+    .descriptions-marquee-track {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .descriptions-marquee-container {
+        height: 24px;
+    }
+
+    .description-text {
+        font-size: 0.8rem;
+    }
+
+    .description-category {
+        display: none; /* Hide category on very small screens */
+    }
+
+    .descriptions-marquee-track {
+        gap: 30px;
+    }
+}
