@@ -110,8 +110,8 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
 
     return (
         <>
-            <div className="overlay-overlay" onClick={onClose} />
-            <div className="feature-overlay">
+            <div className="overlay-overlay-editprofile" onClick={onClose} />
+            <div className="feature-overlay-editprofile">
                 <div className="feature-overlay-header">
                     <div className="feature-header-left">
                         <button className="feature-back-button" onClick={onClose}>
