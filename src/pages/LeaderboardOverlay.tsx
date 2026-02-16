@@ -1,47 +1,75 @@
-import {useAuth} from "../hooks/useAuth.ts";
-import type {FC} from "react";
-import "../styles/featureoverlay.css"
+import { useAuth } from "../hooks/useAuth";
+import type { FC } from "react";
+import { useState } from "react";
+import { useLeaderboard } from "../hooks/useLeaderboard";
+import "../styles/featureoverlay.css";
+import type {LeaderboardPeriod} from "../Store/leaderboardService.ts";
 
 interface LeaderboardOverlayProps {
     onClose: () => void;
+    gameId?: string;
 }
 
-export const LeaderboardOverlay: FC<LeaderboardOverlayProps> = ({ onClose }) => {
+export const LeaderboardOverlay: FC<LeaderboardOverlayProps> = ({ onClose, gameId = 'default' }) => {
     const { user } = useAuth();
+    const {
+        leaderboardData,
+        pagination,
+        loading,
+        error,
+        currentPeriod,
+        userRank,
+        changePeriod,
+        goToPage,
+        refresh
+    } = useLeaderboard(gameId);
 
-    // Mock data - replace with actual API call
-    const leaderboardData = [
-        { rank: 1, name: 'Alex Johnson', points: 12500, games: 48 },
-        { rank: 2, name: 'Maria Garcia', points: 11200, games: 42 },
-        { rank: 3, name: 'David Chen', points: 9800, games: 39 },
-        { rank: 4, name: user?.username || 'You', points: user?.pointsBalance || 0, games: 35, isCurrentUser: true },
-        { rank: 5, name: 'Emma Wilson', points: 7500, games: 30 },
-        { rank: 6, name: 'James Brown', points: 7200, games: 28 },
-        { rank: 7, name: 'Sophia Lee', points: 6800, games: 26 },
-        { rank: 8, name: 'Michael Wang', points: 6500, games: 24 },
-        { rank: 9, name: 'Olivia Taylor', points: 6200, games: 23 },
-        { rank: 10, name: 'Daniel Martinez', points: 5900, games: 22 },
-    ];
+    const [showFullscreen, setShowFullscreen] = useState(false);
+
+    const handlePeriodChange = (period: LeaderboardPeriod) => {
+        changePeriod(period);
+    };
+
+    const formatPeriodLabel = (period: string): string => {
+        switch(period) {
+            case 'daily': return 'Daily';
+            case 'weekly': return 'Weekly';
+            case 'monthly': return 'Monthly';
+            case 'all_time': return 'All Time';
+            default: return period;
+        }
+    };
+
+    const formatDate = (dateString: string): string => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    // Find current user in leaderboard data
+    const currentUserEntry = leaderboardData.find(entry => entry.userId === user?.id);
 
     return (
         <>
             <div className="overlay-overlay" onClick={onClose} />
-            <div className="feature-overlay">
+            <div className={`feature-overlay ${showFullscreen ? 'fullscreen' : ''}`}>
                 <div className="feature-overlay-header">
                     <div className="feature-header-left">
                         <button className="feature-back-button" onClick={onClose}>
                             <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            {/*<span className="back-text">Back</span>*/}
                         </button>
                     </div>
                     <div className="feature-header-center">
                         <h2 className="feature-title">Leaderboard</h2>
-                        <p className="feature-subtitle">Top Players This Week</p>
+                        <p className="feature-subtitle">Top Players - {formatPeriodLabel(currentPeriod)}</p>
                     </div>
                     <div className="feature-header-right">
-                        <button className="feature-action-button">
+                        <button className="feature-action-button" onClick={() => setShowFullscreen(!showFullscreen)}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 <path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -50,10 +78,11 @@ export const LeaderboardOverlay: FC<LeaderboardOverlayProps> = ({ onClose }) => 
                                 <path d="M14 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                        <button className="feature-action-button">
+                        <button className="feature-action-button" onClick={refresh} disabled={loading}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.858 5.151 14.63 5.736 15.483 5.736C17.324 5.736 18.02 7.499 16.707 8.597C16.014 9.181 15.733 10.107 16.016 10.941C16.442 12.697 14.816 14.168 13.297 13.317C12.589 12.941 11.411 12.941 10.703 13.317C9.184 14.168 7.558 12.697 7.984 10.941C8.267 10.107 7.986 9.181 7.293 8.597C5.98 7.499 6.676 5.736 8.517 5.736C9.37 5.736 10.142 5.151 10.325 4.317Z" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M15 19C15 19.7956 14.6839 20.5587 14.1213 21.1213C13.5587 21.6839 12.7956 22 12 22C11.2044 22 10.4413 21.6839 9.87868 21.1213C9.31607 20.5587 9 19.7956 9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M23 4V10H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M1 20V14H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M3.51 9C4.0177 7.56686 4.8794 6.28546 6.01545 5.27541C7.1515 4.26535 8.52172 3.56385 10.0008 3.24489C11.4799 2.92593 13.0168 3.00136 14.4569 3.46381C15.8971 3.92626 17.1899 4.7563 18.21 5.87L23 10M1 14L5.79 18.13C6.8101 19.2437 8.1029 20.0737 9.54305 20.5362C10.9832 20.9986 12.5201 21.0741 13.9992 20.7551C15.4783 20.4362 16.8485 19.7347 17.9846 18.7246C19.1206 17.7145 19.9823 16.4331 20.49 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
                     </div>
@@ -61,83 +90,184 @@ export const LeaderboardOverlay: FC<LeaderboardOverlayProps> = ({ onClose }) => 
 
                 <div className="feature-overlay-content">
                     <div className="leaderboard-container">
+                        {/* Header with filters and stats */}
                         <div className="leaderboard-header">
                             <div className="leaderboard-filters">
-                                <button className="filter-btn active">Weekly</button>
-                                <button className="filter-btn">Monthly</button>
-                                <button className="filter-btn">All Time</button>
+                                {(['daily', 'weekly', 'monthly', 'all_time'] as LeaderboardPeriod[]).map(period => (
+                                    <button
+                                        key={period}
+                                        className={`filter-btn ${currentPeriod === period ? 'active' : ''}`}
+                                        onClick={() => handlePeriodChange(period)}
+                                        disabled={loading}
+                                    >
+                                        {formatPeriodLabel(period)}
+                                    </button>
+                                ))}
                             </div>
+
                             <div className="leaderboard-stats">
                                 <div className="stat-item">
                                     <span className="stat-label">Your Rank</span>
-                                    <span className="stat-value">#4</span>
+                                    <span className="stat-value">
+                                        {userRank ? `#${userRank.rank}` : currentUserEntry ? `#${currentUserEntry.rank}` : '-'}
+                                    </span>
                                 </div>
                                 <div className="stat-item">
                                     <span className="stat-label">Total Players</span>
-                                    <span className="stat-value">1,247</span>
+                                    <span className="stat-value">{pagination.total.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="leaderboard-list">
-                            <div className="leaderboard-row header">
-                                <div className="rank-col">Rank</div>
-                                <div className="name-col">Player</div>
-                                <div className="points-col">Points</div>
-                                <div className="games-col">Games</div>
+                        {/* Loading State */}
+                        {loading && (
+                            <div className="loading-container">
+                                <div className="loading-spinner"></div>
+                                <p>Loading leaderboard...</p>
                             </div>
-                            {leaderboardData.map((player) => (
-                                <div
-                                    key={player.rank}
-                                    className={`leaderboard-row ${player.isCurrentUser ? 'current-user' : ''}`}
-                                >
-                                    <div className="rank-col">
-                                        {player.rank <= 3 ? (
-                                            <span className={`rank-badge rank-${player.rank}`}>
-                                                {player.rank}
-                                            </span>
-                                        ) : (
-                                            <span className="rank-number">{player.rank}</span>
-                                        )}
-                                    </div>
-                                    <div className="name-col">
-                                        <div className="player-info">
-                                            <div className="player-avatar">
-                                                {player.name.charAt(0)}
-                                            </div>
-                                            <div className="player-details">
-                                                <span className="player-name">{player.name}</span>
-                                                {player.isCurrentUser && (
-                                                    <span className="player-tag">You</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="points-col">
-                                        <span className="points-value">{player.points.toLocaleString()}</span>
-                                    </div>
-                                    <div className="games-col">
-                                        <span className="games-count">{player.games}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        )}
 
-                        <div className="leaderboard-footer">
-                            <div className="current-user-highlight">
-                                <div className="current-user-rank">
-                                    <span className="current-rank-label">Your Position</span>
-                                    <span className="current-rank-value">#4</span>
-                                </div>
-                                <div className="current-user-points">
-                                    <span className="current-points-label">Your Points</span>
-                                    <span className="current-points-value">{user?.pointsBalance || 0}</span>
-                                </div>
-                                <button className="btn-view-all">
-                                    View Full Leaderboard
+                        {/* Error State */}
+                        {error && (
+                            <div className="error-container">
+                                <p className="error-message">{error}</p>
+                                <button onClick={refresh} className="retry-button">
+                                    Try Again
                                 </button>
                             </div>
-                        </div>
+                        )}
+
+                        {/* Leaderboard List */}
+                        {!loading && !error && (
+                            <>
+                                <div className="leaderboard-list">
+                                    <div className="leaderboard-row header">
+                                        <div className="rank-col">Rank</div>
+                                        <div className="name-col">Player</div>
+                                        <div className="score-col">Score</div>
+                                        <div className="stats-col">W/L</div>
+                                        <div className="winrate-col">Win Rate</div>
+                                    </div>
+
+                                    {leaderboardData.length > 0 ? (
+                                        leaderboardData.map((player) => (
+                                            <div
+                                                key={player.userId}
+                                                className={`leaderboard-row ${player.userId === user?.id ? 'current-user' : ''}`}
+                                            >
+                                                <div className="rank-col">
+                                                    {player.rank <= 3 ? (
+                                                        <span className={`rank-badge rank-${player.rank}`}>
+                                                            {player.rank === 1 && '🥇'}
+                                                            {player.rank === 2 && '🥈'}
+                                                            {player.rank === 3 && '🥉'}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="rank-number">#{player.rank}</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="name-col">
+                                                    <div className="player-info">
+                                                        <div className="player-avatar">
+                                                            {player.username?.charAt(0).toUpperCase() || '?'}
+                                                        </div>
+                                                        <div className="player-details">
+                                                            <span className="player-name">{player.username}</span>
+                                                            {player.userId === user?.id && (
+                                                                <span className="player-tag">You</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="score-col">
+                                                    <span className="score-value">{player.score.toLocaleString()}</span>
+                                                </div>
+
+                                                <div className="stats-col">
+                                                    <span className="stats-value">
+                                                        {player.wins}/{player.losses}
+                                                    </span>
+                                                </div>
+
+                                                <div className="winrate-col">
+                                                    <span className="winrate-value">{player.winRate.toFixed(1)}%</span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="empty-state">
+                                            <p>No leaderboard data available for this period.</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Pagination */}
+                                {pagination.pages > 1 && (
+                                    <div className="pagination">
+                                        <button
+                                            className="pagination-btn"
+                                            onClick={() => goToPage(pagination.page - 1)}
+                                            disabled={pagination.page === 1 || loading}
+                                        >
+                                            ← Prev
+                                        </button>
+
+                                        <span className="pagination-info">
+                                            Page {pagination.page} of {pagination.pages}
+                                        </span>
+
+                                        <button
+                                            className="pagination-btn"
+                                            onClick={() => goToPage(pagination.page + 1)}
+                                            disabled={pagination.page === pagination.pages || loading}
+                                        >
+                                            Next →
+                                        </button>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* User Stats Footer */}
+                        {user && (currentUserEntry || userRank) && (
+                            <div className="leaderboard-footer">
+                                <div className="current-user-highlight">
+                                    <div className="current-user-rank">
+                                        <span className="current-rank-label">Your Position</span>
+                                        <span className="current-rank-value">
+                                            #{currentUserEntry?.rank || userRank?.rank || '-'}
+                                        </span>
+                                    </div>
+                                    <div className="current-user-stats">
+                                        <div className="current-stat">
+                                            <span className="current-stat-label">Score</span>
+                                            <span className="current-stat-value">
+                                                {currentUserEntry?.score.toLocaleString() || userRank?.score.toLocaleString() || 0}
+                                            </span>
+                                        </div>
+                                        <div className="current-stat">
+                                            <span className="current-stat-label">W/L</span>
+                                            <span className="current-stat-value">
+                                                {currentUserEntry ? `${currentUserEntry.wins}/${currentUserEntry.losses}` : '0/0'}
+                                            </span>
+                                        </div>
+                                        <div className="current-stat">
+                                            <span className="current-stat-label">Win Rate</span>
+                                            <span className="current-stat-value">
+                                                {currentUserEntry ? `${currentUserEntry.winRate.toFixed(1)}%` : '0%'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {currentUserEntry?.lastPlayed && (
+                                        <div className="last-played">
+                                            Last played: {formatDate(currentUserEntry.lastPlayed)}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
