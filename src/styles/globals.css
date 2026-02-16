@@ -1195,18 +1195,18 @@ input:-webkit-autofill:active {
 
 /* Game Card Styles */
 .main-game-card {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
     background: transparent;
     border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /*border: 1px solid rgba(255, 255, 255, 0.1);*/
     display: flex;
     flex-direction: row;
     max-width: 200px;
-    /*height: 100%;*/
+    aspect-ratio: 1 / 1;
 }
-
 .main-game-card:hover {
     display: flex;
     align-items: center;
@@ -1217,7 +1217,7 @@ input:-webkit-autofill:active {
 
 .game-card-image-container {
     width: 100%;
-    max-width: 200px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1227,26 +1227,7 @@ input:-webkit-autofill:active {
     background: #0f172a;
     position: relative;
     border-radius: 10px;
-
-    /* Gradient border using box-shadow */
-    box-shadow:
-            inset 0 0 0 1px rgba(0, 253, 160, 0.09),
-            0 0 20px rgba(0, 253, 176, 0.16);
-
-    /* Optional: Add a subtle glow effect */
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 10px;
-        pointer-events: none;
-        box-shadow:
-                inset 0 0 15px rgba(0, 247, 190, 0.09),
-                inset 0 0 30px rgba(0, 247, 190, 0.2);
-    }
+    box-shadow: inset 0 0 0 1px rgba(0, 253, 160, 0.09), 0 0 20px rgba(0, 253, 176, 0.16);
 }
 
 /*.main-game-Grid{*/
@@ -1254,19 +1235,26 @@ input:-webkit-autofill:active {
 /*}*/
 
 .game-card-image {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    /*max-height: 80%;*/
-    object-fit: fill;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease;
-    border-radius: 10px;
 }
 
 .main-game-card:hover .game-card-image {
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
+
+@media (hover: none) and (pointer: coarse) {
+    .game-card-hover {
+        display: none; /* Hide hover on touch devices */
+    }
+
+    .main-game-card:active {
+        transform: scale(0.98);
+    }
+}
 .game-card-content {
     padding: 20px;
     flex-grow: 1;
@@ -1400,19 +1388,20 @@ input:-webkit-autofill:active {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: linear-gradient(135deg, rgba(0, 201, 255, 0.13), rgba(146, 254, 157, 0.24));
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: 12px;
+    border-radius: 10px;
     width: 100%;
-    max-width: 200px;
-    -webkit-tap-highlight-color: transparent;
+    height: 100%;
+    z-index: 30; /* Higher z-index to ensure it's above everything */
+    pointer-events: none; /* Allow clicks to pass through to the card */
 }
 
-.game-card:hover .game-card-hover {
+.main-game-card:hover .game-card-hover {
     opacity: 1;
     -webkit-tap-highlight-color: transparent;
 
@@ -1421,19 +1410,32 @@ input:-webkit-autofill:active {
 .play-button {
     font-size: 3rem;
     color: white;
-    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
-    width: 60px;
-    height: 60px;
+    background: rgba(0, 0, 0, 0.5);
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transform: scale(0.8);
     transition: transform 0.3s ease;
+    backdrop-filter: blur(4px);
+    /*border: 2px solid white;*/
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
 }
 
-.game-card:hover .play-button {
+/*.game-card:hover .play-button {*/
+/*    transform: scale(1);*/
+/*}*/
+
+.main-game-card:hover .play-button {
     transform: scale(1);
+}
+
+.play-button svg {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px; /* Slight adjustment for play icon centering */
 }
 
 /* Game Overlay Styles */
@@ -1828,7 +1830,7 @@ input:-webkit-autofill:active {
     z-index: 2000;
     display: flex;
     /*align-items: center;*/
-    /*justify-content: center;*/
+    justify-content: center;
     animation: fadeIn 0.3s ease-out;
     height: 100vh;
     overflow-y: visible;
@@ -2860,7 +2862,7 @@ input:-webkit-autofill:active {
     position: absolute;
     top: 8px;
     left: 8px;
-    z-index: 20;
+    z-index: 20; /* Lower than hover overlay (30) */
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2932,7 +2934,7 @@ input:-webkit-autofill:active {
     padding: 4px 8px;
     border-radius: 4px;
     backdrop-filter: blur(2px);
-    z-index: 15;
+    z-index: 15; /* Lower than hover overlay */
 }
 
 /* Animations */
@@ -2963,6 +2965,15 @@ input:-webkit-autofill:active {
         padding: 3px 6px;
         font-size: 0.65rem;
     }
+    .play-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .play-button svg {
+        width: 30px;
+        height: 30px;
+    }
 
     .game-card-title-overlay {
         bottom: 6px;
@@ -2982,7 +2993,15 @@ input:-webkit-autofill:active {
         font-size: 0.55rem;
         gap: 2px;
     }
+    .play-button {
+        width: 40px;
+        height: 40px;
+    }
 
+    .play-button svg {
+        width: 25px;
+        height: 25px;
+    }
     .game-tag-hot .tag-dot,
     .game-tag-new .tag-dot {
         font-size: 0.4rem;
@@ -3009,6 +3028,10 @@ input:-webkit-autofill:active {
 .game-tag-new.bottom {
     top: auto;
     bottom: 8px;
+}
+.main-game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 201, 255, 0.3);
 }
 
 /* Ensure proper positioning */

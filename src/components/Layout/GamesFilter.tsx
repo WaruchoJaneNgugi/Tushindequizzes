@@ -145,14 +145,6 @@ export const GamesFilter = ({onFilterChange, activeFilter}: GamesFilterProps) =>
                 <HeroSlider/>
 
                 <div className="hero-container">
-                    {/*<div className="title-section">*/}
-                    {/*    <h2 className="filter-title">*/}
-                    {/*        <span className="title-text">Trending </span>*/}
-                    {/*        <span className="title-accent">Games </span>*/}
-                    {/*    </h2>*/}
-                    {/*</div>*/}
-
-
                     <div className="descriptions-marquee-container">
                         <div className={`descriptions-marquee-track descriptions-marquee-${marqueeSpeed}`}>
                             {getMarqueeDescriptions().map((desc) => (
@@ -191,56 +183,52 @@ export const GamesFilter = ({onFilterChange, activeFilter}: GamesFilterProps) =>
                     </div>
                 </div>
 
-                {/* Mobile Filter Controls - Professional Redesign */}
                 <div className="mobile-filter-section">
                     {/* Active Category Display */}
                     <div className="mobile-active-category" onClick={handleSearchClick}>
                         {!isSearchActive && (
-                            <div className="active-category-content">
+                            <div className="active-category-content" onClick={handleSearchClick}>
                                 <span className="active-category-icon">{getCurrentIcon()}</span>
                                 <div className="active-category-info">
-                                    <div className="active-category-label">
+                                    <h1 className="active-category-label">
                                         {filterCategories.find(cat => cat.id === currentFilter)?.label || 'All Games'}
-                                    </div>
-                                    <div className="active-category-badge">
-                                        {isSearchActive ? 'Searching...' : 'Tap to search'}
-                                    </div>
+                                    </h1>
+                                    <p className="active-category-badge">
+                                        {isSearchActive ? 'Searching for games...' : 'Tap to search'}
+                                    </p>
                                 </div>
                             </div>
-
                         )}
 
                         <div className={`mobile-search-container ${isSearchActive ? 'active' : ''}`}>
                             <form onSubmit={handleSearchSubmit} className="mobile-search-form">
-                                {/*<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="search-icon">*/}
-                                {/*    <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" strokeLinecap="round" strokeLinejoin="round"/>*/}
-                                {/*</svg>*/}
                                 <input
                                     id="game-search-input"
                                     type="text"
                                     className="mobile-search-input"
-                                    placeholder="Search games..."
+                                    placeholder="Search by name "
                                     value={localSearchQuery}
                                     onChange={handleSearchChange}
                                 />
                                 {localSearchQuery && (
-                                    <button
-                                        type="button"
+                                    <div
+                                        // type="button"
                                         className="mobile-search-clear"
                                         onClick={handleClearSearch}
                                         aria-label="Clear search"
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                                              stroke="currentColor" strokeWidth="2">
                                             <path d="M18 6L6 18M6 6L18 18" strokeLinecap="round"
                                                   strokeLinejoin="round"/>
                                         </svg>
-                                    </button>
+                                    </div>
                                 )}
                             </form>
                         </div>
+
                         <div className="active-category-actions">
-                            <button
+                            <div
                                 className="mobile-search-trigger"
                                 aria-label="Toggle search"
                             >
@@ -257,12 +245,9 @@ export const GamesFilter = ({onFilterChange, activeFilter}: GamesFilterProps) =>
                                             strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 )}
-                            </button>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Search Bar - Slides down */}
-
 
                     {/* Categories Pills with Icons */}
                     <div className="mobile-categories-pills">

@@ -9,27 +9,27 @@ const mockExam: Exam = {
     Code: "GK-PRO",
     levels: [
         {
-            level: 1,
+            level: 1, // Basic Arithmetic
             questions: [
-                { QuestionID: "L1-Q1", QuestionText: "Level 1: 2 + 2?", OptionA: "3", OptionB: "4", OptionC: "5", OptionD: "6", CorrectAnswer: "B" },
-                { QuestionID: "L1-Q2", QuestionText: "Level 1: Color of grass?", OptionA: "Blue", OptionB: "Green", OptionC: "Red", OptionD: "Yellow", CorrectAnswer: "B" },
-                { QuestionID: "L1-Q3", QuestionText: "Level 1: Capital of France?", OptionA: "London", OptionB: "Paris", OptionC: "Rome", OptionD: "Berlin", CorrectAnswer: "B" }
+                { QuestionID: "L1-Q1", QuestionText: "What is 15 + 27?", OptionA: "32", OptionB: "42", OptionC: "38", OptionD: "45", CorrectAnswer: "B" },
+                { QuestionID: "L1-Q2", QuestionText: "What is 12 x 3?", OptionA: "32", OptionB: "36", OptionC: "42", OptionD: "34", CorrectAnswer: "B" },
+                { QuestionID: "L1-Q3", QuestionText: "What is 100 - 45?", OptionA: "65", OptionB: "55", OptionC: "45", OptionD: "50", CorrectAnswer: "B" }
             ]
         },
         {
-            level: 2,
+            level: 2, // Intermediate Algebra & Squares
             questions: [
-                { QuestionID: "L2-Q1", QuestionText: "Level 2: 5 x 5?", OptionA: "20", OptionB: "25", OptionC: "30", OptionD: "35", CorrectAnswer: "B" },
-                { QuestionID: "L2-Q2", QuestionText: "Level 2: Largest planet?", OptionA: "Mars", OptionB: "Jupiter", OptionC: "Earth", OptionD: "Saturn", CorrectAnswer: "B" },
-                { QuestionID: "L2-Q3", QuestionText: "Level 2: Boiling point of water?", OptionA: "90°C", OptionB: "100°C", OptionC: "110°C", OptionD: "120°C", CorrectAnswer: "B" }
+                { QuestionID: "L2-Q1", QuestionText: "Solve: (5 x 5) + (10 / 2)", OptionA: "25", OptionB: "30", OptionC: "20", OptionD: "15", CorrectAnswer: "B" },
+                { QuestionID: "L2-Q2", QuestionText: "What is 14 squared (14²)?", OptionA: "169", OptionB: "196", OptionC: "212", OptionD: "144", CorrectAnswer: "B" },
+                { QuestionID: "L2-Q3", QuestionText: "If 3x = 27, what is x?", OptionA: "7", OptionB: "9", OptionC: "12", OptionD: "6", CorrectAnswer: "B" }
             ]
         },
         {
-            level: 3,
+            level: 3, // Advanced Logic & Roots
             questions: [
-                { QuestionID: "L3-Q1", QuestionText: "Level 3: Square root of 144?", OptionA: "10", OptionB: "12", OptionC: "14", OptionD: "16", CorrectAnswer: "B" },
-                { QuestionID: "L3-Q2", QuestionText: "Level 3: Who wrote 'Hamlet'?", OptionA: "Dickens", OptionB: "Shakespeare", OptionC: "Twain", OptionD: "Austen", CorrectAnswer: "B" },
-                { QuestionID: "L3-Q3", QuestionText: "Level 3: Fastest land animal?", OptionA: "Lion", OptionB: "Cheetah", OptionC: "Horse", OptionD: "Falcon", CorrectAnswer: "B" }
+                { QuestionID: "L3-Q1", QuestionText: "What is the square root of 225?", OptionA: "13", OptionB: "15", OptionC: "25", OptionD: "12", CorrectAnswer: "B" },
+                { QuestionID: "L3-Q2", QuestionText: "Solve: 2³ + 4²", OptionA: "20", OptionB: "24", OptionC: "16", OptionD: "22", CorrectAnswer: "B" },
+                { QuestionID: "L3-Q3", QuestionText: "What is 25% of 200?", OptionA: "40", OptionB: "50", OptionC: "60", OptionD: "25", CorrectAnswer: "B" }
             ]
         }
     ]

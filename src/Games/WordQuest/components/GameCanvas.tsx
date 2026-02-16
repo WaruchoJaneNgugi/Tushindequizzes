@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import type { GameState, Position, PlacedWord } from '../types';
 import { COLORS, HIGHLIGHT_COLORS } from '../constants';
@@ -8,6 +9,7 @@ interface GameCanvasProps {
   onWordSelection: (start: Position, end: Position) => void;
   width: number;
   height: number;
+  isMobile: boolean;
 }
 
 interface AnimationState {
@@ -15,7 +17,7 @@ interface AnimationState {
   cells: Position[];
 }
 
-const GameCanvas: React.FC<GameCanvasProps> = ({ gameState, onWordSelection, width, height }) => {
+const GameCanvas: React.FC<GameCanvasProps> = ({ gameState, onWordSelection, width, height, isMobile }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number | null>(null);
   const prevPlacedWords = useRef<PlacedWord[]>([]);
@@ -170,8 +172,8 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ gameState, onWordSelection, wid
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // Slightly reduced font scaling for better spacing on mobile/high-density grids
-    const baseFontSize = Math.min(cellW, cellH) * 0.5;
+    const fontSizeMultiplier = isMobile ? 0.65 : 0.5;
+    const baseFontSize = Math.min(cellW, cellH) * fontSizeMultiplier;
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -216,7 +218,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ gameState, onWordSelection, wid
       ctx.lineTo(width, i * cellH);
       ctx.stroke();
     }
-  }, [gameState, dragState, cellW, cellH, rows, cols, width, height, activeAnimations]);
+  }, [gameState, dragState, cellW, cellH, rows, cols, width, height, activeAnimations, isMobile]);
 
   useEffect(() => {
     const render = () => {
