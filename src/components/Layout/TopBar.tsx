@@ -12,7 +12,7 @@ import {LeaderboardOverlay} from "../../pages/LeaderboardOverlay.tsx";
 // import {RewardsOverlay} from "../../pages/RewardsOverlay.tsx";
 import {HistoryOverlay} from "../../pages/HistoryOverlay.tsx";
 import {ProfileOverlay} from "../../pages/ProfileOverlay.tsx";
-import {AchievementsOverlay} from "./Achievements.tsx";
+import {AchievementsOverlay} from "./AchievementsOverlay.tsx";
 import {EditProfileOverlay} from "../../pages/EditProfileOverlay.tsx";
 // import {EditProfileOverlay} from "../../pages/EditProfileOverlay.tsx";
 
@@ -50,6 +50,7 @@ export const TopBar: FC = () => {
         useEffect(() => {
             setActiveSidebarFilter(activeFilter || 'all');
         }, [activeFilter]);
+
         const handleEditProfile = async () => {
             try {
                 // Handle saving profile updates
@@ -188,29 +189,6 @@ export const TopBar: FC = () => {
             }
         };
 
-// // Add this useEffect to sync activeMobileNav with overlay states
-//         useEffect(() => {
-//             // If no overlays are open, set activeMobileNav to 'games'
-//             const isAnyOverlayOpen = showLeaderboardOverlay || showRewardsOverlay ||
-//                 showHistoryOverlay || showProfileOverlay;
-//
-//             if (!isAnyOverlayOpen) {
-//                 setActiveMobileNav('games');
-//             }
-//         }, [showLeaderboardOverlay, showRewardsOverlay, showHistoryOverlay, showProfileOverlay]);
-
-// Update closeAllOverlays to ensure games are shown
-//         const closeAllOverlays = () => {
-//             setShowLeaderboardOverlay(false);
-//             setShowRewardsOverlay(false);
-//             setShowHistoryOverlay(false);
-//             setShowProfileOverlay(false);
-//
-//             // Set active filter to show games
-//             setActiveFilter('all');
-//             setActiveSidebarFilter('all');
-//             setActiveMobileNav('games');
-//         };
         // Close mobile menu when clicking outside
         useEffect(() => {
             const handleClickOutside = (event: MouseEvent) => {
@@ -625,7 +603,7 @@ export const TopBar: FC = () => {
                     </button>
 
                     <button
-                        className={`mobile-bottom-nav-item ${activeMobileNav === 'event' ? 'active' : ''}`}
+                        className={`mobile-bottom-nav-item ${activeMobileNav === 'achievements' ? 'active' : ''}`}
                         onClick={() => isLoggedIn ? handleMobileNavClick('event') : ''}
                     >
                         <span className="mobile-nav-icon">

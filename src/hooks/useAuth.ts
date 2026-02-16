@@ -9,8 +9,10 @@ export const useAuth = () => {
         login,
         signup,
         logout,
+        changePassword,
         updateUser,
         clearError,
+        token,
     } = useAuthStore();
 
     return {
@@ -21,7 +23,9 @@ export const useAuth = () => {
         login,
         signup,
         logout,
+        changePassword,
         updateUser,
         clearError,
+        token
     };
 };

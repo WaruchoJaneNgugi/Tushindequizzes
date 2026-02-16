@@ -5,11 +5,10 @@ import "../styles/featureoverlay.css";
 
 interface EditProfileOverlayProps {
     onClose: () => void;
-    onSave: (updates: { username?: string; newPassword?: string; currentPassword?: string }) => Promise<void>;
 }
 
-export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSave }) => {
-    const { user } = useAuth();
+export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => {
+    const { user, updateUser, changePassword } = useAuth(); // Add changePassword
 
     const [formData, setFormData] = useState({
         username: user?.username || "",
@@ -44,16 +43,20 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
                 return false;
             }
         } else if (activeTab === 'security') {
-            if (formData.newPassword && formData.newPassword.length < 6) {
+            if (!formData.currentPassword) {
+                setError("Current password is required");
+                return false;
+            }
+            if (!formData.newPassword) {
+                setError("New password is required");
+                return false;
+            }
+            if (formData.newPassword.length < 6) {
                 setError("New password must be at least 6 characters");
                 return false;
             }
             if (formData.newPassword !== formData.confirmPassword) {
                 setError("New passwords do not match");
-                return false;
-            }
-            if (formData.newPassword && !formData.currentPassword) {
-                setError("Current password is required to set a new password");
                 return false;
             }
         }
@@ -70,35 +73,30 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
         setSuccess("");
 
         try {
-            const updates: any = {};
-
-            if (activeTab === 'profile' && formData.username !== user?.username) {
-                updates.username = formData.username.trim();
-            }
-
-            if (activeTab === 'security' && formData.newPassword) {
-                updates.newPassword = formData.newPassword;
-                updates.currentPassword = formData.currentPassword;
-            }
-
-            if (Object.keys(updates).length > 0) {
-                await onSave(updates);
-                setSuccess(activeTab === 'profile' ? "Username updated successfully!" : "Password changed successfully!");
+            if (activeTab === 'profile') {
+                // Handle username update
+                if (formData.username !== user?.username) {
+                    await updateUser({ username: formData.username.trim() });
+                    setSuccess("Username updated successfully!");
+                } else {
+                    setSuccess("No changes were made.");
+                }
+            } else if (activeTab === 'security') {
+                // Handle password change
+                await changePassword(formData.currentPassword, formData.newPassword);
+                setSuccess("Password changed successfully!");
 
                 // Reset password fields after successful change
-                if (activeTab === 'security') {
-                    setFormData(prev => ({
-                        ...prev,
-                        currentPassword: "",
-                        newPassword: "",
-                        confirmPassword: ""
-                    }));
-                }
-            } else {
-                setSuccess("No changes were made.");
+                setFormData(prev => ({
+                    ...prev,
+                    currentPassword: "",
+                    newPassword: "",
+                    confirmPassword: ""
+                }));
             }
-        } catch (err: any) {
-            setError(err.message || "Something went wrong. Please try again.");
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+            setError( "Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -108,6 +106,7 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
         onClose();
     };
 
+    // ... rest of your component remains the same (JSX)
     return (
         <>
             <div className="overlay-overlay-editprofile" onClick={onClose} />
