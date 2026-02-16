@@ -15,6 +15,14 @@
 }
 
 @media (max-width: 768px) {
+    .sidebar-overlay {
+        display: none;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+
     .mobile-bottom-nav {
         display: flex;
         justify-content: space-around;
@@ -283,6 +291,7 @@
     padding: 0 10px;
     overflow-y: auto;
 }
+
 .sidebar-nav::-webkit-scrollbar {
     width: 4px;
 }
@@ -424,9 +433,9 @@
     position: relative;
 }
 
-.top-nav-left{
+.top-nav-left {
     display: flex;
-    gap:10px;
+    gap: 10px;
 }
 
 /* Update mobile navigation for not logged in state */
@@ -623,7 +632,6 @@
     /*.games-grid {*/
     /*    margin-bottom: 80px;*/
     /*}*/
-
     /* Adjust mobile bottom nav spacing */
     .mobile-bottom-nav-item {
         min-width: 65px;
