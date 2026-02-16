@@ -1,14 +1,16 @@
+// pages/EditProfileOverlay.tsx
 import type { FC } from "react";
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth.ts";
+import { useAuth } from "../hooks/useAuth";
 import "../styles/featureoverlay.css";
 
 interface EditProfileOverlayProps {
     onClose: () => void;
+    onSave: () => Promise<void>; // This matches what TopBar is passing
 }
 
-export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => {
-    const { user, updateUser, changePassword } = useAuth(); // Add changePassword
+export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSave }) => {
+    const { user, updateUser, changePassword } = useAuth();
 
     const [formData, setFormData] = useState({
         username: user?.username || "",
@@ -28,7 +30,6 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
             ...prev,
             [name]: value
         }));
-        // Clear errors when user starts typing
         if (error) setError("");
     };
 
@@ -78,8 +79,6 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
                 if (formData.username !== user?.username) {
                     await updateUser({ username: formData.username.trim() });
                     setSuccess("Username updated successfully!");
-                } else {
-                    setSuccess("No changes were made.");
                 }
             } else if (activeTab === 'security') {
                 // Handle password change
@@ -94,9 +93,12 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
                     confirmPassword: ""
                 }));
             }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
-            setError( "Something went wrong. Please try again.");
+
+            // Call the onSave prop after successful save
+            await onSave();
+
+        } catch (err: any) {
+            setError(err.message || "Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -106,7 +108,6 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
         onClose();
     };
 
-    // ... rest of your component remains the same (JSX)
     return (
         <>
             <div className="overlay-overlay-editprofile" onClick={onClose} />
@@ -171,7 +172,7 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
                         <div className="current-profile-info">
                             <div className="current-avatar">
                                 <div className="avatar-large">
-                                    {user?.email?.charAt(0).toUpperCase() || 'U'}
+                                    {user?.username?.charAt(0).toUpperCase() || 'U'}
                                 </div>
                             </div>
                             <div className="current-details">
@@ -201,7 +202,7 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose }) => 
                                             disabled={loading}
                                         />
                                         <p className="form-hint">
-                                            Choose a username between 3 and 20 characters. This is how others will see you.
+                                            Choose a username between 3 and 20 characters.
                                         </p>
                                     </div>
                                 </div>

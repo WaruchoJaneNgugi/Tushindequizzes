@@ -1828,10 +1828,10 @@ input:-webkit-autofill:active {
     z-index: 2000;
     display: flex;
     /*align-items: center;*/
-    justify-content: center;
+    /*justify-content: center;*/
     animation: fadeIn 0.3s ease-out;
     height: 100vh;
-    overflow-y: auto;
+    overflow-y: visible;
     /*max-height: 100vh; !* Changed from height: 100vh *!*/
 
 }
@@ -1844,7 +1844,7 @@ input:-webkit-autofill:active {
 .game-overlay-container {
     width: 100%;
     max-width: 1200px;
-    max-height: 100vh; /* Changed from height: 100vh */
+    /*max-height: 100vh; !* Changed from height: 100vh *!*/
     height: 100vh; /* Keep for mobile fallback */
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     border-radius: 24px;

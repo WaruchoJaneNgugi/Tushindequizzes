@@ -74,7 +74,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.5rem;
+  /*padding: 1.5rem;*/
   overflow-y: auto;
 }
 
@@ -354,29 +354,30 @@ html, body, #root {
   align-items: center;
   background-color: rgba(25, 20, 37, 0.95); /* Your #191425 with opacity */
   z-index: 1000;
+  overflow-y:visible;
 }
 
 
 .game-view {
   position: relative;
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
-  max-height: 90vh;
-  overflow-y: auto;
+  /*max-height: 100vh;*/
+  /*overflow-y: auto;*/
   /*width: 100%;*/
   /*max-width: 1300px;*/
-  height: 100dvh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   /*padding: 24px;*/
-  /*overflow: hidden;*/
+  overflow: visible;
   background: var(--surface-color);
   box-shadow: 0 0 100px rgba(0,0,0,0.5);
   /*position: relative;*/
 }
 
 .game-navbar {
-  margin-top:25px;
+  margin-top:10px;
   height: 80px;
   background: var(--surface-color);
   border-bottom: 1px solid var(--border-color);
@@ -385,6 +386,7 @@ html, body, #root {
   align-items: center;
   padding: 0 1.5rem;
   flex-shrink: 0;
+
 }
 
 .nav-left, .nav-right { display: flex; align-items: center; gap: 1rem; }
