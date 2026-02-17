@@ -206,13 +206,12 @@ export const GamesFilter = ({onFilterChange, activeFilter}: GamesFilterProps) =>
                                     id="game-search-input"
                                     type="text"
                                     className="mobile-search-input"
-                                    placeholder="Search by name "
+                                    placeholder="Search by game name "
                                     value={localSearchQuery}
                                     onChange={handleSearchChange}
                                 />
                                 {localSearchQuery && (
                                     <div
-                                        // type="button"
                                         className="mobile-search-clear"
                                         onClick={handleClearSearch}
                                         aria-label="Clear search"

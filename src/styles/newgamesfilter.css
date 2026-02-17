@@ -971,7 +971,6 @@
 .mobile-search-container.active {
     max-height: 60px;
     opacity: 1;
-    margin-top: 10px;
 }
 
 .mobile-search-form {
