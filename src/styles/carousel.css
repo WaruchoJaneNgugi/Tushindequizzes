@@ -448,7 +448,7 @@
     }
 
     .hero-slider-section.parallax-layout .slide-image-side {
-        height: 350px;
+        /*height: 350px;*/
         clip-path: none;
     }
 
