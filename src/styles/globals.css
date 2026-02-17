@@ -1410,7 +1410,6 @@ input:-webkit-autofill:active {
 .play-button {
     font-size: 3rem;
     color: white;
-    background: rgba(0, 0, 0, 0.5);
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -1419,8 +1418,6 @@ input:-webkit-autofill:active {
     justify-content: center;
     transform: scale(0.8);
     transition: transform 0.3s ease;
-    backdrop-filter: blur(4px);
-    /*border: 2px solid white;*/
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
 }
 
