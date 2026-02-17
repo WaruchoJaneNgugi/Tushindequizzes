@@ -1,17 +1,10 @@
-import React, {useRef, useEffect, useState} from 'react';
+
+import React, { useRef, useEffect, useState } from 'react';
 import type {GameState} from '../types';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-    faLightbulb,
-    faCog,
-    faVolumeXmark,
-    faVolumeHigh,
-    faCircleQuestion,
-    faChevronLeft
-} from '@fortawesome/free-solid-svg-icons';
 
 interface GameHeaderProps {
     gameState: GameState;
+    totalPoints: number;
     isMuted: boolean;
     onQuit: () => void;
     onHint: () => void;
@@ -21,6 +14,7 @@ interface GameHeaderProps {
 
 const GameHeader: React.FC<GameHeaderProps> = ({
                                                    gameState,
+                                                   totalPoints,
                                                    isMuted,
                                                    onQuit,
                                                    onHint,
@@ -40,11 +34,13 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isSettingsOpen]);
 
+    const displayedScore = totalPoints + gameState.score;
+
     return (
         <header className="game-navbar">
             <div className="nav-left">
                 <button className="nav-icon-btn" onClick={onQuit}>
-                    <FontAwesomeIcon icon={faChevronLeft}/>
+                    <i className="fa-solid fa-chevron-left"></i>
                 </button>
                 <div className="nav-meta">
                     <span className="nav-cat">{gameState.category.name}</span>
@@ -54,35 +50,30 @@ const GameHeader: React.FC<GameHeaderProps> = ({
 
             <div className="nav-stats">
                 <div className="stat-pill score-pill">
-                    <span className="label">SCORE</span>
-                    <span className="val">{gameState.score}</span>
+                    <span className="label">TOTAL POINTS</span>
+                    <span className="val">{displayedScore}</span>
                 </div>
             </div>
 
             <div className="nav-right">
                 <button className="nav-icon-btn" onClick={onHint} disabled={gameState.status !== 'PLAYING'}>
-                    <FontAwesomeIcon icon={faLightbulb}/>
+                    <i className="fa-solid fa-lightbulb"></i>
                 </button>
                 <div className="settings-wrapper" ref={settingsRef}>
-                    <button className={`nav-icon-btn ${isSettingsOpen ? 'active' : ''}`}
-                            onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
-                        <FontAwesomeIcon icon={faCog}/>
+                    <button
+                        className={`nav-icon-btn ${isSettingsOpen ? 'active' : ''}`}
+                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    >
+                        <i className="fa-solid fa-cog"></i>
                     </button>
                     {isSettingsOpen && (
                         <div className="settings-dropdown">
-                            <button className="dropdown-item" onClick={() => {
-                                onToggleMute();
-                                setIsSettingsOpen(false);
-                            }}>
-                                <FontAwesomeIcon icon={isMuted ? faVolumeXmark : faVolumeHigh}/>
+                            <button className="dropdown-item" onClick={() => { onToggleMute(); setIsSettingsOpen(false); }}>
+                                <i className={`fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}></i>
                                 {isMuted ? 'Unmute' : 'Mute'}
                             </button>
-
-                            <button className="dropdown-item" onClick={() => {
-                                onShowHowTo();
-                                setIsSettingsOpen(false);
-                            }}>
-                                <FontAwesomeIcon icon={faCircleQuestion}/>
+                            <button className="dropdown-item" onClick={() => { onShowHowTo(); setIsSettingsOpen(false); }}>
+                                <i className="fa-solid fa-circle-question"></i>
                                 How to Play
                             </button>
                         </div>
