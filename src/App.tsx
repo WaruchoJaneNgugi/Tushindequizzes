@@ -10,21 +10,21 @@ import {type FC, useEffect, useState} from "react";
 import {ImageLoader} from "./components/ImageLoader.tsx";
 import {
     type AdminUser,
-    type Category,
-    type Player,
-    type Question,
-    type Quiz,
-    type QuizAttempt,
+    // type Category,
+    // type Player,
+    // type Question,
+    // type Quiz,
+    // type QuizAttempt,
 } from "./Admin/types.ts";
-import Dashboard from "./Admin/views/Dashboard.tsx";
-import Quizzes from "./Admin/views/Quizzes.tsx";
-import Categories from "./Admin/views/Categories.tsx";
-import Players from "./Admin/views/Players.tsx";
-import Results from "./Admin/views/Results.tsx";
+// import Quizzes from "./Admin/views/Quizzes.tsx";
+// import Categories from "./Admin/views/Categories.tsx";
+// import Players from "./Admin/views/Players.tsx";
+// import Results from "./Admin/views/Results.tsx";
 import Login from "./Admin/views/Login.tsx";
 import Layout from "./Admin/components/Layout.tsx";
 import {GameOverlay} from "./components/Layout/GameOverlay.tsx";
 import {apiService} from "./Admin/services/api.ts";
+import {Dashboard} from "./Admin/views/Dashboard.tsx";
 
 const AdminLayoutWrapper: FC<{
     user: AdminUser;
@@ -44,11 +44,11 @@ const App: FC = () => {
     const [user, setUser] = useState<AdminUser | null>(null);
 
     // Initialize empty states - each component will fetch its own data
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
+    // const [categories, setCategories] = useState<Category[]>([]);
+    // const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+    // const [questions, setQuestions] = useState<Question[]>([]);
+    // const [players, setPlayers] = useState<Player[]>([]);
+    // const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -86,11 +86,11 @@ const App: FC = () => {
         localStorage.removeItem('admin_user');
         setUser(null);
         // Clear all data on logout
-        setCategories([]);
-        setQuizzes([]);
-        setPlayers([]);
-        setQuestions([]);
-        setAttempts([]);
+        // setCategories([]);
+        // setQuizzes([]);
+        // setPlayers([]);
+        // setQuestions([]);
+        // setAttempts([]);
     };
 
     const handleLogin = (userData: AdminUser) => {
@@ -127,63 +127,63 @@ const App: FC = () => {
 
                 {/* Admin Login Route */}
                 <Route path="/admin/login" element={
-                    !user ? <Login onLogin={handleLogin}/> : <Navigate to="/admin/dashboard" replace/>
+                    !user ? <Login onLogin={handleLogin}/> : <Navigate to="/admin/" replace/>
                 }/>
 
                 {/* Admin Routes */}
                 {user && (
                     <>
-                        <Route path="/admin/dashboard" element={
+                        <Route path="/admin/" element={
                             <AdminLayoutWrapper user={user} onLogout={handleLogout}>
-                                <Dashboard quizzes={quizzes} players={players}/>
+                                <Dashboard />
                             </AdminLayoutWrapper>
                         }/>
 
-                        <Route path="/admin/quizzes" element={
-                            <AdminLayoutWrapper user={user} onLogout={handleLogout}>
-                                <Quizzes
-                                    quizzes={quizzes}
-                                    setQuizzes={setQuizzes}
-                                    categories={categories}
-                                    questions={questions}
-                                    setQuestions={setQuestions}
-                                />
-                            </AdminLayoutWrapper>
-                        }/>
+                        {/*<Route path="/admin/quizzes" element={*/}
+                        {/*    <AdminLayoutWrapper user={user} onLogout={handleLogout}>*/}
+                        {/*        <Quizzes*/}
+                        {/*            quizzes={quizzes}*/}
+                        {/*            setQuizzes={setQuizzes}*/}
+                        {/*            categories={categories}*/}
+                        {/*            questions={questions}*/}
+                        {/*            setQuestions={setQuestions}*/}
+                        {/*        />*/}
+                        {/*    </AdminLayoutWrapper>*/}
+                        {/*}/>*/}
 
-                        <Route path="/admin/categories" element={
-                            <AdminLayoutWrapper user={user} onLogout={handleLogout}>
-                                <Categories
-                                    categories={categories}
-                                    setCategories={setCategories}
-                                    quizzes={quizzes}
-                                    setQuizzes={setQuizzes}
-                                />
-                            </AdminLayoutWrapper>
-                        }/>
+                        {/*<Route path="/admin/categories" element={*/}
+                        {/*    <AdminLayoutWrapper user={user} onLogout={handleLogout}>*/}
+                        {/*        <Categories*/}
+                        {/*            categories={categories}*/}
+                        {/*            setCategories={setCategories}*/}
+                        {/*            quizzes={quizzes}*/}
+                        {/*            setQuizzes={setQuizzes}*/}
+                        {/*        />*/}
+                        {/*    </AdminLayoutWrapper>*/}
+                        {/*}/>*/}
 
-                        <Route path="/admin/players" element={
-                            <AdminLayoutWrapper user={user} onLogout={handleLogout}>
-                                <Players
-                                    players={players}
-                                    setPlayers={setPlayers}
-                                    attempts={attempts}
-                                    quizzes={quizzes}
-                                />
-                            </AdminLayoutWrapper>
-                        }/>
+                        {/*<Route path="/admin/players" element={*/}
+                        {/*    <AdminLayoutWrapper user={user} onLogout={handleLogout}>*/}
+                        {/*        <Players*/}
+                        {/*            players={players}*/}
+                        {/*            setPlayers={setPlayers}*/}
+                        {/*            attempts={attempts}*/}
+                        {/*            quizzes={quizzes}*/}
+                        {/*        />*/}
+                        {/*    </AdminLayoutWrapper>*/}
+                        {/*}/>*/}
 
-                        <Route path="/admin/results" element={
-                            <AdminLayoutWrapper user={user} onLogout={handleLogout}>
-                                <Results attempts={attempts}/>
-                            </AdminLayoutWrapper>
-                        }/>
+                        {/*<Route path="/admin/results" element={*/}
+                        {/*    <AdminLayoutWrapper user={user} onLogout={handleLogout}>*/}
+                        {/*        <Results attempts={attempts}/>*/}
+                        {/*    </AdminLayoutWrapper>*/}
+                        {/*}/>*/}
                     </>
                 )}
 
                 {/* Redirect to dashboard if logged in, otherwise to login */}
                 <Route path="/admin" element={
-                    user ? <Navigate to="/admin/dashboard" replace/> : <Navigate to="/admin/login" replace/>
+                    user ? <Navigate to="/admin/" replace/> : <Navigate to="/admin/login" replace/>
                 }/>
 
                 {/* 404 Route */}

@@ -1,15 +1,15 @@
 // HeroSlider.tsx
-import {useState, useEffect, useRef} from 'react';
-import '../../styles/hero.css';
-
-// Import your images
+import {useState, useEffect, useRef, useCallback} from 'react';
+// import '../../styles/hero.css';
+import '../../styles/carousel.css'
+// Import the new carousel styles
+import '../../styles/carousel.css';
 import bibleQuizBanner from '../../assests/banners/BibleQuiz-banner.png';
 import wordQuest from '../../assests/banners/WordQuest-banner.png';
 import mathquiz from '../../assests/banners/MathQuiz-banner.png';
 import chemshabongo from '../../assests/banners/ChemshaBongo-banner.png';
 import {useGameClick} from "../../hooks/useGameClick.ts";
 
-// Define Slide type with tags
 interface Tag {
     label: string;
     type: 'trending' | 'hot' | 'new' | 'trivia' | 'featured';
@@ -20,9 +20,11 @@ interface Slide {
     gameId: string;
     title: string;
     subtitle?: string;
+    description?: string;
     image: string;
     tags: Tag[];
-    gradientOverlay: string;
+    points: string;
+    ctaText?: string;
 }
 
 const HeroSlider = () => {
@@ -37,7 +39,6 @@ const HeroSlider = () => {
 
     const {handleGameClick} = useGameClick();
 
-    // Minimum swipe distance
     const minSwipeDistance = 50;
 
     const slides: Slide[] = [
@@ -46,48 +47,56 @@ const HeroSlider = () => {
             gameId: "chemsha-bongo",
             title: "Chemsha Bongo",
             subtitle: "Brain Teaser Challenge",
+            description: "Test your wits with our most popular brain teasers",
             image: chemshabongo,
+            points: "EARN UP TO 1000 POINTS!",
             tags: [
                 {label: "TRENDING", type: "trending"},
                 {label: "HOT", type: "hot"}
             ],
-            gradientOverlay: "transaprent"
+            ctaText: "Play Now"
         },
         {
             id: 2,
             gameId: "bible-quiz",
             title: "Bible Quiz",
             subtitle: "Test Your Scripture Knowledge",
+            description: "Challenge yourself with questions from the Bible",
             image: bibleQuizBanner,
+            points: "EARN UP TO 1000 POINTS!",
             tags: [
                 {label: "NEW", type: "new"},
                 {label: "TRIVIA", type: "trivia"}
             ],
-            gradientOverlay: "transaprent"
+            ctaText: "Play Now"
         },
         {
             id: 3,
             gameId: "word-quest",
             title: "Word Quest",
             subtitle: "Vocabulary Adventure",
+            description: "Expand your vocabulary while having fun",
             image: wordQuest,
+            points: "EARN UP TO 1000 POINTS!",
             tags: [
                 {label: "FEATURED", type: "featured"},
                 {label: "TRIVIA", type: "trivia"}
             ],
-            gradientOverlay: "transaprent"
+            ctaText: "Play Now"
         },
         {
             id: 4,
             gameId: "math-quiz",
             title: "Math Quiz",
             subtitle: "Numbers & Logic",
+            description: "Sharpen your math skills with exciting challenges",
             image: mathquiz,
+            points: "EARN UP TO 1000 POINTS!",
             tags: [
                 {label: "HOT", type: "hot"},
                 {label: "TRIVIA", type: "trivia"}
             ],
-            gradientOverlay: "transaprent"
+            ctaText: "Play Now"
         },
     ];
 
@@ -95,21 +104,20 @@ const HeroSlider = () => {
         handleGameClick(gameId);
     };
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         if (isTransitioning) return;
         setIsTransitioning(true);
         setCurrentSlide((prev) => (prev + 1) % slides.length);
         setTimeout(() => setIsTransitioning(false), 500);
-    };
+    }, [isTransitioning, slides.length]);
 
-    const prevSlide = () => {
+    const prevSlide = useCallback(() => {
         if (isTransitioning) return;
         setIsTransitioning(true);
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
         setTimeout(() => setIsTransitioning(false), 500);
-    };
+    }, [isTransitioning, slides.length]);
 
-    // Touch handlers for mobile swipe
     const onTouchStart = (e: React.TouchEvent) => {
         setTouchEnd(null);
         setTouchStart(e.targetTouches[0].clientX);
@@ -121,7 +129,6 @@ const HeroSlider = () => {
 
     const onTouchEnd = () => {
         if (!touchStart || !touchEnd) return;
-
         const distance = touchStart - touchEnd;
         const isLeftSwipe = distance > minSwipeDistance;
         const isRightSwipe = distance < -minSwipeDistance;
@@ -134,14 +141,33 @@ const HeroSlider = () => {
     };
 
     useEffect(() => {
-        if (isHovering) return;
-
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
         }
-        intervalRef.current = setInterval(() => {
-            nextSlide();
-        }, 4000);
+
+        if (!isHovering) {
+            intervalRef.current = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [isHovering, nextSlide]);
+
+    useEffect(() => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+
+        if (!isHovering) {
+            intervalRef.current = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
 
         return () => {
             if (intervalRef.current) {
@@ -172,30 +198,16 @@ const HeroSlider = () => {
     };
 
     return (
-        <div className="hero-slider-div">
+        // Add the parallax-layout class here
+        <div className="hero-slider-section parallax-layout">
             <div className="hero-slider-container">
-                {/* Progress Bar */}
-                {/*<div className="slider-progress">*/}
-                {/*    {slides.map((_, index) => (*/}
-                {/*        <div*/}
-                {/*            key={index}*/}
-                {/*            className={`progress-bar ${index === currentSlide ? 'active' : ''}`}*/}
-                {/*            style={{*/}
-                {/*                width: `${100 / slides.length}%`,*/}
-                {/*                transition: 'all 0.3s ease'*/}
-                {/*            }}*/}
-                {/*        />*/}
-                {/*    ))}*/}
-                {/*</div>*/}
-
-                {/* Main Slider */}
                 <div className="slider-wrapper">
                     <div
                         ref={sliderRef}
                         className="slider-track"
                         style={{
                             transform: `translateX(-${currentSlide * 100}%)`,
-                            transition: isTransitioning ? 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+                            transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
                         }}
                         onMouseEnter={() => setIsHovering(true)}
                         onMouseLeave={() => setIsHovering(false)}
@@ -204,11 +216,10 @@ const HeroSlider = () => {
                         onTouchEnd={onTouchEnd}
                     >
                         {slides.map((slide, index) => (
-                            <div
-                                key={slide.id}
-                                className="slide-item"
-                            >
-                                <div className="slide-background">
+                            <div key={slide.id} className="slide-item">
+                                <div className="slide-image-side"
+                                     onClick={() => handleGameButtonClick(slide.gameId)}
+                                >
                                     <img
                                         src={slide.image}
                                         alt={slide.title}
@@ -217,38 +228,47 @@ const HeroSlider = () => {
                                         decoding="async"
                                         onLoad={() => handleImageLoad(slide.image)}
                                     />
-                                    <div
-                                        className="slide-overlay"
-                                        style={{background: slide.gradientOverlay}}
-                                        onClick={() => handleGameButtonClick(slide.gameId)}
-
-                                    />
                                 </div>
 
-                                <div className="slide-content">
-                                    {/* Tags */}
+                                <div className="slide-content-side">
                                     <div className="slide-tags">
                                         {slide.tags.map((tag, tagIndex) => (
                                             <span
                                                 key={tagIndex}
                                                 className={`slide-tag ${getTagClassName(tag.type)}`}
                                             >
-                      {tag.label}
-                    </span>
+                                                {tag.label}
+                                            </span>
                                         ))}
                                     </div>
 
-                                     {/*Title and Subtitle*/}
                                     <h2 className="slide-title">{slide.title}</h2>
-                                    {slide.subtitle && (
-                                        <p className="slide-subtitle">{slide.subtitle}</p>
-                                    )}
+                                    {/*{slide.subtitle && (*/}
+                                    {/*    <h3 className="slide-subtitle">{slide.subtitle}</h3>*/}
+                                    {/*)}*/}
 
-                                    {/* Play Button */}
+                                    {/*/!* Add description for the parallax layout *!/*/}
+                                    {/*{slide.description && (*/}
+                                    {/*    <p className="slide-description">{slide.description}</p>*/}
+                                    {/*)}*/}
 
+                                    {/* Points badge - optional for parallax layout */}
+                                    <div className="slide-points-badge">
+                                        {/*<span className="points-icon">🏆</span>*/}
+                                        <span className="points-text">{slide.points}</span>
+                                    </div>
+
+                                    <div className="playbtn-container">
+                                        <div
+                                            className="slide-cta-button"
+                                            onClick={() => handleGameButtonClick(slide.gameId)}
+                                        >
+                                            <span>{slide.ctaText || "Play Now"}</span>
+                                            <span className="button-arrow">→</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Decorative Elements */}
                                 <div className="slide-decoration">
                                     <div className="decoration-circle"></div>
                                     <div className="decoration-line"></div>
@@ -257,28 +277,26 @@ const HeroSlider = () => {
                         ))}
                     </div>
 
-                    {/* Navigation Arrows */}
-                    {/*<button*/}
-                    {/*    className="slider-nav nav-prev"*/}
-                    {/*    onClick={prevSlide}*/}
-                    {/*    aria-label="Previous slide"*/}
-                    {/*>*/}
-                    {/*    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">*/}
-                    {/*        <path d="M15 18L9 12L15 6" strokeLinecap="round" strokeLinejoin="round"/>*/}
-                    {/*    </svg>*/}
-                    {/*</button>*/}
+                    <button
+                        className="slider-nav nav-prev"
+                        onClick={prevSlide}
+                        aria-label="Previous slide"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M15 18L9 12L15 6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
 
-                    {/*<button*/}
-                    {/*    className="slider-nav nav-next"*/}
-                    {/*    onClick={nextSlide}*/}
-                    {/*    aria-label="Next slide"*/}
-                    {/*>*/}
-                    {/*    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">*/}
-                    {/*        <path d="M9 18L15 12L9 6" strokeLinecap="round" strokeLinejoin="round"/>*/}
-                    {/*    </svg>*/}
-                    {/*</button>*/}
+                    <button
+                        className="slider-nav nav-next"
+                        onClick={nextSlide}
+                        aria-label="Next slide"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M9 18L15 12L9 6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
 
-                    {/* Slide Indicators */}
                     <div className="slide-indicators">
                         {slides.map((_, index) => (
                             <button

@@ -1,0 +1,124 @@
+/* styles/globals.css */
+:root {
+    /* Light theme */
+    --bg-primary: rgb(26, 35, 76);
+    --bg-secondary: rgb(30, 39, 83);
+    --bg-card: rgb(23, 9, 66);
+    --text-primary: #f6f9ff;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-color: #3b82f6;
+    --accent-hover: #2563eb;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --chart-grid: #e5e7eb;
+    --chart-line: #3b82f6;
+}
+
+[data-theme="dark"] {
+    /* Dark theme - using colors from your image */
+    --bg-primary: #1a1f2e;
+    --bg-secondary: #1e2436;
+    --bg-card: #252b3d;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a8c0;
+    --border-color: #2d3447;
+    --accent-color: #60a5fa;
+    --accent-hover: #93c5fd;
+    --success-color: #34d399;
+    --warning-color: #fbbf24;
+    --danger-color: #f87171;
+    --chart-grid: #2d3447;
+    --chart-line: #60a5fa;
+}
+/* assets/adminstyles.css */
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Card hover effects */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+}
+
+/* Gradient text */
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Table styles */
+.table-hover tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* Input focus styles */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    ring: 2px solid var(--accent-color);
+    ring-opacity: 0.5;
+}
+
+/* Button press effect */
+.button-press:active {
+    transform: scale(0.98);
+}
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-card) 50%, var(--bg-secondary) 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}

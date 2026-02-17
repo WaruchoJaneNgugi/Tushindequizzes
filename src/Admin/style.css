@@ -23,7 +23,7 @@
   --bg-outer: #10142a;
   --bg-main: #0a0e23;
   --bg-sidebar: #070a1a;
-  --bg-card: #10142a;
+  --bg-card: rgba(16, 20, 42, 0.22);
   --sidebar-active: rgba(0, 201, 255, 0.15);
   --text-main: #ffffff;
   --text-muted: #94a3b8;
