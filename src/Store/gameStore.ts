@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import RandomQuizIMG from '../assests/Bible-IMG.png';
 import BibleQuiz from '../assests/Bible-IMG.png';
-import RandomQuiz2IMG from '../assests/chemsha-bongo-new.png';
+import IMGChess from '../assests/chess.png';
 import ChemshaBongo from '../assests/chemsha-bongo-new.png';
 import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
@@ -88,20 +88,20 @@ const DEFAULT_GAMES: GameCard[] = [
         duration: '2-5 min',
         isFeatured: false,
     },
-    // {
-    //     id: 5,
-    //     title: "Bible Challenge",
-    //     content: "Advanced Bible knowledge",
-    //     imageUrl: RandomQuiz2IMG,
-    //     category: 'bible',
-    //     tags: ['bible', 'challenge', 'knowledge'],
-    //     description: "For Bible experts! This advanced quiz tests your in-depth knowledge of scriptures and biblical history.",
-    //     players: 1900,
-    //     difficulty: 'Hard',
-    //     points: 200,
-    //     duration: '15-20 min',
-    //     isFeatured: true,
-    // },
+    {
+        id: "chess",
+        title: "chess",
+        content: "Advanced Bible knowledge",
+        imageUrl: IMGChess,
+        category: 'bible',
+        tags: ['new','bible', 'challenge', 'knowledge'],
+        description: "For Bible experts! This advanced quiz tests your in-depth knowledge of scriptures and biblical history.",
+        players: 1900,
+        difficulty: 'Hard',
+        points: 200,
+        duration: '15-20 min',
+        isFeatured: true,
+    },
     // {
     //     id: 6,
     //     title: "Brain Puzzle",
@@ -232,20 +232,20 @@ const FEATURED_GAMES: GameCard[] = [
         duration: '8-12 min',
         isFeatured: true
     },
-    {
-        id: "featured-2",
-        title: "ROCKET GOAL",
-        content: "Fast-paced action game",
-        imageUrl: RandomQuiz2IMG, // Use existing image or add new one
-        category: 'arcade',
-        tags: ['arcade', 'action', 'featured'],
-        description: "Fast-paced action game with rocket challenges",
-        players: 4200,
-        difficulty: 'Easy',
-        points: 80,
-        duration: '5-8 min',
-        isFeatured: true
-    },
+    // {
+    //     id: "featured-2",
+    //     title: "ROCKET GOAL",
+    //     content: "Fast-paced action game",
+    //     imageUrl: RandomQuiz2IMG, // Use existing image or add new one
+    //     category: 'arcade',
+    //     tags: ['arcade', 'action', 'featured'],
+    //     description: "Fast-paced action game with rocket challenges",
+    //     players: 4200,
+    //     difficulty: 'Easy',
+    //     points: 80,
+    //     duration: '5-8 min',
+    //     isFeatured: true
+    // },
     {
         id: "featured-3",
         title: "EPIC BATTLE",

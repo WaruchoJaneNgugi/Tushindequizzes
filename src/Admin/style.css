@@ -55,7 +55,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* App Structure */
+/* ChessMain Structure */
 .app-wrapper {
   display: flex;
   min-height: 100vh;
@@ -506,7 +506,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* App Structure */
+/* ChessMain Structure */
 .app-wrapper {
   display: flex;
   min-height: 100vh;
