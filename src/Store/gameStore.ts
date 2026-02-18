@@ -5,6 +5,7 @@ import RandomQuiz2IMG from '../assests/chemsha-bongo-new.png';
 import ChemshaBongo from '../assests/chemsha-bongo-new.png';
 import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
+import checkers from '../assests/checkers.png';
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -73,20 +74,20 @@ const DEFAULT_GAMES: GameCard[] = [
         duration: '10-15 min',
         isFeatured: true,
     },
-    // {
-    //     id: 4,
-    //     title: "Arcade Blitz",
-    //     content: "Fun arcade challenges",
-    //     imageUrl: RandomQuizIMG,
-    //     category: 'arcade',
-    //     tags: ['arcade', 'action', 'fun'],
-    //     description: "An action-packed arcade game with multiple mini-games. Perfect for quick gaming sessions!",
-    //     players: 5100,
-    //     difficulty: 'Easy',
-    //     points: 50,
-    //     duration: '2-5 min',
-    //     isFeatured: false,
-    // },
+    {
+        id: "checkers",
+        title: "checkers",
+        content: "Fun arcade challenges",
+        imageUrl: checkers,
+        category: 'arcade',
+        tags: ['new','arcade', 'fun'],
+        description: "An action-packed arcade game with multiple mini-games. Perfect for quick gaming sessions!",
+        players: 5100,
+        difficulty: 'Easy',
+        points: 50,
+        duration: '2-5 min',
+        isFeatured: false,
+    },
     // {
     //     id: 5,
     //     title: "Bible Challenge",
