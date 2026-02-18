@@ -1,5 +1,5 @@
 // src/contexts/QuizContext/QuizContext.tsx
-import React, { createContext, useState, useContext, type ReactNode } from 'react';
+import React, { createContext, useState, type ReactNode } from 'react';
 import type {QuizSession, QuizResult, UserAnswer} from '../../types/quiz';
 
 
@@ -17,14 +17,14 @@ interface QuizContextType {
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
-
-export const useQuiz = () => {
-    const context = useContext(QuizContext);
-    if (!context) {
-        throw new Error('useQuiz must be used within a QuizProvider');
-    }
-    return context;
-};
+//
+// export const useQuiz = () => {
+//     const context = useContext(QuizContext);
+//     if (!context) {
+//         throw new Error('useQuiz must be used within a QuizProvider');
+//     }
+//     return context;
+// };
 
 interface QuizProviderProps {
     children: ReactNode;
@@ -38,6 +38,7 @@ export const QuizProvider: React.FC<QuizProviderProps> = ({ children }) => {
     const startQuiz = (quizId: string) => {
         setCurrentQuizId(quizId);
         setQuizSession({
+            score: 0,
             currentQuestionIndex: 0,
             userAnswers: [],
             startTime: new Date(),
