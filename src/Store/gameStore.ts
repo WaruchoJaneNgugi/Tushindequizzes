@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import RandomQuizIMG from '../assests/Bible-IMG.png';
-import BibleQuiz from '../assests/bibleQuiz.png';
+import BibleQuiz from '../assests/Bible-IMG.png';
 import RandomQuiz2IMG from '../assests/chemsha-bongo-new.png';
 import ChemshaBongo from '../assests/chemsha-bongo-new.png';
 import mathQuiz from '../assests/mathquiz.png';
