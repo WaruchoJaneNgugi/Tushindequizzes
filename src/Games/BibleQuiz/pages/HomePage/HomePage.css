@@ -1,0 +1,95 @@
+/* src/pages/HomePage/HomePage.css - ADJUSTED GRID SPACING */
+.homePage {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.homePage::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.mainContent {
+    position: relative;
+    flex: 1;
+    padding: 40px 24px;
+    z-index: 1;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Desktop - 3 columns with tighter spacing */
+.quizGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px; /* Reduced from 32px */
+    margin-top: 20px;
+}
+
+/* Tablet - 2 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .mainContent {
+        padding: 30px 20px;
+    }
+
+    .quizGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+/* Mobile - 2 columns with tighter spacing */
+@media (max-width: 767px) {
+    .mainContent {
+        padding: 20px 16px;
+    }
+
+    .quizGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px; /* Reduced from 16px */
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .quizGrid {
+        gap: 12px;
+    }
+}
+
+/* Animation - subtle */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quizGrid > * {
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.quizGrid > *:nth-child(1) { animation-delay: 0.05s; }
+.quizGrid > *:nth-child(2) { animation-delay: 0.1s; }
+.quizGrid > *:nth-child(3) { animation-delay: 0.15s; }
+.quizGrid > *:nth-child(4) { animation-delay: 0.2s; }
+.quizGrid > *:nth-child(5) { animation-delay: 0.25s; }
+.quizGrid > *:nth-child(6) { animation-delay: 0.3s; }

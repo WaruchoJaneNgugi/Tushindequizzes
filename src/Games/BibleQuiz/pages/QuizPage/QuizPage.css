@@ -1,0 +1,395 @@
+/* src/pages/QuizPage/QuizPage.css - REMOVED DUPLICATE HEADER STYLES */
+
+.quizPage {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+/* ====================================
+   REDESIGNED HEADER SCORE - Clean & Modern
+   Same compact size, better design
+   ==================================== */
+.quizStats {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 4px 12px;
+    border-radius: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.headerScore {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    color: #2c3e50;
+    min-width: auto;
+    text-align: left;
+    gap: 6px;
+}
+
+.headerScore .currentScore {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.headerScore .currentScore span {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.headerScore .scoreChange {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.scoringHint {
+    display: none;
+}
+
+/* Timer - redesigned to match screenshot */
+.timer {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    border: 1px solid #e2e8f0;
+    letter-spacing: 0.3px;
+}
+
+.timer::before {
+    content: "⏱️";
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-right: 2px;
+}
+
+/* Score warning states - subtle */
+.headerScore.warning .currentScore span {
+    color: #b45309;
+}
+
+.headerScore.danger .currentScore span {
+    color: #dc2626;
+}
+
+.headerScore.critical .currentScore span {
+    color: #dc2626;
+    animation: criticalPulse 0.5s infinite;
+}
+
+@keyframes criticalPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* ====================================
+   PROGRESS BAR - SAME FORMAT ALL DEVICES
+   ==================================== */
+.progressBar {
+    background: #e9ecef;
+    border-radius: 2px;
+    margin: 20px 0 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progressText {
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ====================================
+   WARNING MESSAGES - SAME FORMAT ALL DEVICES
+   ==================================== */
+.lowScoreWarning {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffc107;
+    color: #856404;
+    border-radius: 40px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    z-index: 100;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.criticalWarning {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+/* ====================================
+   ====================================
+   SIZE VARIANTS - ONLY SIZES CHANGE
+   ====================================
+   ==================================== */
+
+/* DEFAULT (Desktop) */
+.quizStats {
+    padding: 4px 12px;
+    gap: 8px;
+}
+
+.headerScore .currentScore {
+    font-size: 0.95rem;
+}
+
+.headerScore .currentScore span {
+    font-size: 1.1rem;
+}
+
+.headerScore .scoreChange {
+    font-size: 0.75rem;
+}
+
+.timer {
+    padding: 4px 12px;
+    font-size: 0.9rem;
+}
+
+.progressBar {
+    height: 4px;
+}
+
+.progressText {
+    font-size: 0.8rem;
+}
+
+.lowScoreWarning {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .mainContent {
+        padding: 18px;
+    }
+
+    .quizStats {
+        padding: 4px 10px;
+        gap: 8px;
+    }
+
+    .headerScore .currentScore {
+        font-size: 0.9rem;
+    }
+
+    .headerScore .currentScore span {
+        font-size: 1rem;
+    }
+
+    .headerScore .scoreChange {
+        font-size: 0.7rem;
+    }
+
+    .timer {
+        padding: 4px 10px;
+        font-size: 0.85rem;
+    }
+
+    .progressText {
+        font-size: 0.75rem;
+    }
+
+    .lowScoreWarning {
+        padding: 8px 18px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Large Mobile (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+    .mainContent {
+        padding: 15px;
+    }
+
+    .quizStats {
+        padding: 4px 10px;
+        gap: 6px;
+    }
+
+    .headerScore .currentScore {
+        font-size: 0.85rem;
+    }
+
+    .headerScore .currentScore span {
+        font-size: 0.95rem;
+    }
+
+    .headerScore .scoreChange {
+        font-size: 0.65rem;
+    }
+
+    .timer {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    .progressBar {
+        height: 3px;
+    }
+
+    .progressText {
+        font-size: 0.7rem;
+    }
+
+    .lowScoreWarning {
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        bottom: 15px;
+    }
+}
+
+/* Small Mobile (376px - 480px) - iPhone X */
+@media (min-width: 376px) and (max-width: 480px) {
+    .mainContent {
+        padding: 12px;
+    }
+
+    .quizStats {
+        padding: 3px 8px;
+        gap: 5px;
+    }
+
+    .headerScore .currentScore {
+        font-size: 0.8rem;
+    }
+
+    .headerScore .currentScore span {
+        font-size: 0.9rem;
+    }
+
+    .headerScore .scoreChange {
+        font-size: 0.6rem;
+    }
+
+    .timer {
+        padding: 3px 8px;
+        font-size: 0.75rem;
+    }
+
+    .progressBar {
+        height: 3px;
+    }
+
+    .progressText {
+        font-size: 0.65rem;
+    }
+
+    .lowScoreWarning {
+        padding: 5px 14px;
+        font-size: 0.75rem;
+        bottom: 12px;
+    }
+}
+
+/* Extra Small Mobile (≤ 375px) - iPhone SE */
+@media (max-width: 375px) {
+    .mainContent {
+        padding: 10px;
+    }
+
+    .quizStats {
+        padding: 2px 6px;
+        gap: 4px;
+    }
+
+    .headerScore .currentScore {
+        font-size: 0.75rem;
+    }
+
+    .headerScore .currentScore span {
+        font-size: 0.85rem;
+    }
+
+    .headerScore .scoreChange {
+        font-size: 0.55rem;
+    }
+
+    .timer {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+    }
+
+    .progressBar {
+        height: 2px;
+    }
+
+    .progressText {
+        font-size: 0.6rem;
+    }
+
+    .lowScoreWarning {
+        padding: 4px 12px;
+        font-size: 0.7rem;
+        bottom: 10px;
+    }
+}
+
+/* Landscape mode - same format, just adjusted positioning */
+@media (max-width: 767px) and (orientation: landscape) {
+    .lowScoreWarning {
+        bottom: 10px;
+    }
+}

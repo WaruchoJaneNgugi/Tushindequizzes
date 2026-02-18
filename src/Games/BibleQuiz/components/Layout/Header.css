@@ -1,0 +1,309 @@
+/* src/components/Layout/Header.css - UPDATED with larger logo-bible */
+.header-bible {
+    position: absolute;
+    top:0;
+    width: 100%;
+    z-index: 1000;
+    max-width: 1200px;
+}
+
+/* Full image header for home page */
+.imageHeader {
+    /*background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);*/
+    padding: 60px 20px;
+    margin-bottom: 20px;
+    position: relative;
+    isolation: isolate;
+}
+
+.imageHeader::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /*background-image:*/
+    /*        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.02) 0%, transparent 30%),*/
+    /*        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.02) 0%, transparent 30%),*/
+    /*        repeating-linear-gradient(45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 10px);*/
+    z-index: -1;
+}
+
+/* Simple header for quiz pages - just a thin bar with back button */
+.simpleHeader {
+    color:white;
+    /*padding: 15px 20px;*/
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    /*margin-bottom: 20px;*/
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    /*margin: 0 auto;*/
+    position: relative;
+    /*z-index: 1;*/
+    width: 100%;
+    padding: 0 20px;
+}
+
+.headerLeft {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.backButton {
+    background: #1f1036;
+    color: #ffffff;
+    border: 1px solid rgba(224, 224, 224, 0.46);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.headerRight {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .headerContent {
+        padding: 0 10px;
+    }
+}
+
+/* Back button - different styles for different headers */
+.imageHeader  {
+    /*background: rgba(255, 255, 255, 0.2);*/
+    color: white;
+    border: none;
+    /*padding: 4px 20px;*/
+    border-radius: 25px;
+    /*font-size: 1rem;*/
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /*margin-top: 5px;*/
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+}
+
+.simpleHeader  {
+    background: #191836;
+    color: #2c3e50;
+    /*border: 1px solid #e0e0e0;*/
+    padding: 10px 0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/*.simpleHeader .headerContent {*/
+/*    padding: 0 20px;*/
+/*}*/
+
+.imageHeader .backButton:hover {
+    background: rgba(255, 255, 255, 0.44);
+    transform: translateX(-5px);
+}
+
+.simpleHeader .backButton:hover {
+    /*background: #e9ecef;*/
+    transform: translateX(-3px);
+}
+
+/* Logo styles - LARGER SIZE for home page */
+.logo-bibleContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.logoContainer{
+    display: flex;
+    flex-direction: column;
+    /*border:1px solid white;*/
+}
+
+.logo-bible {
+    width: 100%;
+    max-height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+    animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add decorative element */
+.imageHeader::after {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    font-size: 120px;
+    color: rgba(255, 255, 255, 0.03);
+    font-weight: 300;
+    pointer-events: none;
+}
+
+/* Even larger on desktop */
+@media (min-width: 1024px) {
+    .logo-bible {
+        max-height: 100px;  /* Even larger on big screens */
+        /*margin-bottom: 30px;*/
+    }
+
+    .imageHeader {
+        padding: 60px 20px;  /* More padding for larger header */
+    }
+}
+
+/* Title styles - fallback only */
+.title {
+    font-size: 2.8rem;
+    margin: 0 0 20px 0;
+    color: white;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.subtitle-bible {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.6;
+    max-width: 800px;
+    color: #ffffff;
+}
+
+/* Simple header content - just holds back button */
+.simpleHeaderContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.simpleHeaderInfo {
+    flex: 1;
+    text-align: center;
+}
+
+.simpleTitle {
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+}
+
+.simpleSubtitle {
+    color: #a49999;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .simpleTitle {
+        font-size: 1.1rem;
+    }
+
+    .simpleSubtitle {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .simpleTitle {
+        font-size: 1rem;
+    }
+
+    .simpleSubtitle {
+        font-size: 0.7rem;
+    }
+}
+
+/* Mobile styles - still large but scaled down proportionally */
+@media (max-width: 767px) {
+    .imageHeader {
+        padding: 0px 0px;
+        margin-bottom: 30px;
+    }
+
+    .simpleHeader {
+        padding: 12px 15px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .subtitle-bible {
+        font-size: 1rem;
+    }
+
+    .logo-bible {
+        max-height: 100px;  /* Larger on mobile too */
+        /*margin-bottom: 20px;*/
+    }
+}
+
+@media (max-width: 480px) {
+    .imageHeader {
+        padding: 0px 0px;
+        margin-bottom: 1px;
+    }
+
+    .simpleHeader {
+        padding: 10px 15px;
+    }
+
+    .title {
+        font-size: 1.6rem;
+    }
+
+    .subtitle-bible {
+        font-size: 0.9rem;
+    }
+
+    .logo-bible {
+        max-height: 80px;  /* Still substantial on small phones */
+        /*margin-bottom: 15px;*/
+    }
+
+    .simpleHeader .backButton {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 360px) {
+    .logo-bible {
+        max-height: 90px;  /* Minimum size */
+    }
+}

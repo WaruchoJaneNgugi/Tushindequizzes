@@ -1,7 +1,7 @@
-import { MainGameLayout } from "../Games/BibleQuiz/MainGameLayout.tsx";
 import { type ComponentType } from 'react';
 import Quest from "../Games/WordQuest/components/Quest.tsx";
 import {MathQuiz} from "../Games/MathQuiz/MathQuiz.tsx";
+import {MainGameLayout} from "../Games/BibleQuiz/components/MainGameLayout.tsx";
 
 export const gameComponents: Record<string, ComponentType<{}>> = {
     'bible-quiz': MainGameLayout,

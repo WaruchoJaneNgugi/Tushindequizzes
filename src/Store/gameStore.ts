@@ -1,4 +1,3 @@
-// store/gameStore.ts
 import { create } from 'zustand';
 import RandomQuizIMG from '../assests/Bible-IMG.png';
 import BibleQuiz from '../assests/bibleQuiz.png';
@@ -17,8 +16,6 @@ interface GameState {
     showGameOverlay: boolean;
     searchQuery: string;
     isSearchActive: boolean;
-
-    // Actions
     setActiveFilter: (filter: string) => void;
     setSelectedGame: (game: GameCard | null) => void;
     setShowGameOverlay: (show: boolean) => void;

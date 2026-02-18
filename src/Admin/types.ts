@@ -9,6 +9,7 @@ export const QuizStatus = {
   PUBLISHED: 'Published',
   DRAFT: 'Draft'
 } as const;
+
 export type QuizStatus = typeof QuizStatus[keyof typeof QuizStatus];
 
 export const QuestionType = {
@@ -61,6 +62,7 @@ export interface Quiz {
 //   status: 'active' | 'disabled';
 //   isDeleted: boolean;
 // }
+
 export interface Player {
   id: string;
   username: string;
