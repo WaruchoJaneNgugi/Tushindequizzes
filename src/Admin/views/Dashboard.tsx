@@ -549,6 +549,7 @@ const Dashboard = ({user}: DashboardProps) => {
                     }
                     break;
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             // console.error('Submit error:', error);
             showToast(  `Unexpected error occurred`,"error");
