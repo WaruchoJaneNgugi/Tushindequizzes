@@ -1,415 +1,321 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// services/api.ts
+const BASE_URL = 'https://lottomotto.co.ke/chemsha/api'; // Use consistent base URL
 
-import type {
-    ApiResponse,
-    CategoryResponse,
-    GameResponse,
-    UserResponse,
-    QuestionResponse,
-    SessionResponse,
-    GameData, Player
-} from '../types';
-
-class ApiService {
-    private token: string | null = null;
-
-    setToken(token: string) {
-        this.token = token;
-        localStorage.setItem('admin_token', token);
-    }
-
-    getToken(): string | null {
-        return this.token || localStorage.getItem('admin_token');
-    }
-
-    clearToken() {
-        this.token = null;
-        localStorage.removeItem('admin_token');
-    }
-
-    // Helper function to normalize headers
-    private normalizeHeaders(headers?: HeadersInit): Record<string, string> {
-        if (!headers) return {};
-
-        const normalized: Record<string, string> = {};
-
-        if (headers instanceof Headers) {
-            headers.forEach((value, key) => {
-                if (typeof value === 'string') {
-                    normalized[key] = value;
-                }
-            });
-        } else if (Array.isArray(headers)) {
-            headers.forEach(([key, value]) => {
-                if (typeof value === 'string') {
-                    normalized[key] = value;
-                }
-            });
-        } else if (typeof headers === 'object') {
-            Object.entries(headers).forEach(([key, value]) => {
-                if (typeof value === 'string') {
-                    normalized[key] = value;
-                }
-                // else if (typeof value === 'number' || typeof value === 'boolean') {
-                //     normalized[key] = value.toString();
-                // }
-            });
-        }
-
-        return normalized;
-    }
-
-    private async request<T>(
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<ApiResponse<T>> {
-        // Normalize headers properly
-        const baseHeaders: Record<string, string> = {
-            'Content-Type': 'application/json',
-        };
-
-        const providedHeaders = this.normalizeHeaders(options.headers);
-        const headers = { ...baseHeaders, ...providedHeaders };
-
-        const token = this.getToken();
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                ...options,
-                headers,
-            });
-
-            // Check if response has content
-            const contentType = response.headers.get('content-type');
-            let data: any;
-
-            if (contentType && contentType.includes('application/json')) {
-                data = await response.json();
-            } else {
-                const text = await response.text();
-                data = text ? { message: text } : {};
-            }
-
-            if (!response.ok) {
-                return {
-                    success: false,
-                    error: data.message || data.error || `HTTP ${response.status}`,
-                    message: data.message,
-                };
-            }
-
-            return {
-                success: true,
-                ...data
-            };
-        } catch (error) {
-            return {
-                success: false,
-                error: error instanceof Error ? error.message : 'Network error',
-            };
-        }
-    }
-
-    // Auth endpoints
-    async login(phoneNumber: string, password: string) {
-        return this.request<{ token: string; user: UserResponse }>('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                phoneNumber,
-                password,
-                role: 'admin'
-            }),
-        });
-    }
-
-    async verifyOTP(phoneNumber: string, otp: string) {
-        return this.request<{ token: string }>('/auth/verify-otp', {
-            method: 'POST',
-            body: JSON.stringify({ phoneNumber, otp }),
-        });
-    }
-
-    async changePassword(oldPassword: string, newPassword: string) {
-        return this.request('/auth/change-password', {
-            method: 'POST',
-            body: JSON.stringify({ oldPassword, newPassword }),
-        });
-    }
-
-    // Users endpoints
-    async getUsers(params?: {
-        page?: number;
-        limit?: number;
-        search?: string;
-        status?: string;
-    }) {
-        const query = params ? new URLSearchParams(params as any).toString() : '';
-        return this.request<{
-            users: UserResponse[];
-            pagination?: any
-        }>(`/users?${query}`);
-    }
-
-    async getUserById(id: string) {
-        return this.request<{ user: UserResponse }>(`/users/${id}`);
-    }
-
-    async updateUserStatus(id: string, status: string) {
-        return this.request(`/users/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({ status }),
-        });
-    }
-
-    async deleteUser(id: string) {
-        return this.request(`/users/${id}`, {
-            method: 'DELETE',
-        });
-    }
-
-    // Games endpoints
-    async getGames(params?: {
-        page?: number;
-        limit?: number;
-        category?: string;
-        featured?: boolean;
-    }) {
-        const query = params ? new URLSearchParams(params as any).toString() : '';
-        return this.request<{
-            games: GameResponse[];
-            pagination?: any
-        }>(`/games?${query}`);
-    }
-
-    async createGame(gameData: GameData) {
-        return this.request<{
-            game: GameResponse
-        }>('/games', {
-            method: 'POST',
-            body: JSON.stringify(gameData),
-        });
-    }
-
-    async updateGame(id: string, gameData: Partial<GameData>) {
-        return this.request<{
-            game: GameResponse
-        }>(`/games/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(gameData),
-        });
-    }
-
-    async deleteGame(id: string) {
-        return this.request(`/games/${id}`, {
-            method: 'DELETE',
-        });
-    }
-
-    // Categories endpoints
-    async getCategories() {
-        return this.request<{
-            categories: CategoryResponse[]
-        }>('/categories');
-    }
-
-    async createCategory(categoryData: { name: string; description: string }) {
-        return this.request<{
-            category: CategoryResponse
-        }>('/categories', {
-            method: 'POST',
-            body: JSON.stringify(categoryData),
-        });
-    }
-
-    async updateCategory(id: string, categoryData: Partial<CategoryResponse>) {
-        return this.request<{
-            category: CategoryResponse
-        }>(`/categories/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(categoryData),
-        });
-    }
-
-    async deleteCategory(id: string) {
-        return this.request(`/categories/${id}`, {
-            method: 'DELETE',
-        });
-    }
-
-    // Questions endpoints
-    async getQuestions(params?: {
-        gameId?: string;
-        page?: number;
-        limit?: number;
-    }) {
-        const query = params ? new URLSearchParams(params as any).toString() : '';
-        return this.request<{
-            questions: QuestionResponse[];
-            pagination?: any
-        }>(`/questions?${query}`);
-    }
-
-    async createQuestion(questionData: any) {
-        return this.request<{
-            question: QuestionResponse
-        }>('/questions', {
-            method: 'POST',
-            body: JSON.stringify(questionData),
-        });
-    }
-
-    async updateQuestion(id: string, questionData: any) {
-        return this.request<{
-            question: QuestionResponse
-        }>(`/questions/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(questionData),
-        });
-    }
-
-    // async deleteQuestion(id: string) {
-    //     return this.request(`/questions/${id}`, {
-    //         method: 'DELETE',
-    //     });
-    // }
-
-    // Transactions endpoints
-    // async getTransactions(params?: {
-    //     page?: number;
-    //     limit?: number;
-    //     status?: string;
-    //     userId?: string;
-    //     startDate?: string;
-    //     endDate?: string;
-    // }) {
-    //     const query = params ? new URLSearchParams(params as any).toString() : '';
-    //     return this.request<any>(`/transactions?${query}`);
-    // }
-    //
-    // async getTransactionStats() {
-    //     return this.request<any>('/transactions/stats');
-    // }
-    //
-    // async getRevenueReport() {
-    //     return this.request<any>('/transactions/revenue');
-    // }
-    //
-    // async updateTransactionStatus(id: string, status: string) {
-    //     return this.request(`/transactions/${id}/status`, {
-    //         method: 'PUT',
-    //         body: JSON.stringify({ status }),
-    //     });
-    // }
-    //
-    // async refundTransaction(id: string) {
-    //     return this.request(`/transactions/${id}/refund`, {
-    //         method: 'POST',
-    //     });
-    // }
-
-    // Game Sessions endpoints
-    async getGameSessions(params?: {
-        page?: number;
-        limit?: number;
-        gameId?: string;
-        userId?: string;
-    }) {
-        const query = params ? new URLSearchParams(params as any).toString() : '';
-        return this.request<{
-            sessions: SessionResponse[];
-            pagination?: any
-        }>(`/sessions/admin/all?${query}`);
-    }
-
-    // async deleteSession(id: string) {
-    //     return this.request(`/sessions/${id}`, {
-    //         method: 'DELETE',
-    //     });
-    // }
-    //
-    // // Leaderboards endpoints
-    // async getLeaderboards(gameId?: string) {
-    //     const endpoint = gameId ? `/leaderboards/game/${gameId}` : '/leaderboards';
-    //     return this.request<any>(endpoint);
-    // }
-    //
-    // async updateLeaderboard(gameId: string) {
-    //     return this.request(`/leaderboards/update`, {
-    //         method: 'POST',
-    //         body: JSON.stringify({ gameId }),
-    //     });
-    // }
-    //
-    // async resetLeaderboard(gameId: string) {
-    //     return this.request(`/leaderboards/reset`, {
-    //         method: 'POST',
-    //         body: JSON.stringify({ gameId }),
-    //     });
-    // }
-    //
-    // // Achievements endpoints
-    // async getAchievements() {
-    //     return this.request<any[]>('/achievements');
-    // }
-    //
-    // async createAchievement(achievementData: any) {
-    //     return this.request('/achievements', {
-    //         method: 'POST',
-    //         body: JSON.stringify(achievementData),
-    //     });
-    // }
-    //
-    // async updateAchievement(id: string, achievementData: any) {
-    //     return this.request(`/achievements/${id}`, {
-    //         method: 'PUT',
-    //         body: JSON.stringify(achievementData),
-    //     });
-    // }
-    //
-    // async deleteAchievement(id: string) {
-    //     return this.request(`/achievements/${id}`, {
-    //         method: 'DELETE',
-    //     });
-    // }
-    //
-    // async awardAchievement(userId: string, achievementId: string) {
-    //     return this.request(`/achievements/award/${userId}/achievement/${achievementId}`, {
-    //         method: 'POST',
-    //     });
-    // }
-    //
-    // // Dashboard Stats
-    // async getDashboardStats() {
-    //     return this.request<{
-    //         totalUsers: number;
-    //         totalGames: number;
-    //         totalSessions: number;
-    //         activeUsers: number;
-    //         revenueToday: number;
-    //         revenueThisWeek: number;
-    //     }>('/dashboard/stats');
-    // }
+function getAuthHeaders(): Record<string, string> {
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 }
-// Helper functions for type conversion
-export function convertUserResponseToPlayer(user: UserResponse): Player {
-    return {
-        id: user.id,
-        username: user.username,
-        phoneNumber: user.phoneNumber,
-        // Handle backend's 'suspended' status
-        status: user.status === 'suspended' ? 'disabled' : user.status,
-        role: user.role,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        registrationDate: user.createdAt.split('T')[0],
-        isDeleted: user.isDeleted || false
+export const authApi = {
+  // Login with phone number and password
+  login: (phoneNumber: string, password: string) =>
+      request<{
+        token: string;
+        user: {
+          id: string;
+          username: string;
+          phoneNumber: string;
+          role: string;
+        }
+      }>('POST', '/auth/login', { phoneNumber, password }, undefined),
+
+  // Login with phone number only (for OTP flow)
+  requestOTP: (phoneNumber: string) =>
+      request<{ message: string }>('POST', '/auth/request-otp', { phoneNumber }, undefined),
+
+  // Verify OTP code
+  verifyOTP: (phoneNumber: string, otp: string) =>
+      request<{
+        token: string;
+        user: {
+          id: string;
+          username: string;
+          phoneNumber: string;
+          role: string;
+        }
+      }>('POST', '/auth/verify-otp', { phoneNumber, otp }, undefined),
+
+  // Register new admin (if needed)
+  register: (body: {
+    phoneNumber: string;
+    password: string;
+    username: string;
+    email?: string;
+  }) => request<any>('POST', '/auth/register', body, undefined),
+
+  // Refresh token
+  refreshToken: (refreshToken: string) =>
+      request<{ token: string }>('POST', '/auth/refresh', { refreshToken }, undefined),
+
+  // Logout
+  logout: () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    return request<any>('POST', '/auth/logout', {}, undefined);
+  },
+
+  // Change password
+  changePassword: (body: {
+    currentPassword: string;
+    newPassword: string;
+  }) => request<any>('POST', '/auth/change-password', body),
+
+  // Forgot password
+  forgotPassword: (phoneNumber: string) =>
+      request<{ message: string }>('POST', '/auth/forgot-password', { phoneNumber }, undefined),
+
+  // Reset password
+  resetPassword: (body: {
+    phoneNumber: string;
+    otp: string;
+    newPassword: string;
+  }) => request<any>('POST', '/auth/reset-password', body, undefined),
+
+  // Get current user profile
+  getProfile: () => request<any>('GET', '/auth/profile'),
+
+  // Update profile
+  updateProfile: (body: {
+    username?: string;
+    email?: string;
+    avatar?: string;
+  }) => request<any>('PUT', '/auth/profile', body),
+};
+
+async function request<T>(
+    method: string,
+    path: string,
+    body?: unknown,
+    params?: Record<string, string | number | boolean>
+): Promise<{ success: boolean; data?: T; message?: string; error?: string; pagination?: any }> {
+
+
+  let url = `${BASE_URL}${path}`;
+  if (params) {
+    const query = new URLSearchParams(
+        Object.entries(params)
+            .filter(([, v]) => v !== undefined && v !== null)
+            .map(([k, v]) => [k, String(v)])
+    ).toString();
+    if (query) url += `?${query}`;
+  }
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: getAuthHeaders(),
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    console.error(`API error [${method} ${path}]:`, err);
+    return { success: false, error: String(err) };
+  }
+}
+
+// ─── Achievements ────────────────────────────────────────────────────────────
+export const achievementsApi = {
+  getAll: (params?: { page?: number; limit?: number }) =>
+      request<any>('GET', '/achievements', undefined, params),
+
+  getById: (id: string) =>
+      request<any>('GET', `/achievements/${id}`),
+
+  create: (body: {
+    title: string;
+    description: string;
+    pointsReward: number;
+    criteria: { type: string; threshold: number; gameId?: string };
+    isActive: boolean;
+  }) => request<any>('POST', '/achievements', body),
+
+  update: (id: string, body: Partial<{
+    title: string;
+    description: string;
+    pointsReward: number;
+    criteria: { type: string; threshold: number; gameId?: string };
+    isActive: boolean;
+  }>) => request<any>('PUT', `/achievements/${id}`, body),
+
+  delete: (id: string) => request<any>('DELETE', `/achievements/${id}`),
+
+  getUserAchievements: (userId: string) =>
+      request<any>('GET', `/achievements/user/${userId}`),
+
+  updateUserProgress: (userId: string, achievementId: string, body: { progress: number; isUnlocked: boolean }) =>
+      request<any>('PUT', `/achievements/user/${userId}/achievement/${achievementId}`, body),
+
+  award: (userId: string, achievementId: string) =>
+      request<any>('POST', `/achievements/award/${userId}/achievement/${achievementId}`),
+};
+
+// ─── Categories ──────────────────────────────────────────────────────────────
+export const categoriesApi = {
+  getAll: (params?: { page?: number; limit?: number }) =>
+      request<any>('GET', '/categories', undefined, params),
+
+  getById: (id: string) =>
+      request<any>('GET', `/categories/${id}`),
+
+  create: (body: { name: string; slug: string }) =>
+      request<any>('POST', '/categories', body),
+
+  update: (id: string, body: { name?: string; slug?: string }) =>
+      request<any>('PUT', `/categories/${id}`, body),
+
+  delete: (id: string) => request<any>('DELETE', `/categories/${id}`),
+};
+
+// ─── Games ───────────────────────────────────────────────────────────────────
+export const gamesApi = {
+  getAll: (params?: { page?: number; limit?: number; category?: string; difficulty?: string }) =>
+      request<any>('GET', '/games', undefined, params),
+
+  getById: (id: string) =>
+      request<any>('GET', `/games/${id}`),
+
+  create: (body: {
+    title: string;
+    slug: string;
+    description: string;
+    category: string;
+    difficulty: string;
+    entryFee: number;
+    rewardPoints: number;
+    durationMinutes: number;
+    metadata?: {
+      instructions?: string;
+      questionsCount?: number;
+      timePerQuestion?: number;
     };
-}
+  }) => request<any>('POST', '/games', body),
 
-export function convertPlayersFromResponse(users: UserResponse[]): Player[] {
-    return users.map(convertUserResponseToPlayer);
-}
-export const apiService = new ApiService();
+  update: (id: string, body: Partial<{
+    title: string;
+    slug: string;
+    description: string;
+    category: string;
+    difficulty: string;
+    entryFee: number;
+    rewardPoints: number;
+    durationMinutes: number;
+    isActive: boolean;
+    isFeatured: boolean;
+    metadata: Record<string, any>;
+  }>) => request<any>('PUT', `/games/${id}`, body),
+
+  delete: (id: string) => request<any>('DELETE', `/games/${id}`),
+};
+
+// ─── Leaderboards ────────────────────────────────────────────────────────────
+export const leaderboardsApi = {
+  get: (gameId: string, period: string) =>
+      request<any>('GET', `/leaderboards/${gameId}/${period}`),
+
+  getGlobal: (period: string) =>
+      request<any>('GET', `/leaderboards/global/${period}`),
+
+  getTop: (gameId: string) =>
+      request<any>('GET', `/leaderboards/top/${gameId}`),
+
+  updateScores: (body: {
+    userId: string;
+    gameId: string;
+    period: string;
+    score: number;
+    rank?: number;
+    wins?: number;
+    losses?: number;
+  }) => request<any>('POST', '/leaderboards/update', body),
+
+  reset: (body: { gameId: string; period: string; excludeAllTime?: boolean }) =>
+      request<any>('POST', '/leaderboards/reset', body),
+};
+
+// ─── Sessions ────────────────────────────────────────────────────────────────
+export const sessionsApi = {
+  getAll: (params?: { page?: number; limit?: number; status?: string; gameId?: string }) =>
+      request<any>('GET', '/sessions/admin/all', undefined, params),
+
+  getById: (id: string) =>
+      request<any>('GET', `/sessions/${id}`),
+
+  abandon: (sessionId: string) =>
+      request<any>('POST', `/sessions/${sessionId}/abandon`),
+};
+
+// ─── Transactions ────────────────────────────────────────────────────────────
+export const transactionsApi = {
+  getAll: (params?: { page?: number; limit?: number; type?: string; status?: string }) =>
+      request<any>('GET', '/transactions', undefined, params),
+
+  getUserTransactions: (userId: string, params?: { page?: number; limit?: number }) =>
+      request<any>('GET', `/transactions/user/${userId}`, undefined, params),
+
+  getById: (id: string) =>
+      request<any>('GET', `/transactions/${id}`),
+
+  create: (body: {
+    type: string;
+    pointsAmount: number;
+    amountPaid?: number;
+    paymentMethod?: string;
+    description: string;
+    referenceId?: string;
+    metadata?: Record<string, any>;
+  }) => request<any>('POST', '/transactions', body),
+
+  getStats: (params?: { startDate?: string; endDate?: string }) =>
+      request<any>('GET', '/transactions/stats', undefined, params),
+
+  getDailySummary: () => request<any>('GET', '/transactions/daily'),
+
+  getRevenue: () => request<any>('GET', '/transactions/revenue'),
+
+  updateStatus: (id: string, body: { status: string; notes?: string }) =>
+      request<any>('PUT', `/transactions/${id}/status`, body),
+
+  refund: (id: string, body: { refundAmount: number; reason: string; notes?: string }) =>
+      request<any>('POST', `/transactions/${id}/refund`, body),
+};
+
+// ─── Users ───────────────────────────────────────────────────────────────────
+export const usersApi = {
+  getAll: (params?: { page?: number; limit?: number; role?: string; isActive?: boolean; search?: string }) =>
+      request<any>('GET', '/users', undefined, params),
+
+  getById: (id: string) => request<any>('GET', `/users/${id}`),
+
+  delete: (id: string, body?: { reason?: string; deleteData?: boolean }) =>
+      request<any>('DELETE', `/users/${id}`, body),
+
+  updateStatus: (id: string, body: { isActive: boolean; reason?: string; notes?: string }) =>
+      request<any>('PUT', `/users/${id}/status`, body),
+};
+
+// ─── Dashboard Stats ─────────────────────────────────────────────────────────
+export const dashboardApi = {
+  getStats: () => request<any>('GET', '/dashboard/stats'),
+};
+
+export const apiService = {
+  login: (phoneNumber: string, password: string) => authApi.login(phoneNumber, password),
+  requestOTP: (phoneNumber: string) => authApi.requestOTP(phoneNumber),
+  verifyOTP: (phoneNumber: string, otp: string) => authApi.verifyOTP(phoneNumber, otp),
+  logout: () => authApi.logout(),
+  getProfile: () => authApi.getProfile(),
+  setToken: (token: string) => {
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('token', token);
+  },
+
+  getUsers: (params?: any) => usersApi.getAll(params),
+  getGames: (params?: any) => gamesApi.getAll(params),
+  getGameSessions: (params?: any) => sessionsApi.getAll(params),
+  getDashboardStats: () => dashboardApi.getStats(),
+};

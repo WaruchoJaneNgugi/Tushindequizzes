@@ -33,7 +33,7 @@ export const DifficultySelector: React.FC<DifficultySelectorProps> = ({
       width: '100%',
     }}>
       <div style={{ textAlign: 'center', marginBottom: '4px' }}>
-        <p style={{ color: '#b8a898', fontSize: '13px', margin: 0 }}>
+        <p style={{ color: '#b8a898', fontSize: '15px', margin: 0 }}>
           Select difficulty level · Cost deducted before play · Win to earn rewards
         </p>
       </div>
@@ -53,7 +53,7 @@ export const DifficultySelector: React.FC<DifficultySelectorProps> = ({
                 background: isSelected ? colors.bg : 'rgba(255,255,255,0.04)',
                 border: `2px solid ${isSelected ? colors.border : 'rgba(255,255,255,0.1)'}`,
                 borderRadius: '10px',
-                padding: '14px 12px',
+                padding: '16px 12px',
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.2s',
@@ -61,10 +61,10 @@ export const DifficultySelector: React.FC<DifficultySelectorProps> = ({
                 opacity: affordable ? 1 : 0.5,
               }}
             >
-              <div style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
+              <div style={{ fontFamily: '"Playfair Display", Georgia, serif', fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
                 {config.label}
               </div>
-              <div style={{ fontSize: '12px', color: '#b8a898', marginBottom: '8px' }}>
+              <div style={{ fontSize: '14px', color: '#b8a898', marginBottom: '8px' }}>
                 {config.description}
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>

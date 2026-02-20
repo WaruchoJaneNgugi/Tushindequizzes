@@ -175,9 +175,9 @@ export const GamesFilter = ({onFilterChange, activeFilter}: GamesFilterProps) =>
                             >
                                 <span className="category-icon">{category.icon}</span>
                                 <span className="category-label">{category.label}</span>
-                                {currentFilter === category.id && (
-                                    <span className="active-indicator">●</span>
-                                )}
+                                {/*{currentFilter === category.id && (*/}
+                                {/*    <span className="active-indicator-filter">●</span>*/}
+                                {/*)}*/}
                             </button>
                         ))}
                     </div>

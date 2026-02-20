@@ -1,18 +1,16 @@
-// HeroSlider.tsx
 import {useState, useEffect, useRef, useCallback} from 'react';
-// import '../../styles/hero.css';
-import '../../styles/carousel.css'
-// Import the new carousel styles
 import '../../styles/carousel.css';
 import bibleQuizBanner from '../../assests/banners/BibleQuiz-banner.png';
 import wordQuest from '../../assests/banners/WordQuest-banner.png';
 import mathquiz from '../../assests/banners/MathQuiz-banner.png';
 import chemshabongo from '../../assests/banners/ChemshaBongo-banner.png';
+import checkers from '../../assests/banners/checkers-banner.png';
+import chessbanner from '../../assests/banners/chess-banner.png';
 import {useGameClick} from "../../hooks/useGameClick.ts";
 
 interface Tag {
     label: string;
-    type: 'trending' | 'hot' | 'new' | 'trivia' | 'featured';
+    type: 'trending' | 'hot' | 'new' | 'trivia' | 'featured'|'strategy'|"classic"|"multiplayer";
 }
 
 interface Slide {
@@ -58,6 +56,35 @@ const HeroSlider = () => {
         },
         {
             id: 2,
+            gameId: "chess",
+            title: "Chess Master",
+            subtitle: "Classic Strategy Game",
+            description: "Challenge the AI in this classic game of strategy. Multiple difficulty levels available!",
+            image: chessbanner,
+            points: "EARN UP TO 1500 POINTS!",
+            tags: [
+                {label: "STRATEGY", type: "strategy"},
+                {label: "FEATURED", type: "featured"},
+            ],
+            ctaText: "Play Chess"
+        },
+        {
+            id: 3,
+            gameId: "checkers",
+            title: "Checkers",
+            subtitle: "Jump & Capture",
+            description: "Classic draughts game. Jump over opponent pieces and become the king!",
+            image: checkers,
+            points: "EARN UP TO 800 POINTS!",
+            tags: [
+                {label: "CLASSIC", type: "classic"},
+                {label: "STRATEGY", type: "strategy"},
+                {label: "2-PLAYER", type: "multiplayer"}
+            ],
+            ctaText: "Play Checkers"
+        },
+        {
+            id: 4,
             gameId: "bible-quiz",
             title: "Bible Quiz",
             subtitle: "Test Your Scripture Knowledge",
@@ -71,7 +98,7 @@ const HeroSlider = () => {
             ctaText: "Play Now"
         },
         {
-            id: 3,
+            id: 5,
             gameId: "word-quest",
             title: "Word Quest",
             subtitle: "Vocabulary Adventure",
@@ -85,7 +112,7 @@ const HeroSlider = () => {
             ctaText: "Play Now"
         },
         {
-            id: 4,
+            id: 6,
             gameId: "math-quiz",
             title: "Math Quiz",
             subtitle: "Numbers & Logic",

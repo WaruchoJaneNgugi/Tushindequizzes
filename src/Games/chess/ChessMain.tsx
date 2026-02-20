@@ -277,7 +277,16 @@ export const ChessMain=()=> {
     const getStatusBarClass = () => {
         return `status-bar ${gameState?.inCheck ? 'status-bar-check' : ''}`;
     };
-
+    useEffect(() => {
+        // Add Font Awesome CSS if not already present
+        if (!document.querySelector('#font-awesome-css')) {
+            const link = document.createElement('link');
+            link.id = 'font-awesome-css';
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+            document.head.appendChild(link);
+        }
+    }, []);
     return (
         <div className="app-container">
             {/* Header */}

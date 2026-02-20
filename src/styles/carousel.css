@@ -478,6 +478,9 @@
     transition: width 0.6s ease, height 0.6s ease;
 }
 
+.points-text{
+    color:white;
+}
 .slide-cta-button:hover {
     transform: translateY(-2px);
     gap: 20px;

@@ -325,12 +325,28 @@ export const hasAnyLegalMoves = (
   }
   return false;
 };
+// white pieces
+import WhiteKing from "../assets/chessPieces/white/king.png"
+import WhiteQueen from "../assets/chessPieces/white/queen.png"
+import whiteBishop from "../assets/chessPieces/white/bishop.png"
+import whiteKnight from "../assets/chessPieces/white/knight.png"
+import whiteRook from "../assets/chessPieces/white/rook.png"
+import whitePawn from "../assets/chessPieces/white/pawn.png"
+
+// black pieces
+import BlackKing from "../assets/chessPieces/black/king.png"
+import BlackQueen from "../assets/chessPieces/black/queen.png"
+import BlackBishop from "../assets/chessPieces/black/bishop.png"
+import BlackKnight from "../assets/chessPieces/black/knight.png"
+import BlackRook from "../assets/chessPieces/black/rook.png"
+import BlackPawn from "../assets/chessPieces/black/pawn.png"
+
 
 export const PIECE_SYMBOLS: Record<PieceType, Record<PieceColor, string>> = {
-  king:   { white: '♔', black: '♚' },
-  queen:  { white: '♕', black: '♛' },
-  rook:   { white: '♖', black: '♜' },
-  bishop: { white: '♗', black: '♝' },
-  knight: { white: '♘', black: '♞' },
-  pawn:   { white: '♙', black: '♟' },
+  king:   { white: WhiteKing, black: BlackKing },
+  queen:  { white:WhiteQueen, black: BlackQueen },
+  rook:   { white: whiteRook, black: BlackRook },
+  bishop: { white: whiteBishop, black: BlackBishop },
+  knight: { white: whiteKnight, black: BlackKnight },
+  pawn:   { white: whitePawn, black: BlackPawn },
 };

@@ -18,10 +18,10 @@ import { executeAITurn } from './useAI'
 // ── Level configuration ───────────────────────────────────
 
 export const LEVELS: LevelMap = {
-  easy:   { label: 'Easy',   cost: 1, reward: 2, depth: 1, color: '#4ade80' },
-  medium: { label: 'Medium', cost: 2, reward: 4, depth: 3, color: '#fb923c' },
-  hard:   { label: 'Hard',   cost: 3, reward: 6, depth: 5, color: '#f87171' },
-  expert: { label: 'Expert', cost: 4, reward: 8, depth: 7, color: '#c084fc' },
+  easy:   { label: 'Easy',   cost: 5, reward: 9, depth: 1, color: '#4ade80' },
+  medium: { label: 'Medium', cost: 10, reward: 22, depth: 3, color: '#fb923c' },
+  hard:   { label: 'Hard',   cost: 15, reward: 35, depth: 5, color: '#f87171' },
+  expert: { label: 'Expert', cost: 25, reward: 65, depth: 7, color: '#c084fc' },
 }
 
 export const INITIAL_POINTS = 20

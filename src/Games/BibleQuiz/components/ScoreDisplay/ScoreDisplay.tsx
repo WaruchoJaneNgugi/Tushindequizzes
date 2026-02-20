@@ -20,58 +20,57 @@ const ScoreDisplay: React.FC<ScoreDisplayProps> = ({
                                                        score,
                                                        startingPoints = 100,
                                                        total,
-                                                       totalPossibleScore,
+                                                       // totalPossibleScore,
                                                        correct,
                                                        wrong,
-                                                       percentage,
-                                                       timeSpent,
-                                                       scoring
+                                                       // percentage,
+                                                       timeSpent
                                                    }) => {
-    const getGrade = (percent: number): string => {
-        if (percent >= 90) return 'A+';
-        if (percent >= 80) return 'A';
-        if (percent >= 70) return 'B';
-        if (percent >= 60) return 'C';
-        if (percent >= 50) return 'D';
-        return 'F';
-    };
+    // const getGrade = (percent: number): string => {
+    //     if (percent >= 90) return 'A+';
+    //     if (percent >= 80) return 'A';
+    //     if (percent >= 70) return 'B';
+    //     if (percent >= 60) return 'C';
+    //     if (percent >= 50) return 'D';
+    //     return 'F';
+    // };
 
-    const getMessage = (percent: number): string => {
-        if (percent >= 90) return 'Excellent! Bible Scholar!';
-        if (percent >= 80) return 'Great job! Well done!';
-        if (percent >= 70) return 'Good effort! Keep studying!';
-        if (percent >= 60) return 'Not bad! Try again!';
-        if (percent >= 50) return 'Keep learning!';
-        return 'Time to study more!';
-    };
+    // const getMessage = (percent: number): string => {
+    //     if (percent >= 90) return 'Excellent! Bible Scholar!';
+    //     if (percent >= 80) return 'Great job! Well done!';
+    //     if (percent >= 70) return 'Good effort! Keep studying!';
+    //     if (percent >= 60) return 'Not bad! Try again!';
+    //     if (percent >= 50) return 'Keep learning!';
+    //     return 'Time to study more!';
+    // };
 
     const pointsEarned = score - startingPoints;
     const pointsEarnedDisplay = pointsEarned >= 0 ? `+${pointsEarned}` : `${pointsEarned}`;
 
     return (
         <div className="scoreDisplay">
-            {scoring && (
-                <div className="scoreHeader">
-                    <div className="scoringRules">
-            <span className="ruleItem">
-              <span className="ruleCorrect">+{scoring.correctPoints}</span> correct
-            </span>
-                        <span className="ruleItem">
-              <span className="ruleWrong">-{scoring.wrongPenalty}</span> wrong
-            </span>
-                    </div>
-                    {/*<div className="startingPointsInfo">*/}
-                    {/*    Started with: <strong>{startingPoints}</strong> points*/}
-                    {/*</div>*/}
-                </div>
-            )}
+            {/*{scoring && (*/}
+            {/*    <div className="scoreHeader">*/}
+            {/*        <div className="scoringRules">*/}
+            {/*<span className="ruleItem">*/}
+            {/*  <span className="ruleCorrect">+{scoring.correctPoints}</span> correct*/}
+            {/*</span>*/}
+            {/*            <span className="ruleItem">*/}
+            {/*  <span className="ruleWrong">-{scoring.wrongPenalty}</span> wrong*/}
+            {/*</span>*/}
+            {/*        </div>*/}
+            {/*        /!*<div className="startingPointsInfo">*!/*/}
+            {/*        /!*    Started with: <strong>{startingPoints}</strong> points*!/*/}
+            {/*        /!*</div>*!/*/}
+            {/*    </div>*/}
+            {/*)}*/}
 
-            <div className="scoreCircle">
-                <div className="scoreNumber">{score}</div>
-                <div className="scoreTotal">/ {totalPossibleScore}</div>
-                <div className="scorePercentage">{percentage}%</div>
-                <div className="scoreGrade">{getGrade(percentage)}</div>
-            </div>
+            {/*<div className="scoreCircle">*/}
+            {/*    <div className="scoreNumber">{score}</div>*/}
+            {/*    <div className="scoreTotal">/ {totalPossibleScore}</div>*/}
+            {/*    <div className="scorePercentage">{percentage}%</div>*/}
+            {/*    <div className="scoreGrade">{getGrade(percentage)}</div>*/}
+            {/*</div>*/}
 
             <div className="scoreChange" style={{
                 color: pointsEarned >= 0 ? '#2ecc71' : '#e74c3c',
@@ -83,11 +82,11 @@ const ScoreDisplay: React.FC<ScoreDisplayProps> = ({
             </div>
 
             <div className="scoreMessage">
-                <h3>{getMessage(percentage)}</h3>
+                {/*<h3>{getMessage(percentage)}</h3>*/}
                 <p>You answered {correct} out of {total} questions correctly.</p>
-                <p className="scorePoints">
-                    You earned {score} out of {totalPossibleScore} possible points.
-                </p>
+                {/*<p className="scorePoints">*/}
+                {/*    You earned {score} out of {totalPossibleScore} possible points.*/}
+                {/*</p>*/}
             </div>
 
             <div className="scoreDetails">

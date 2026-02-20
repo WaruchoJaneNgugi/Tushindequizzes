@@ -14,20 +14,53 @@ interface CanvasChessBoardProps {
 }
 
 export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
-                                                                      board,
-                                                                      selectedSquare,
-                                                                      validMoves,
-                                                                      moveHistory,
-                                                                      inCheck,
-                                                                      currentTurn,
-                                                                      onSquareClick,
-                                                                      size = 800,
-                                                                  }) => {
+                                                                board,
+                                                                selectedSquare,
+                                                                validMoves,
+                                                                moveHistory,
+                                                                inCheck,
+                                                                currentTurn,
+                                                                onSquareClick,
+                                                                size = 800,
+                                                            }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [canvasSize, setCanvasSize] = useState(size);
     const [scale, setScale] = useState(1);
+    const [imagesLoaded, setImagesLoaded] = useState(false);
     const lastMove = moveHistory[moveHistory.length - 1];
+
+    // Load all piece images
+    const pieceImages = useRef<Map<string, HTMLImageElement>>(new Map());
+
+    // Preload all piece images
+    useEffect(() => {
+        const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+        const colors = ['white', 'black'];
+        let loadedCount = 0;
+        const totalImages = pieceTypes.length * colors.length;
+
+        const checkAllLoaded = () => {
+            loadedCount++;
+            if (loadedCount === totalImages) {
+                setImagesLoaded(true);
+                // Redraw canvas once images are loaded
+                if (canvasRef.current) {
+                    drawBoard();
+                }
+            }
+        };
+
+        pieceTypes.forEach(pieceType => {
+            colors.forEach(color => {
+                const img = new Image();
+                img.onload = checkAllLoaded;
+                img.onerror = checkAllLoaded; // Count errors as loaded to avoid hanging
+                img.src = PIECE_SYMBOLS[pieceType as keyof typeof PIECE_SYMBOLS][color as 'white' | 'black'];
+                pieceImages.current.set(`${pieceType}-${color}`, img);
+            });
+        });
+    }, []);
 
     // Handle responsive sizing
     useEffect(() => {
@@ -45,22 +78,18 @@ export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
         return () => window.removeEventListener('resize', updateSize);
     }, [size]);
 
-    // Draw the board
-    useEffect(() => {
+    // Draw the board function
+    const drawBoard = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Set canvas dimensions
-        canvas.width = canvasSize;
-        canvas.height = canvasSize;
+        const squareSize = canvasSize / 8;
 
         // Clear canvas
         ctx.clearRect(0, 0, canvasSize, canvasSize);
-
-        const squareSize = canvasSize / 8;
 
         // Draw squares
         for (let row = 0; row < 8; row++) {
@@ -74,20 +103,85 @@ export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
 
                 // Check if this is the selected square
                 if (selectedSquare && selectedSquare.row === row && selectedSquare.col === col) {
-                    fillColor = '#f6f669';
+                    fillColor = '#785b83';
                 }
                 // Check if this is a last move square
                 else if (lastMove && (
                     (lastMove.from.row === row && lastMove.from.col === col) ||
                     (lastMove.to.row === row && lastMove.to.col === col)
                 )) {
-                    fillColor = isLight ? '#cdd16e' : '#aaa23a';
+                    fillColor = isLight ? '#785b83' : '#6a5970';
                 }
                 // Check if this is the king in check
                 else if (inCheck) {
+                    // Draw piece if exists
                     const piece = board[row][col];
-                    if (piece?.type === 'king' && piece.color === currentTurn) {
-                        fillColor = '#e74c3c';
+                    if (piece) {
+                        const img = pieceImages.current.get(`${piece.type}-${piece.color}`);
+
+                        if (img && img.complete && img.naturalHeight > 0) {
+                            // Draw image with padding (90% of square size)
+                            const padding = squareSize * 0.1;
+                            const imgSize = squareSize - (padding * 2);
+
+                            // Save context state
+                            ctx.save();
+
+                            // Add shadow based on piece color
+                            if (piece.color === 'white') {
+                                // Black shadow for white pieces
+                                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                                ctx.shadowBlur = 4;
+                                ctx.shadowOffsetX = 2;
+                                ctx.shadowOffsetY = 2;
+                            } else {
+                                // White shadow for black pieces
+                                ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                                ctx.shadowBlur = 4;
+                                ctx.shadowOffsetX = 2;
+                                ctx.shadowOffsetY = 2;
+                            }
+
+                            // Draw the image
+                            ctx.drawImage(
+                                img,
+                                x + padding,
+                                y + padding,
+                                imgSize,
+                                imgSize
+                            );
+
+                            // Restore context
+                            ctx.restore();
+                        } else {
+                            // Fallback to text if image not loaded
+                            const symbol = PIECE_SYMBOLS[piece.type][piece.color];
+                            ctx.font = `bold ${squareSize * 0.7}px 'Arial', 'Segoe UI', 'Noto Sans', sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+
+                            if (piece.color === 'white') {
+                                ctx.fillStyle = '#ffffff';
+                                ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                                ctx.shadowBlur = 4;
+                                ctx.shadowOffsetX = 1;
+                                ctx.shadowOffsetY = 1;
+                            } else {
+                                ctx.fillStyle = '#1a1a1a';
+                                ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+                                ctx.shadowBlur = 3;
+                                ctx.shadowOffsetX = 1;
+                                ctx.shadowOffsetY = 1;
+                            }
+
+                            ctx.fillText(symbol, x + squareSize/2, y + squareSize/2);
+
+                            // Reset shadow
+                            ctx.shadowColor = 'transparent';
+                            ctx.shadowBlur = 0;
+                            ctx.shadowOffsetX = 0;
+                            ctx.shadowOffsetY = 0;
+                        }
                     }
                 }
 
@@ -119,33 +213,62 @@ export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
                 // Draw piece if exists
                 const piece = board[row][col];
                 if (piece) {
-                    const symbol = PIECE_SYMBOLS[piece.type][piece.color];
-                    ctx.font = `bold ${squareSize * 0.7}px 'Arial', 'Segoe UI', 'Noto Sans', sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
+                    const img = pieceImages.current.get(`${piece.type}-${piece.color}`);
 
-                    // Add text shadow/stroke based on piece color
-                    if (piece.color === 'white') {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                    if (img && img.complete && img.naturalHeight > 0) {
+                        // Draw image with padding (90% of square size)
+                        const padding = squareSize * 0.1;
+                        const imgSize = squareSize - (padding * 2);
+
+                        // Save context state
+                        ctx.save();
+
+                        // Add subtle shadow
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
                         ctx.shadowBlur = 4;
-                        ctx.shadowOffsetX = 1;
-                        ctx.shadowOffsetY = 1;
+                        ctx.shadowOffsetX = 2;
+                        ctx.shadowOffsetY = 2;
+
+                        // Draw the image
+                        ctx.drawImage(
+                            img,
+                            x + padding,
+                            y + padding,
+                            imgSize,
+                            imgSize
+                        );
+
+                        // Restore context
+                        ctx.restore();
                     } else {
-                        ctx.fillStyle = '#1a1a1a';
-                        ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
-                        ctx.shadowBlur = 3;
-                        ctx.shadowOffsetX = 1;
-                        ctx.shadowOffsetY = 1;
+                        // Fallback to text if image not loaded
+                        const symbol = PIECE_SYMBOLS[piece.type][piece.color];
+                        ctx.font = `bold ${squareSize * 0.7}px 'Arial', 'Segoe UI', 'Noto Sans', sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        if (piece.color === 'white') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                            ctx.shadowBlur = 4;
+                            ctx.shadowOffsetX = 1;
+                            ctx.shadowOffsetY = 1;
+                        } else {
+                            ctx.fillStyle = '#1a1a1a';
+                            ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+                            ctx.shadowBlur = 3;
+                            ctx.shadowOffsetX = 1;
+                            ctx.shadowOffsetY = 1;
+                        }
+
+                        ctx.fillText(symbol, x + squareSize/2, y + squareSize/2);
+
+                        // Reset shadow
+                        ctx.shadowColor = 'transparent';
+                        ctx.shadowBlur = 0;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 0;
                     }
-
-                    ctx.fillText(symbol, x + squareSize/2, y + squareSize/2);
-
-                    // Reset shadow
-                    ctx.shadowColor = 'transparent';
-                    ctx.shadowBlur = 0;
-                    ctx.shadowOffsetX = 0;
-                    ctx.shadowOffsetY = 0;
                 }
 
                 // Draw rank labels (left side)
@@ -168,6 +291,13 @@ export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
             }
         }
     }, [board, selectedSquare, validMoves, lastMove, inCheck, currentTurn, canvasSize, scale]);
+
+    // Draw the board whenever dependencies change
+    useEffect(() => {
+        if (imagesLoaded || canvasRef.current) {
+            drawBoard();
+        }
+    }, [drawBoard, imagesLoaded]);
 
     // Handle clicks on canvas
     const handleCanvasClick = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
