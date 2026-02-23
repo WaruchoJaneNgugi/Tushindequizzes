@@ -98,19 +98,19 @@ canvas {
     }
 }
 
-.subtitle {
+.subtitle-checkers {
     font-size: 16px;
     color: var(--text-dim);
     letter-spacing: 3px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
 @media (max-width: 600px) {
-    .subtitle {
+    .subtitle-checkers {
         font-size: 13px;
         letter-spacing: 2px;
-        margin-bottom: 32px;
+        margin-bottom: 12px;
     }
 }
 
@@ -119,17 +119,16 @@ canvas {
     background: linear-gradient(135deg, rgba(245, 200, 66, 0.12), rgba(201, 146, 42, 0.06));
     border: 1px solid var(--border-light);
     border-radius: 20px;
-    padding: 24px 70px;
-    margin-bottom: 40px;
+    padding: 14px 30px;
+    margin-bottom: 10px;
     text-align: center;
     box-shadow: var(--border-glow);
     width: auto;
-    max-width: 90%;
 }
 
 @media (max-width: 600px) {
     .balance-card {
-        padding: 20px 40px;
+        padding: 10px 30px;
         margin-bottom: 32px;
     }
 }
@@ -148,8 +147,8 @@ canvas {
     }
 }
 
-.balance-value {
-    font-size: 68px;
+.balance-value-checkers {
+    font-size: 48px;
     font-weight: 700;
     background: var(--gold-gradient);
     -webkit-background-clip: text;
@@ -158,8 +157,8 @@ canvas {
 }
 
 @media (max-width: 600px) {
-    .balance-value {
-        font-size: 54px;
+    .balance-value-checkers {
+        font-size: 34px;
     }
 }
 
@@ -180,15 +179,15 @@ canvas {
 .level-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 10px;
     width: 100%;
-    max-width: 500px;
-    margin-bottom: 30px;
+    max-width: 700px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 600px) {
     .level-grid {
-        gap: 14px;
+        gap: 10px;
         max-width: 100%;
     }
 }
@@ -409,8 +408,9 @@ canvas {
     font-size: 54px;
     font-weight: 700;
     margin-bottom: 12px;
+    color:black;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    /*-webkit-text-fill-color: transparent;*/
 }
 
 @media (max-width: 600px) {
@@ -420,7 +420,7 @@ canvas {
 }
 
 .result-title.win {
-    color:white;
+    color: #182711;
     background: var(--gold-gradient);
 }
 

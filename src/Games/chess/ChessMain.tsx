@@ -292,7 +292,7 @@ export const ChessMain=()=> {
             {/* Header */}
             <div className="header-chess">
                 <h1 className="header-title">♟ ROYAL CHESS</h1>
-                <p className="header-subtitle">Point-Based Gaming</p>
+                {/*<p className="header-subtitle">Point-Based Gaming</p>*/}
             </div>
 
             {/* Points bar */}
