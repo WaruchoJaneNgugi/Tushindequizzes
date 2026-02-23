@@ -45,7 +45,7 @@ export interface DifficultyConfig {
 }
 
 export const DIFFICULTY_CONFIG: Record<Difficulty, DifficultyConfig> = {
-  easy: { label: 'Easy', cost: 1, reward: 9, depth: 1, description: 'Random AI moves' },
+  easy: { label: 'Easy', cost: 5, reward: 9, depth: 1, description: 'Random AI moves' },
   medium: { label: 'Medium', cost: 10, reward: 22, depth: 2, description: 'Basic strategy' },
   hard: { label: 'Hard', cost: 15, reward: 35, depth: 3, description: 'Advanced tactics' },
   expert: { label: 'Expert', cost: 25, reward: 65, depth: 4, description: 'Near-perfect play' },
