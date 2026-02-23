@@ -612,7 +612,7 @@ export const AuthModal: FC = () => {
                     ×
                 </button>
 
-                <div className="modal-header">
+                <div className="modal-header-main">
                     <h2>
                         {authMode === 'login' && 'Welcome Back'}
                         {authMode === 'signup' && 'Create Account'}

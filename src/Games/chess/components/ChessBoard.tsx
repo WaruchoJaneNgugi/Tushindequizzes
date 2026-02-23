@@ -99,18 +99,18 @@ export const ChessBoard: React.FC<CanvasChessBoardProps> = ({
 
                 // Determine square color
                 const isLight = (row + col) % 2 === 0;
-                let fillColor = isLight ? 'hsl(35, 40%, 78%)' : 'hsl(25, 35%, 42%)';
+                let fillColor = isLight ? 'hsl(29,96%,81%)' : 'hsl(27,87%,56%)';
 
                 // Check if this is the selected square
                 if (selectedSquare && selectedSquare.row === row && selectedSquare.col === col) {
-                    fillColor = '#785b83';
+                    fillColor = 'rgba(103,255,0,0.53)';
                 }
                 // Check if this is a last move square
                 else if (lastMove && (
                     (lastMove.from.row === row && lastMove.from.col === col) ||
                     (lastMove.to.row === row && lastMove.to.col === col)
                 )) {
-                    fillColor = isLight ? '#785b83' : '#6a5970';
+                    fillColor = isLight ? 'rgba(103,255,0,0.53)' : 'rgba(103,255,0,0.33)';
                 }
                 // Check if this is the king in check
                 else if (inCheck) {
