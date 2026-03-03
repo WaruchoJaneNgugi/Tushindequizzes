@@ -1,12 +1,11 @@
 // types/adminTypes.ts
 
-// API Response Types
 export interface ApiResponse<T> {
     success: boolean;
-    data?: T;
+    data?: T | { [key: string]: any };
     message?: string;
     error?: string;
-    pagination?: Pagination;
+    pagination?: Pagination | string;
 }
 
 export interface Pagination {
@@ -15,7 +14,25 @@ export interface Pagination {
     total: number;
     pages: number;
 }
+export interface UsersResponse {
+    users: User[];
+    total?: number;
+}
 
+export interface GamesResponse {
+    games: Game[];
+    total?: number;
+}
+
+export interface AchievementsResponse {
+    achievements: Achievement[];
+    total?: number;
+}
+
+export interface CategoriesResponse {
+    categories: Category[];
+    total?: number;
+}
 // User Types
 export interface User {
     id: string;
@@ -331,7 +348,7 @@ export interface ModalState {
     data?: any;
 }
 
-export interface FormData {
+export interface FormDataM {
     [key: string]: any;
 }
 
@@ -372,8 +389,8 @@ export interface AchievementFormData {
     threshold: number;
     gameId?: string;
     isActive: boolean;
+    imageUrl?: string;
 }
-
 // Category Form Types
 export interface CategoryFormData {
     name: string;
@@ -404,6 +421,7 @@ export interface UserFormData {
     isActive: boolean;
     reason?: string;
     notes?: string;
+    deleteData?: boolean;
 }
 
 // Transaction Form Types

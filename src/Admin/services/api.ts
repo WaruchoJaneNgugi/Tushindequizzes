@@ -43,7 +43,7 @@ export const authApi = {
     password: string;
     username: string;
     email?: string;
-  }) => request<any>('POST', '/auth/register', body, undefined),
+  }) => request('POST', '/auth/register', body, undefined),
 
   // Refresh token
   refreshToken: (refreshToken: string) =>
@@ -54,14 +54,14 @@ export const authApi = {
     localStorage.removeItem('authToken');
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-    return request<any>('POST', '/auth/logout', {}, undefined);
+    return request('POST', '/auth/logout', {}, undefined);
   },
 
   // Change password
   changePassword: (body: {
     currentPassword: string;
     newPassword: string;
-  }) => request<any>('POST', '/auth/change-password', body),
+  }) => request('POST', '/auth/change-password', body),
 
   // Forgot password
   forgotPassword: (phoneNumber: string) =>
@@ -72,17 +72,17 @@ export const authApi = {
     phoneNumber: string;
     otp: string;
     newPassword: string;
-  }) => request<any>('POST', '/auth/reset-password', body, undefined),
+  }) => request('POST', '/auth/reset-password', body, undefined),
 
   // Get current user profile
-  getProfile: () => request<any>('GET', '/auth/profile'),
+  getProfile: () => request('GET', '/auth/profile'),
 
   // Update profile
   updateProfile: (body: {
     username?: string;
     email?: string;
     avatar?: string;
-  }) => request<any>('PUT', '/auth/profile', body),
+  }) => request('PUT', '/auth/profile', body),
 };
 
 async function request<T>(
@@ -90,7 +90,7 @@ async function request<T>(
     path: string,
     body?: unknown,
     params?: Record<string, string | number | boolean>
-): Promise<{ success: boolean; data?: T; message?: string; error?: string; pagination?: any }> {
+): Promise<{ success: boolean; data?: T; message?: string; error?: string; pagination?: string }> {
 
 
   let url = `${BASE_URL}${path}`;
@@ -121,10 +121,10 @@ async function request<T>(
 // ─── Achievements ────────────────────────────────────────────────────────────
 export const achievementsApi = {
   getAll: (params?: { page?: number; limit?: number }) =>
-      request<any>('GET', '/achievements', undefined, params),
+      request('GET', '/achievements', undefined, params),
 
   getById: (id: string) =>
-      request<any>('GET', `/achievements/${id}`),
+      request('GET', `/achievements/${id}`),
 
   create: (body: {
     title: string;
@@ -132,7 +132,7 @@ export const achievementsApi = {
     pointsReward: number;
     criteria: { type: string; threshold: number; gameId?: string };
     isActive: boolean;
-  }) => request<any>('POST', '/achievements', body),
+  }) => request('POST', '/achievements', body),
 
   update: (id: string, body: Partial<{
     title: string;
@@ -140,44 +140,44 @@ export const achievementsApi = {
     pointsReward: number;
     criteria: { type: string; threshold: number; gameId?: string };
     isActive: boolean;
-  }>) => request<any>('PUT', `/achievements/${id}`, body),
+  }>) => request('PUT', `/achievements/${id}`, body),
 
-  delete: (id: string) => request<any>('DELETE', `/achievements/${id}`),
+  delete: (id: string) => request('DELETE', `/achievements/${id}`),
 
   getUserAchievements: (userId: string) =>
-      request<any>('GET', `/achievements/user/${userId}`),
+      request('GET', `/achievements/user/${userId}`),
 
   updateUserProgress: (userId: string, achievementId: string, body: { progress: number; isUnlocked: boolean }) =>
-      request<any>('PUT', `/achievements/user/${userId}/achievement/${achievementId}`, body),
+      request('PUT', `/achievements/user/${userId}/achievement/${achievementId}`, body),
 
   award: (userId: string, achievementId: string) =>
-      request<any>('POST', `/achievements/award/${userId}/achievement/${achievementId}`),
+      request('POST', `/achievements/award/${userId}/achievement/${achievementId}`),
 };
 
 // ─── Categories ──────────────────────────────────────────────────────────────
 export const categoriesApi = {
   getAll: (params?: { page?: number; limit?: number }) =>
-      request<any>('GET', '/categories', undefined, params),
+      request('GET', '/categories', undefined, params),
 
   getById: (id: string) =>
-      request<any>('GET', `/categories/${id}`),
+      request('GET', `/categories/${id}`),
 
   create: (body: { name: string; slug: string }) =>
-      request<any>('POST', '/categories', body),
+      request('POST', '/categories', body),
 
   update: (id: string, body: { name?: string; slug?: string }) =>
-      request<any>('PUT', `/categories/${id}`, body),
+      request('PUT', `/categories/${id}`, body),
 
-  delete: (id: string) => request<any>('DELETE', `/categories/${id}`),
+  delete: (id: string) => request('DELETE', `/categories/${id}`),
 };
 
 // ─── Games ───────────────────────────────────────────────────────────────────
 export const gamesApi = {
   getAll: (params?: { page?: number; limit?: number; category?: string; difficulty?: string }) =>
-      request<any>('GET', '/games', undefined, params),
+      request('GET', '/games', undefined, params),
 
   getById: (id: string) =>
-      request<any>('GET', `/games/${id}`),
+      request('GET', `/games/${id}`),
 
   create: (body: {
     title: string;
@@ -193,7 +193,7 @@ export const gamesApi = {
       questionsCount?: number;
       timePerQuestion?: number;
     };
-  }) => request<any>('POST', '/games', body),
+  }) => request('POST', '/games', body),
 
   update: (id: string, body: Partial<{
     title: string;
@@ -206,22 +206,22 @@ export const gamesApi = {
     durationMinutes: number;
     isActive: boolean;
     isFeatured: boolean;
-    metadata: Record<string, any>;
-  }>) => request<any>('PUT', `/games/${id}`, body),
+    metadata: Record<string, string>;
+  }>) => request('PUT', `/games/${id}`, body),
 
-  delete: (id: string) => request<any>('DELETE', `/games/${id}`),
+  delete: (id: string) => request('DELETE', `/games/${id}`),
 };
 
 // ─── Leaderboards ────────────────────────────────────────────────────────────
 export const leaderboardsApi = {
   get: (gameId: string, period: string) =>
-      request<any>('GET', `/leaderboards/${gameId}/${period}`),
+      request('GET', `/leaderboards/${gameId}/${period}`),
 
   getGlobal: (period: string) =>
-      request<any>('GET', `/leaderboards/global/${period}`),
+      request('GET', `/leaderboards/global/${period}`),
 
   getTop: (gameId: string) =>
-      request<any>('GET', `/leaderboards/top/${gameId}`),
+      request('GET', `/leaderboards/top/${gameId}`),
 
   updateScores: (body: {
     userId: string;
@@ -231,34 +231,34 @@ export const leaderboardsApi = {
     rank?: number;
     wins?: number;
     losses?: number;
-  }) => request<any>('POST', '/leaderboards/update', body),
+  }) => request('POST', '/leaderboards/update', body),
 
   reset: (body: { gameId: string; period: string; excludeAllTime?: boolean }) =>
-      request<any>('POST', '/leaderboards/reset', body),
+      request('POST', '/leaderboards/reset', body),
 };
 
 // ─── Sessions ────────────────────────────────────────────────────────────────
 export const sessionsApi = {
   getAll: (params?: { page?: number; limit?: number; status?: string; gameId?: string }) =>
-      request<any>('GET', '/sessions/admin/all', undefined, params),
+      request('GET', '/sessions/admin/all', undefined, params),
 
   getById: (id: string) =>
-      request<any>('GET', `/sessions/${id}`),
+      request('GET', `/sessions/${id}`),
 
   abandon: (sessionId: string) =>
-      request<any>('POST', `/sessions/${sessionId}/abandon`),
+      request('POST', `/sessions/${sessionId}/abandon`),
 };
 
 // ─── Transactions ────────────────────────────────────────────────────────────
 export const transactionsApi = {
   getAll: (params?: { page?: number; limit?: number; type?: string; status?: string }) =>
-      request<any>('GET', '/transactions', undefined, params),
+      request('GET', '/transactions', undefined, params),
 
   getUserTransactions: (userId: string, params?: { page?: number; limit?: number }) =>
-      request<any>('GET', `/transactions/user/${userId}`, undefined, params),
+      request('GET', `/transactions/user/${userId}`, undefined, params),
 
   getById: (id: string) =>
-      request<any>('GET', `/transactions/${id}`),
+      request('GET', `/transactions/${id}`),
 
   create: (body: {
     type: string;
@@ -267,40 +267,40 @@ export const transactionsApi = {
     paymentMethod?: string;
     description: string;
     referenceId?: string;
-    metadata?: Record<string, any>;
-  }) => request<any>('POST', '/transactions', body),
+    metadata?: Record<string, string>;
+  }) => request('POST', '/transactions', body),
 
   getStats: (params?: { startDate?: string; endDate?: string }) =>
-      request<any>('GET', '/transactions/stats', undefined, params),
+      request('GET', '/transactions/stats', undefined, params),
 
-  getDailySummary: () => request<any>('GET', '/transactions/daily'),
+  getDailySummary: () => request('GET', '/transactions/daily'),
 
-  getRevenue: () => request<any>('GET', '/transactions/revenue'),
+  getRevenue: () => request('GET', '/transactions/revenue'),
 
   updateStatus: (id: string, body: { status: string; notes?: string }) =>
-      request<any>('PUT', `/transactions/${id}/status`, body),
+      request('PUT', `/transactions/${id}/status`, body),
 
   refund: (id: string, body: { refundAmount: number; reason: string; notes?: string }) =>
-      request<any>('POST', `/transactions/${id}/refund`, body),
+      request('POST', `/transactions/${id}/refund`, body),
 };
 
 // ─── Users ───────────────────────────────────────────────────────────────────
 export const usersApi = {
   getAll: (params?: { page?: number; limit?: number; role?: string; isActive?: boolean; search?: string }) =>
-      request<any>('GET', '/users', undefined, params),
+      request('GET', '/users', undefined, params),
 
-  getById: (id: string) => request<any>('GET', `/users/${id}`),
+  getById: (id: string) => request('GET', `/users/${id}`),
 
   delete: (id: string, body?: { reason?: string; deleteData?: boolean }) =>
-      request<any>('DELETE', `/users/${id}`, body),
+      request('DELETE', `/users/${id}`, body),
 
   updateStatus: (id: string, body: { isActive: boolean; reason?: string; notes?: string }) =>
-      request<any>('PUT', `/users/${id}/status`, body),
+      request('PUT', `/users/${id}/status`, body),
 };
 
 // ─── Dashboard Stats ─────────────────────────────────────────────────────────
 export const dashboardApi = {
-  getStats: () => request<any>('GET', '/dashboard/stats'),
+  getStats: () => request('GET', '/dashboard/stats'),
 };
 
 export const apiService = {

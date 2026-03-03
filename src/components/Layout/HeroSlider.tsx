@@ -1,16 +1,14 @@
-import {useState, useEffect, useRef, useCallback} from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import '../../styles/carousel.css';
 import bibleQuizBanner from '../../assests/banners/BibleQuiz-banner.png';
-import wordQuest from '../../assests/banners/WordQuest-banner.png';
-import mathquiz from '../../assests/banners/MathQuiz-banner.png';
 import chemshabongo from '../../assests/banners/ChemshaBongo-banner.png';
 import checkers from '../../assests/banners/checkers-banner.png';
 import chessbanner from '../../assests/banners/chess-banner.png';
-import {useGameClick} from "../../hooks/useGameClick.ts";
+import { useGameClick } from "../../hooks/useGameClick.ts";
 
 interface Tag {
     label: string;
-    type: 'trending' | 'hot' | 'new' | 'trivia' | 'featured'|'strategy'|"classic"|"multiplayer";
+    type: 'trending' | 'hot' | 'new' | 'trivia' | 'featured' | 'strategy' | 'classic' | 'multiplayer';
 }
 
 interface Slide {
@@ -18,7 +16,6 @@ interface Slide {
     gameId: string;
     title: string;
     subtitle?: string;
-    description?: string;
     image: string;
     tags: Tag[];
     points: string;
@@ -35,100 +32,67 @@ const HeroSlider = () => {
     const sliderRef = useRef<HTMLDivElement>(null);
     const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const {handleGameClick} = useGameClick();
-
+    const { handleGameClick } = useGameClick();
     const minSwipeDistance = 50;
 
     const slides: Slide[] = [
         {
             id: 1,
-            gameId: "chemsha-bongo",
-            title: "Chemsha Bongo",
-            subtitle: "Brain Teaser Challenge",
-            description: "Test your wits with our most popular brain teasers",
-            image: chemshabongo,
+            gameId: "bible-quiz",
+            title: "Bible Quiz",
+            subtitle: "Test Your Scripture Knowledge",
+            image: bibleQuizBanner,
             points: "EARN UP TO 1000 POINTS!",
             tags: [
-                {label: "TRENDING", type: "trending"},
-                {label: "HOT", type: "hot"}
+                { label: "NEW", type: "new" },
+                { label: "TRIVIA", type: "trivia" }
             ],
             ctaText: "Play Now"
         },
         {
             id: 2,
+            gameId: "chemsha-bongo",
+            title: "Chemsha Bongo",
+            subtitle: "Brain Teaser Challenge",
+            image: chemshabongo,
+            points: "EARN UP TO 1000 POINTS!",
+            tags: [
+                { label: "TRENDING", type: "trending" },
+                { label: "HOT", type: "hot" }
+            ],
+            ctaText: "Play Now"
+        },
+        {
+            id: 3,
             gameId: "chess",
             title: "Chess Master",
             subtitle: "Classic Strategy Game",
-            description: "Challenge the AI in this classic game of strategy. Multiple difficulty levels available!",
             image: chessbanner,
             points: "EARN UP TO 1500 POINTS!",
             tags: [
-                {label: "STRATEGY", type: "strategy"},
-                {label: "FEATURED", type: "featured"},
+                { label: "STRATEGY", type: "strategy" },
+                { label: "FEATURED", type: "featured" },
             ],
             ctaText: "Play Chess"
         },
         {
-            id: 3,
+            id: 4,
             gameId: "checkers",
             title: "Checkers",
             subtitle: "Jump & Capture",
-            description: "Classic draughts game. Jump over opponent pieces and become the king!",
             image: checkers,
             points: "EARN UP TO 800 POINTS!",
             tags: [
-                {label: "CLASSIC", type: "classic"},
-                {label: "STRATEGY", type: "strategy"},
-                {label: "2-PLAYER", type: "multiplayer"}
+                { label: "CLASSIC", type: "classic" },
+                { label: "STRATEGY", type: "strategy" },
             ],
             ctaText: "Play Checkers"
-        },
-        {
-            id: 4,
-            gameId: "bible-quiz",
-            title: "Bible Quiz",
-            subtitle: "Test Your Scripture Knowledge",
-            description: "Challenge yourself with questions from the Bible",
-            image: bibleQuizBanner,
-            points: "EARN UP TO 1000 POINTS!",
-            tags: [
-                {label: "NEW", type: "new"},
-                {label: "TRIVIA", type: "trivia"}
-            ],
-            ctaText: "Play Now"
-        },
-        {
-            id: 5,
-            gameId: "word-quest",
-            title: "Word Quest",
-            subtitle: "Vocabulary Adventure",
-            description: "Expand your vocabulary while having fun",
-            image: wordQuest,
-            points: "EARN UP TO 1000 POINTS!",
-            tags: [
-                {label: "FEATURED", type: "featured"},
-                {label: "TRIVIA", type: "trivia"}
-            ],
-            ctaText: "Play Now"
-        },
-        {
-            id: 6,
-            gameId: "math-quiz",
-            title: "Math Quiz",
-            subtitle: "Numbers & Logic",
-            description: "Sharpen your math skills with exciting challenges",
-            image: mathquiz,
-            points: "EARN UP TO 1000 POINTS!",
-            tags: [
-                {label: "HOT", type: "hot"},
-                {label: "TRIVIA", type: "trivia"}
-            ],
-            ctaText: "Play Now"
-        },
+        }
     ];
 
-    const handleGameButtonClick = (gameId: string): void => {
-        handleGameClick(gameId);
+    const handleGameButtonClick = (gameId: string) => {
+        const gameData = slides.find(s => s.gameId === gameId);
+        handleGameClick(gameId, gameData as any);
     };
 
     const nextSlide = useCallback(() => {
@@ -185,56 +149,33 @@ const HeroSlider = () => {
         };
     }, [isHovering, nextSlide]);
 
-    useEffect(() => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-        }
-
-        if (!isHovering) {
-            intervalRef.current = setInterval(() => {
-                nextSlide();
-            }, 5000);
-        }
-
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-        };
-    }, [currentSlide, isHovering, nextSlide]);
-
     const handleImageLoad = (imageUrl: string) => {
-        setLoadedImages(prev => ({...prev, [imageUrl]: true}));
+        setLoadedImages(prev => ({ ...prev, [imageUrl]: true }));
     };
 
     const getTagClassName = (type: string) => {
         switch (type) {
-            case 'trending':
-                return 'tag-trending';
-            case 'hot':
-                return 'tag-hot';
-            case 'new':
-                return 'tag-new';
-            case 'trivia':
-                return 'tag-trivia';
-            case 'featured':
-                return 'tag-featured';
-            default:
-                return '';
+            case 'trending': return 'tag-trending';
+            case 'hot': return 'tag-hot';
+            case 'new': return 'tag-new';
+            case 'trivia': return 'tag-trivia';
+            case 'featured': return 'tag-featured';
+            case 'strategy': return 'tag-strategy';
+            case 'classic': return 'tag-classic';
+            default: return '';
         }
     };
 
     return (
-        // Add the parallax-layout class here
-        <div className="hero-slider-section parallax-layout">
+        <div className="hero-slider">
             <div className="hero-slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-main-wrapper">
+                    {/* Slides */}
                     <div
                         ref={sliderRef}
                         className="slider-track"
                         style={{
                             transform: `translateX(-${currentSlide * 100}%)`,
-                            transition: isTransitioning ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none',
                         }}
                         onMouseEnter={() => setIsHovering(true)}
                         onMouseLeave={() => setIsHovering(false)}
@@ -243,21 +184,21 @@ const HeroSlider = () => {
                         onTouchEnd={onTouchEnd}
                     >
                         {slides.map((slide, index) => (
-                            <div key={slide.id} className="slide-item">
-                                <div className="slide-image-side"
-                                     onClick={() => handleGameButtonClick(slide.gameId)}
-                                >
+                            <div key={slide.id} className="slide">
+                                {/* Image Side */}
+                                <div className="slide-image-wrapper">
                                     <img
                                         src={slide.image}
                                         alt={slide.title}
                                         className={`slide-image ${loadedImages[slide.image] ? 'loaded' : 'loading'}`}
                                         loading={index === 0 ? 'eager' : 'lazy'}
-                                        decoding="async"
                                         onLoad={() => handleImageLoad(slide.image)}
                                     />
+                                    <div className="slide-image-overlay" />
                                 </div>
 
-                                <div className="slide-content-side">
+                                {/* Content Side */}
+                                <div className="slide-content">
                                     <div className="slide-tags">
                                         {slide.tags.map((tag, tagIndex) => (
                                             <span
@@ -270,47 +211,36 @@ const HeroSlider = () => {
                                     </div>
 
                                     <h2 className="slide-title">{slide.title}</h2>
+
                                     {/*{slide.subtitle && (*/}
-                                    {/*    <h3 className="slide-subtitle">{slide.subtitle}</h3>*/}
+                                    {/*    <p className="slide-subtitle">{slide.subtitle}</p>*/}
                                     {/*)}*/}
 
-                                    {/*/!* Add description for the parallax layout *!/*/}
-                                    {/*{slide.description && (*/}
-                                    {/*    <p className="slide-description">{slide.description}</p>*/}
-                                    {/*)}*/}
-
-                                    {/* Points badge - optional for parallax layout */}
-                                    <div className="slide-points-badge">
+                                    <div className="slide-points">
                                         {/*<span className="points-icon">🏆</span>*/}
-                                        <span className="points-text">{slide.points}</span>
+                                        {/*<span className="points-text">{slide.points}</span>*/}
                                     </div>
 
-                                    <div className="playbtn-container">
-                                        <div
-                                            className="slide-cta-button"
-                                            onClick={() => handleGameButtonClick(slide.gameId)}
-                                        >
-                                            <span>{slide.ctaText || "Play Now"}</span>
-                                            <span className="button-arrow">→</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="slide-decoration">
-                                    <div className="decoration-circle"></div>
-                                    <div className="decoration-line"></div>
+                                    <button
+                                        className="slide-cta"
+                                        onClick={() => handleGameButtonClick(slide.gameId)}
+                                    >
+                                        <span>{slide.ctaText}</span>
+                                        <span className="cta-arrow"> </span>
+                                    </button>
                                 </div>
                             </div>
                         ))}
                     </div>
 
+                    {/* Navigation Arrows */}
                     <button
                         className="slider-nav nav-prev"
                         onClick={prevSlide}
                         aria-label="Previous slide"
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M15 18L9 12L15 6" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M15 18L9 12L15 6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
 
@@ -320,11 +250,12 @@ const HeroSlider = () => {
                         aria-label="Next slide"
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M9 18L15 12L9 6" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M9 18L15 12L9 6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
 
-                    <div className="slide-indicators">
+                    {/* Indicators */}
+                    <div className="slider-indicators">
                         {slides.map((_, index) => (
                             <button
                                 key={index}

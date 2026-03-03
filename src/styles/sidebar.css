@@ -348,12 +348,12 @@
 
 /* Update navbar container for sidebar */
 .navbar-container {
-    max-width: 1600px;
+    /*max-width: 1600px;*/
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 5px 1px;
     position: relative;
 }
 

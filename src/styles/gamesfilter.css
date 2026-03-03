@@ -527,7 +527,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* Desktop Categories */
@@ -840,7 +840,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 24px;
-        margin-bottom: 24px;
+        margin-bottom: 14px;
     }
 
     .desktop-categories {

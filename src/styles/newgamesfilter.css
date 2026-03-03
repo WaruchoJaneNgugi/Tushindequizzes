@@ -1,6 +1,6 @@
 /* Games Filter - Professional Design */
 .games-filter-container {
-    max-width: 1600px;
+    /*max-width: 1600px;*/
     margin: 6px auto;
     padding: 16px 12px 12px;
     border-radius: 10px;
@@ -711,8 +711,8 @@
     display: none;
     align-items: center;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
-    /*padding: 16px;*/
+    border-radius: 10px;
+    padding: 1px 6px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
 }

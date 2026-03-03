@@ -1,0 +1,295 @@
+/* topbar-search.css */
+
+/* Desktop Search Bar */
+.topbar-search-container {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+.topbar-search-form {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 2px 0;
+    transition: all 0.3s ease;
+    min-width: 130px;
+}
+
+.topbar-search-form:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(0, 201, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 201, 255, 0.2);
+}
+
+.search-icon {
+    color: rgba(255, 255, 255, 0.6);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.topbar-search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 14px;
+    width: 100%;
+    padding: 4px 0;
+}
+
+.topbar-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-clear-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.search-clear-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Search Toggle */
+.mobile-search-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.mobile-search-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Mobile Expanded Search Bar */
+.mobile-search-bar-expanded {
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.3s ease;
+}
+
+.mobile-search-form-expanded {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 10px 16px;
+    transition: all 0.3s ease;
+}
+
+.mobile-search-form-expanded:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(0, 201, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 201, 255, 0.2);
+}
+
+.mobile-search-input-expanded {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.mobile-search-input-expanded::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.mobile-search-clear-expanded {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+.mobile-search-clear-expanded:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Animation */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+/*@media (max-width: 768px) {*/
+/*    .desktop-actions .topbar-search-container {*/
+/*        display: none; !* Hide desktop search on mobile *!*/
+/*    }*/
+/*}*/
+
+@media (min-width: 1024px) {
+    /*.mobile-search-toggle-btn {*/
+    /*    display: none; !* Hide mobile search toggle on desktop *!*/
+    /*}*/
+
+    .mobile-search-bar-expanded {
+        display: none; /* Hide expanded mobile search on desktop */
+    }
+}
+
+/* Add to topbar-search.css */
+.desktop-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.topbar-search-container {
+    display: flex;
+    align-items: center;
+    order: 2; /* Ensure search appears after points if needed */
+}
+
+.desktop-points-display {
+    order: 1;
+}
+
+.desktop-logout-btn {
+    order: 3;
+}
+
+/* Ensure the search bar is properly sized */
+/*.topbar-search-form {*/
+/*    min-width: 280px;*/
+/*}*/
+
+/*@media (max-width: 1024px) {*/
+/*    .topbar-search-form {*/
+/*        min-width: 200px;*/
+/*    }*/
+/*}*/
+
+/*@media (max-width: 768px) {*/
+/*    .topbar-search-container {*/
+/*        display: none; !* Hide desktop search on mobile *!*/
+/*    }*/
+/*}*/
+
+/* Desktop Search Wrapper */
+.topbar-search-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.topbar-search-wrapper:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(0, 201, 255, 0.3);
+}
+
+.search-icon {
+    color: rgba(255, 255, 255, 0.6);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.search-placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+}
+
+/* Mobile Search Toggle */
+.mobile-search-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.mobile-search-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Desktop Actions Layout */
+.desktop-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .topbar-search-wrapper {
+        display: none; /* Hide desktop search on mobile */
+    }
+}
+
+/*@media (min-width: 1024px) {*/
+/*    .mobile-search-toggle-btn {*/
+/*        display: none; !* Hide mobile search toggle on desktop *!*/
+/*    }*/
+/*}*/
+
+/* Animation for search overlay trigger */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 201, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 5px rgba(0, 201, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 201, 255, 0);
+    }
+}
+
+.topbar-search-wrapper:active {
+    animation: pulse 0.3s ease;
+}

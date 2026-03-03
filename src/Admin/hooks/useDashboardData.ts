@@ -1,4 +1,3 @@
-// hooks/useDashboardData.ts
 import { useState, useEffect } from 'react';
 import { dashboardService, type RecentActivity, type ChartDataPoint } from '../services/dashboardServices.ts';
 import type { DashboardStats } from '../types';

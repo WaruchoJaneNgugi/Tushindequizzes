@@ -1,5 +1,6 @@
-// services/dashboardService.ts
+// services/dashboardServices.ts
 import { sessionsApi, usersApi, gamesApi } from './api';
+import {parsePagination} from "../hooks/paginationHelpers.ts";
 
 export interface DashboardStats {
   totalUsers: number;
@@ -40,20 +41,24 @@ class DashboardService {
         sessionsApi.getAll({ limit: 1 }),
       ]);
 
-      const totalUsers =
-        usersRes.status === 'fulfilled' && usersRes.value.pagination
-          ? usersRes.value.pagination.total
-          : 0;
+      let totalUsers = 0;
+      let totalQuizzes = 0;
+      let totalAttempts = 0;
 
-      const totalQuizzes =
-        gamesRes.status === 'fulfilled' && gamesRes.value.pagination
-          ? gamesRes.value.pagination.total
-          : 0;
+      if (usersRes.status === 'fulfilled' && usersRes.value.pagination) {
+        const pagination = parsePagination(usersRes.value.pagination);
+        totalUsers = pagination?.total || 0;
+      }
 
-      const totalAttempts =
-        sessionsRes.status === 'fulfilled' && sessionsRes.value.pagination
-          ? sessionsRes.value.pagination.total
-          : 0;
+      if (gamesRes.status === 'fulfilled' && gamesRes.value.pagination) {
+        const pagination = parsePagination(gamesRes.value.pagination);
+        totalQuizzes = pagination?.total || 0;
+      }
+
+      if (sessionsRes.status === 'fulfilled' && sessionsRes.value.pagination) {
+        const pagination = parsePagination(sessionsRes.value.pagination);
+        totalAttempts = pagination?.total || 0;
+      }
 
       if (totalUsers > 0 || totalQuizzes > 0 || totalAttempts > 0) {
         return {
@@ -141,11 +146,11 @@ class DashboardService {
 
   private getInitials(name: string): string {
     return name
-      .split(' ')
-      .map((p) => p[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+        .split(' ')
+        .map((p) => p[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
   }
 
   private formatTimeAgo(dateString: string): string {
