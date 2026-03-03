@@ -1,4 +1,4 @@
-// services/leaderboardService.ts
+// Store/leaderboardService.ts
 const Base_API_Url = 'https://lottomotto.co.ke/chemsha/api/';
 
 export type LeaderboardPeriod = 'daily' | 'weekly' | 'monthly' | 'all_time';
@@ -61,8 +61,19 @@ export const leaderboardAPI = {
             console.log('Leaderboard response status:', response.status);
 
             if (!response.ok) {
+                // If it's a 404, return empty data instead of throwing
                 if (response.status === 404) {
-                    throw new Error('Game not found');
+                    console.log('Leaderboard not found (404), returning empty data');
+                    return {
+                        success: true,
+                        data: [],
+                        pagination: {
+                            page: 1,
+                            limit: 20,
+                            total: 0,
+                            pages: 0
+                        }
+                    };
                 }
 
                 const errorText = await response.text();
@@ -82,10 +93,30 @@ export const leaderboardAPI = {
             const data = await response.json();
             console.log('Leaderboard data:', data);
 
-            return data;
+            // Ensure we always return a consistent structure
+            return {
+                success: data.success ?? true,
+                data: data.data || data || [],
+                pagination: data.pagination || {
+                    page: 1,
+                    limit: 20,
+                    total: 0,
+                    pages: 0
+                }
+            };
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
-            throw error;
+            // Return empty data instead of throwing for better UX
+            return {
+                success: false,
+                data: [],
+                pagination: {
+                    page: 1,
+                    limit: 20,
+                    total: 0,
+                    pages: 0
+                }
+            };
         }
     },
 
@@ -100,14 +131,25 @@ export const leaderboardAPI = {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to fetch games');
+                console.error('Failed to fetch games, returning empty array');
+                return [];
             }
 
             const data = await response.json();
-            return data.data || data;
+
+            // Handle different response structures
+            if (data.success && data.data) {
+                return Array.isArray(data.data) ? data.data : [];
+            } else if (Array.isArray(data)) {
+                return data;
+            } else if (data.games) {
+                return data.games;
+            }
+
+            return [];
         } catch (error) {
             console.error('Error fetching games:', error);
-            throw error;
+            return [];
         }
     },
 
@@ -122,6 +164,10 @@ export const leaderboardAPI = {
             });
 
             if (!response.ok) {
+                if (response.status === 404) {
+                    console.log('User rank not found');
+                    return null;
+                }
                 throw new Error('Failed to fetch user rank');
             }
 
@@ -129,7 +175,7 @@ export const leaderboardAPI = {
             return data.data || data;
         } catch (error) {
             console.error('Error fetching user rank:', error);
-            throw error;
+            return null;
         }
     }
 };

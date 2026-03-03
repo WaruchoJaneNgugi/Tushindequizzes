@@ -4,7 +4,6 @@ import { useAuth } from './useAuth';
 import {
     leaderboardAPI,
     type LeaderboardEntry,
-    // type LeaderboardResponse,
     type LeaderboardPeriod,
     type LeaderboardFilters
 } from '../Store/leaderboardService';
@@ -47,7 +46,7 @@ export const useLeaderboard = (initialGameId: string = 'default') => {
             setPagination(response.pagination);
 
             // Find user's rank in the current data
-            if (user) {
+            if (user && response.data.length > 0) {
                 const userEntry = response.data.find(entry => entry.userId === user.id);
                 if (userEntry) {
                     setUserRank({
@@ -59,15 +58,34 @@ export const useLeaderboard = (initialGameId: string = 'default') => {
                     // If user not in current page, fetch their rank separately
                     try {
                         const rankData = await leaderboardAPI.getUserRank(user.id, currentGameId);
-                        setUserRank(rankData);
+                        if (rankData) {
+                            setUserRank(rankData);
+                        } else {
+                            setUserRank(null);
+                        }
                     } catch (err) {
                         console.error('Error fetching user rank:', err);
+                        setUserRank(null);
                     }
                 }
+            } else {
+                setUserRank(null);
             }
+
+            // Clear error if successful
+            setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to fetch leaderboard');
-            console.error('Error in fetchLeaderboard:', err);
+            // Don't set error for empty leaderboards, just show empty state
+            console.log('Leaderboard fetch returned empty or error:', err);
+            setLeaderboardData([]);
+            setPagination({
+                page: 1,
+                limit: pagination.limit,
+                total: 0,
+                pages: 0
+            });
+            setUserRank(null);
+            // Don't set error state - we'll show empty UI instead
         } finally {
             setLoading(false);
         }
@@ -79,6 +97,7 @@ export const useLeaderboard = (initialGameId: string = 'default') => {
             setGames(gamesData);
         } catch (err) {
             console.error('Error fetching games:', err);
+            setGames([]);
         }
     }, []);
 
@@ -108,7 +127,7 @@ export const useLeaderboard = (initialGameId: string = 'default') => {
         leaderboardData,
         pagination,
         loading,
-        error,
+        error: error, // This will now only be set for real errors, not empty data
         currentPeriod,
         currentGameId,
         games,

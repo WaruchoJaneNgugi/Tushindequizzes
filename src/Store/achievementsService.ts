@@ -1,4 +1,4 @@
-// services/achievementsService.ts
+// Store/achievementsService.ts
 const Base_API_Url = 'https://lottomotto.co.ke/chemsha/api/';
 
 export interface AchievementStats {
@@ -11,9 +11,11 @@ export interface AchievementStats {
 
 export interface Achievement {
     id: string | number;
-    name: string;
+    title: string;  // Changed from 'name' to 'title' to match backend
+    name?: string;  // Keep for backward compatibility
     description: string;
-    points: number;
+    pointsReward?: number;  // Changed from 'points' to match backend
+    points?: number;  // Keep for backward compatibility
     status?: 'claimed' | 'available' | 'locked';
     icon?: string;
     category?: string;
@@ -21,6 +23,9 @@ export interface Achievement {
     maxProgress?: number;
     earnedAt?: string;
     requirements?: string[];
+    isActive?: boolean;  // Add from backend
+    criteria?: any;  // Add from backend
+    createdAt?: string;  // Add from backend
 }
 
 export const achievementsAPI = {
@@ -47,7 +52,6 @@ export const achievementsAPI = {
                     const errorData = JSON.parse(errorText);
                     errorMessage = errorData.message || errorMessage;
                 } catch {
-                    // If it's not JSON, use the text
                     errorMessage = errorText || errorMessage;
                 }
 
@@ -58,8 +62,8 @@ export const achievementsAPI = {
             console.log('Achievement stats data:', data);
 
             // Handle different response structures
-            if (data.success) {
-                return data.data || data;
+            if (data.success && data.data) {
+                return data.data;
             } else if (data.data) {
                 return data.data;
             } else {
@@ -102,21 +106,64 @@ export const achievementsAPI = {
             }
 
             const data = await response.json();
-            console.log('User achievements data:', data);
+            console.log('User achievements raw data:', data);
 
-            // Handle different response structures
+            // Extract achievements array from response
+            let achievementsData: any[] = [];
+
             if (data.success && data.data) {
-                return Array.isArray(data.data) ? data.data : [data.data];
+                // If data.data is an array
+                if (Array.isArray(data.data)) {
+                    achievementsData = data.data;
+                }
+                // If data.data has an achievements property
+                else if (data.data.achievements && Array.isArray(data.data.achievements)) {
+                    achievementsData = data.data.achievements;
+                }
+                // If data.data is a single object
+                else if (typeof data.data === 'object') {
+                    achievementsData = [data.data];
+                }
             } else if (Array.isArray(data)) {
-                return data;
-            } else if (data.achievements) {
-                return data.achievements;
-            } else {
-                return [];
+                achievementsData = data;
+            } else if (data.achievements && Array.isArray(data.achievements)) {
+                achievementsData = data.achievements;
+            } else if (typeof data === 'object') {
+                // Try to find any array property that might contain achievements
+                for (const key in data) {
+                    if (Array.isArray(data[key]) && data[key].length > 0) {
+                        // Check if the first item has achievement-like properties
+                        const firstItem = data[key][0];
+                        if (firstItem && (firstItem.title || firstItem.name || firstItem.description)) {
+                            achievementsData = data[key];
+                            break;
+                        }
+                    }
+                }
             }
+
+            console.log('Extracted achievements data:', achievementsData);
+
+            // Transform achievements to match frontend expected format
+            return achievementsData.map(ach => ({
+                id: ach.id || ach.achievementId || '',
+                title: ach.title || ach.name || 'Unknown Achievement',
+                name: ach.title || ach.name || 'Unknown Achievement',
+                description: ach.description || '',
+                points: ach.pointsReward || ach.points || 0,
+                pointsReward: ach.pointsReward || ach.points || 0,
+                status: ach.status || (ach.claimed ? 'claimed' : ach.available ? 'available' : 'locked'),
+                icon: ach.icon || '🏆',
+                progress: ach.progress || 0,
+                maxProgress: ach.maxProgress || ach.criteria?.threshold || 100,
+                earnedAt: ach.claimedAt || ach.earnedAt || ach.completedAt,
+                isActive: ach.isActive !== false,
+                criteria: ach.criteria,
+                createdAt: ach.createdAt
+            }));
         } catch (error) {
             console.error('Error fetching user achievements:', error);
-            throw error;
+            return []; // Return empty array instead of throwing
         }
     },
 
@@ -192,16 +239,38 @@ export const achievementsAPI = {
             const data = await response.json();
             console.log('All achievements data:', data);
 
+            // Handle different response structures
+            let achievementsData: any[] = [];
+
             if (data.success && data.data) {
-                return Array.isArray(data.data) ? data.data : [data.data];
+                if (Array.isArray(data.data)) {
+                    achievementsData = data.data;
+                } else if (data.data.achievements) {
+                    achievementsData = data.data.achievements;
+                }
             } else if (Array.isArray(data)) {
-                return data;
-            } else {
-                return [];
+                achievementsData = data;
+            } else if (data.achievements) {
+                achievementsData = data.achievements;
             }
+
+            // Transform to frontend format
+            return achievementsData.map(ach => ({
+                id: ach.id,
+                title: ach.title,
+                name: ach.title,
+                description: ach.description,
+                points: ach.pointsReward || 0,
+                pointsReward: ach.pointsReward || 0,
+                status: ach.isActive ? 'available' : 'locked',
+                icon: '🏆',
+                isActive: ach.isActive,
+                criteria: ach.criteria,
+                createdAt: ach.createdAt
+            }));
         } catch (error) {
             console.error('Error fetching achievements:', error);
-            throw error;
+            return [];
         }
     }
 };
