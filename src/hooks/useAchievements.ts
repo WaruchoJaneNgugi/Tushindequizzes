@@ -1,7 +1,7 @@
 // hooks/useAchievements.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
-import {type Achievement, achievementsAPI, type AchievementStats} from "../Store/achievementsService.ts";
+import { type Achievement, achievementsAPI, type AchievementStats } from "../Store/achievementsService.ts";
 
 export const useAchievements = () => {
     const { token, user } = useAuth(); // Get user info as well
@@ -51,9 +51,10 @@ export const useAchievements = () => {
                 console.log('All achievements fetched:', allAchievements);
 
                 // Mark them as locked since user hasn't earned them
-                const lockedAchievements = allAchievements.map(ach => ({
+                // Cast the status to the correct union type
+                const lockedAchievements: Achievement[] = allAchievements.map(ach => ({
                     ...ach,
-                    status: 'locked'
+                    status: 'locked' as const // Use 'as const' to ensure it's treated as literal type
                 }));
                 setAchievements(lockedAchievements);
             }
@@ -65,9 +66,9 @@ export const useAchievements = () => {
             try {
                 console.log('Error occurred, fetching all achievements as fallback...');
                 const allAchievements = await achievementsAPI.getAllAchievements();
-                const lockedAchievements = allAchievements.map(ach => ({
+                const lockedAchievements: Achievement[] = allAchievements.map(ach => ({
                     ...ach,
-                    status: 'locked'
+                    status: 'locked' as const // Use 'as const' to ensure it's treated as literal type
                 }));
                 setAchievements(lockedAchievements);
             } catch (fallbackErr) {
