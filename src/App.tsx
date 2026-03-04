@@ -64,7 +64,7 @@ const App: FC = () => {
             title="Tushinde Quiz"
             subtitle="Preparing your gaming experience"
             loadingMessage="Loading games, assets, and leaderboards..."
-            onCancel={() => setIsLoading(false)}
+            // onCancel={() => setIsLoading(false)}
         />;
     }
 
