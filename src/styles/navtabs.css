@@ -1,7 +1,15 @@
-/* navtabs.css - Tab-based navigation styles */
+/* ==================== MODERN TAB NAVIGATION ==================== */
+:root {
+    --gradient-primary: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%);
+    --gradient-hover: linear-gradient(135deg, #00b8e6 0%, #83e68f 100%);
+    --glass-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --neon-glow: 0 0 20px rgba(0, 201, 255, 0.3);
+}
+.navbar-container{
+    display: flex;
 
-/* ==================== DESKTOP TAB NAVIGATION ==================== */
-
+}
 /* Navigation Tabs Container */
 .nav-tabs-container {
     display: flex;
@@ -11,122 +19,134 @@
     margin: 0 2rem;
 }
 
+/* Modern Tab Design */
 .nav-tabs {
     display: flex;
-    gap: 4px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 4px;
-    backdrop-filter: blur(10px);
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 6px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
 }
 
 .nav-tab {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 10px 20px;
-    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 12px 24px;
+    border-radius: 14px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     position: relative;
     overflow: hidden;
+    letter-spacing: 0.3px;
+}
+
+.nav-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
 }
 
 .nav-tab:hover {
-    background: rgba(255, 255, 255, 0.1);
     color: white;
+    transform: translateY(-2px);
+}
+
+.nav-tab:hover::before {
+    opacity: 0.15;
 }
 
 .nav-tab.active {
-    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
     color: #0f172a;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 201, 255, 0.3);
+    background: var(--gradient-primary);
+    font-weight: 700;
+    box-shadow: var(--neon-glow);
+    animation: tabGlow 2s infinite;
 }
 
-.nav-tab.active::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 3px;
-    background: #0f172a;
-    border-radius: 3px;
-
+@keyframes tabGlow {
+    0%, 100% { box-shadow: 0 4px 15px rgba(0, 201, 255, 0.3); }
+    50% { box-shadow: 0 8px 25px rgba(0, 201, 255, 0.6); }
 }
 
 /* Desktop Actions */
 .desktop-actions {
     display: flex;
-    flex-direction: row;
-    /*justify-content: space-between;*/
     align-items: center;
-    /*border:1px solid white;*/
-    gap: 15px;
+    gap: 20px;
 }
 
-/* Points Display */
+/* Modern Points Display */
 .desktop-points-display {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
 }
 
-.navbar-left-section{
+.navbar-left-section {
     display: flex;
     align-items: center;
-    gap:4px;
+    gap: 8px;
 }
 
-
+/* Premium Points Button */
 .points-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 10px 20px;
     color: white;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 120px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px;
     font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.points-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
 }
 
 .points-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 201, 255, 0.2);
+    border-color: rgba(0, 201, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: var(--neon-glow);
+}
+
+.points-btn:hover::before {
+    opacity: 0.1;
 }
 
 .points-btn.game-points {
-    background: rgba(146, 254, 157, 0.1);
+    background: rgba(146, 254, 157, 0.05);
     border-color: rgba(146, 254, 157, 0.3);
 }
 
-.points-btn.game-points:hover {
-    background: rgba(146, 254, 157, 0.2);
-    box-shadow: 0 4px 12px rgba(146, 254, 157, 0.2);
-}
-
-.points-icon {
-    font-size: 16px;
-]    line-height: 1;
-}
-
 .points-amount {
-    text-align: center;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 800;
     color: #00C9FF;
+    transition: all 0.3s ease;
 }
 
 .points-btn.game-points .points-amount {
@@ -134,55 +154,67 @@
 }
 
 .points-label {
-    font-size: 12px;
+    font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.6);
-    /*margin-left: auto;*/
+    letter-spacing: 0.5px;
 }
 
 /* Action Buttons */
 .desktop-settings-btn,
 .desktop-logout-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    width: 40px;
-    height: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.desktop-settings-btn::before,
+.desktop-logout-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
 }
 
 .desktop-settings-btn:hover {
-    background: rgba(0, 201, 255, 0.1);
+    border-color: rgba(0, 201, 255, 0.5);
     color: #00C9FF;
-    border-color: rgba(0, 201, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0, 201, 255, 0.3);
+}
+
+.desktop-settings-btn:hover::before {
+    opacity: 0.15;
 }
 
 .desktop-logout-btn:hover {
-    background: rgba(255, 107, 107, 0.1);
+    border-color: rgba(255, 107, 107, 0.5);
     color: #ff6b6b;
-    border-color: rgba(255, 107, 107, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
 }
 
-/* Adjust navbar container for new layout */
-/*.navbar-container {*/
-/*    max-width: 1400px;*/
-/*    margin: 0 auto;*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: center;*/
-/*    padding: 1rem 0;*/
-/*    position: relative;*/
-/*}*/
+.desktop-logout-btn:hover::before {
+    opacity: 0.15;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
 
 /* Desktop Navigation Layout */
 .navbar-desktop-nav {
     display: none;
     align-items: center;
-    /*flex: 1;*/
     justify-content: space-between;
 }
 
@@ -191,14 +223,8 @@
         display: flex;
     }
 }
-@media (min-width:740px) {
-.points-amount{
-    font-size: 14px;
 
-}
-}
-
-/* Desktop Auth Buttons - These must be included! */
+/* Auth Buttons */
 .auth-buttons-desktop {
     display: flex;
     gap: 12px;
@@ -207,54 +233,74 @@
 
 .btn-login {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--glass-border);
     color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
+    padding: 0.85rem 1.8rem;
+    border-radius: 30px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
 }
 
 .btn-login:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #00C9FF;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 201, 255, 0.2);
 }
 
 .btn-signup {
-    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+    background: var(--gradient-primary);
     border: none;
     color: #0f172a;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 0.85rem 1.8rem;
+    border-radius: 30px;
+    font-weight: 700;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-signup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .btn-signup:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 201, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 201, 255, 0.4);
 }
 
-/* Mobile menu item active state */
-.mobile-menu-item.active {
-    background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
-    color: #0f172a;
-    font-weight: 600;
+.btn-signup:hover::before {
+    left: 100%;
 }
 
-/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+/* Responsive */
+@media (min-width: 740px) {
+    .points-amount {
+        font-size: 1.2rem;
+    }
+}
 
-/* Tablet and Desktop adjustments */
 @media (max-width: 1200px) {
     .nav-tabs-container {
         margin: 0 1rem;
     }
 
     .points-btn {
-        min-width: 100px;
-        /*padding: 8px 14px;*/
+        min-width: 120px;
+        padding: 8px 16px;
     }
 
     .points-label {
@@ -270,7 +316,6 @@
     .navbar-mobile-nav {
         display: flex;
     }
-
 }
 
 @media (max-width: 768px) {
@@ -292,24 +337,18 @@
     }
 }
 
-/* Animation for active tab */
+/* Animations */
 @keyframes tabActive {
-    0% {
-        transform: scale(0.95);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
 
 .nav-tab.active {
     animation: tabActive 0.3s ease;
 }
 
-/* Badge for notifications */
+/* Notification Badge */
 .nav-tab.has-notification {
     position: relative;
 }
@@ -319,33 +358,23 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: #ff6b6b;
     border-radius: 50%;
     border: 2px solid #0f172a;
+    animation: pulse 2s infinite;
 }
 
-/* Responsive adjustments for smaller desktop screens */
-@media (max-width: 1400px) {
-     .nav-tabs {
-        gap: 2px;
-    }
-
-    .nav-tab {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
 }
 
-/* Dark mode adjustments */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
     .nav-tabs {
         background: rgba(0, 0, 0, 0.3);
-    }
-
-    .nav-tab:hover {
-        background: rgba(255, 255, 255, 0.15);
     }
 
     .points-btn {
@@ -355,10 +384,7 @@
 
 /* Print styles */
 @media print {
-    .navbar-desktop-nav {
-        display: none !important;
-    }
-
+    .navbar-desktop-nav,
     .navbar-mobile-nav {
         display: none !important;
     }

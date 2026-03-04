@@ -18,15 +18,15 @@ export const HistoryOverlay: FC<HistoryOverlayProps> = ({ onClose }) => {
         { id: 7, game: 'Movie Quiz', date: 'Dec 8, 7:00 PM', points: 180, status: 'won', duration: '3:45' },
         { id: 8, game: 'Music Challenge', date: 'Dec 7, 1:45 PM', points: 120, status: 'won', duration: '2:55' },
     ];
-
-    const stats = {
-        totalGames: 42,
-        wins: 28,
-        losses: 14,
-        totalPoints: 1850,
-        avgPoints: 44,
-        winRate: '67%'
-    };
+    //
+    // const stats = {
+    //     totalGames: 42,
+    //     wins: 28,
+    //     losses: 14,
+    //     totalPoints: 1850,
+    //     avgPoints: 44,
+    //     winRate: '67%'
+    // };
 
     return (
         <>
@@ -45,55 +45,55 @@ export const HistoryOverlay: FC<HistoryOverlayProps> = ({ onClose }) => {
                         <h2 className="feature-title">Game History</h2>
                         <p className="feature-subtitle">Your gaming journey</p>
                     </div>
-                    <div className="feature-header-right">
-                        <button className="feature-action-button">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </button>
-                        <button className="feature-action-button">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M12 16V12L15 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
+                    {/*<div className="feature-header-right">*/}
+                    {/*    /!*<button className="feature-action-button">*!/*/}
+                    {/*    /!*    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">*!/*/}
+                    {/*    /!*        <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>*!/*/}
+                    {/*    /!*        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>*!/*/}
+                    {/*    /!*        <path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>*!/*/}
+                    {/*    /!*    </svg>*!/*/}
+                    {/*    /!*</button>*!/*/}
+                    {/*    /!*<button className="feature-action-button">*!/*/}
+                    {/*    /!*    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">*!/*/}
+                    {/*    /!*        <path d="M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z" stroke="currentColor" strokeWidth="2"/>*!/*/}
+                    {/*    /!*        <path d="M12 16V12L15 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>*!/*/}
+                    {/*    /!*    </svg>*!/*/}
+                    {/*    /!*</button>*!/*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className="feature-overlay-content">
                     <div className="history-container">
-                        <div className="history-stats">
-                            <div className="stat-card">
-                                <div className="stat-icon">🎮</div>
-                                <div className="stat-info">
-                                    <h4 className="stat-label">Total Games</h4>
-                                    <p className="stat-value">{stats.totalGames}</p>
-                                </div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-icon">🏆</div>
-                                <div className="stat-info">
-                                    <h4 className="stat-label">Wins</h4>
-                                    <p className="stat-value">{stats.wins} ({stats.winRate})</p>
-                                </div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-icon">📈</div>
-                                <div className="stat-info">
-                                    <h4 className="stat-label">Total Points</h4>
-                                    <p className="stat-value">{stats.totalPoints}</p>
-                                </div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-icon">⏱️</div>
-                                <div className="stat-info">
-                                    <h4 className="stat-label">Avg Points</h4>
-                                    <p className="stat-value">{stats.avgPoints}</p>
-                                </div>
-                            </div>
-                        </div>
+                        {/*<div className="history-stats">*/}
+                        {/*    <div className="stat-card">*/}
+                        {/*        <div className="stat-icon">🎮</div>*/}
+                        {/*        <div className="stat-info">*/}
+                        {/*            <h4 className="stat-label">Total Games</h4>*/}
+                        {/*            <p className="stat-value">{stats.totalGames}</p>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*    <div className="stat-card">*/}
+                        {/*        <div className="stat-icon">🏆</div>*/}
+                        {/*        <div className="stat-info">*/}
+                        {/*            <h4 className="stat-label">Wins</h4>*/}
+                        {/*            <p className="stat-value">{stats.wins} ({stats.winRate})</p>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*    <div className="stat-card">*/}
+                        {/*        <div className="stat-icon">📈</div>*/}
+                        {/*        <div className="stat-info">*/}
+                        {/*            <h4 className="stat-label">Total Points</h4>*/}
+                        {/*            <p className="stat-value">{stats.totalPoints}</p>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*    <div className="stat-card">*/}
+                        {/*        <div className="stat-icon">⏱️</div>*/}
+                        {/*        <div className="stat-info">*/}
+                        {/*            <h4 className="stat-label">Avg Points</h4>*/}
+                        {/*            <p className="stat-value">{stats.avgPoints}</p>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
 
                         <div className="history-filters">
                             <div className="filter-group">

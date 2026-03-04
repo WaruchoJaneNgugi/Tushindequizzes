@@ -1,5 +1,5 @@
 // components/ImageLoader.tsx
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import '../styles/imageLoader.css';
 
 interface ImageLoaderProps {
@@ -7,179 +7,132 @@ interface ImageLoaderProps {
     progress?: number;
     title?: string;
     subtitle?: string;
-    loadingMessage?: string;
-    // onCancel?: () => void;
-    // showSteps?: boolean;
-    variant?: 'default' | 'minimal' | 'cyber';
 }
 
 export const ImageLoader: FC<ImageLoaderProps> = ({
                                                       isLoading,
                                                       progress = 0,
-                                                      title = "Loading Experience",
-                                                      subtitle = "Preparing something amazing for you",
-                                                      loadingMessage = "Crafting pixels with precision...",
-                                                      // onCancel,
-                                                      // showSteps = true,
-                                                      variant = 'default'
-                                                  }) => {
-    const [dots, setDots] = useState('');
-
-    // Animated loading dots
-    useEffect(() => {
-        if (!isLoading) return;
-
-        const interval = setInterval(() => {
-            setDots(prev => prev.length >= 3 ? '' : prev + '.');
-        }, 400);
-
-        return () => clearInterval(interval);
-    }, [isLoading]);
+                                                      title = "Loading...",
+                                                      subtitle = "Please wait while we prepare your content"                                                  }) => {
+    // const [elapsedTime, setElapsedTime] = useState(0);
+    //
+    // useEffect(() => {
+    //     if (!isLoading) return;
+    //
+    //     const interval = setInterval(() => {
+    //         setElapsedTime(prev => prev + 1);
+    //     }, 1000);
+    //
+    //     return () => clearInterval(interval);
+    // }, [isLoading]);
 
     if (!isLoading) return null;
 
-    const getVariantClass = () => {
-        switch(variant) {
-            case 'minimal': return 'loader-minimal';
-            case 'cyber': return 'loader-cyber';
-            default: return 'loader-default';
-        }
-    };
+    // const formatTime = (seconds: number) => {
+    //     if (seconds < 60) return `${seconds}s`;
+    //     return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
+    // };
 
     return (
-        <div className={`image-loader-overlay ${getVariantClass()}`}>
-            <div className="image-loader-content">
-                {/* Animated Background Elements */}
-                <div className="loader-bg-elements">
-                    <div className="bg-circle circle-1"></div>
-                    <div className="bg-circle circle-2"></div>
-                    <div className="bg-grid"></div>
+        <div className={`loader-modern loader-dark`}>
+            <div className="loader-grid">
+                {/* Animated Grid Background */}
+                <div className="grid-background">
+                    {[...Array(20)].map((_, i) => (
+                        <div key={i} className="grid-line horizontal" style={{ top: `${i * 5}%` }}></div>
+                    ))}
+                    {[...Array(20)].map((_, i) => (
+                        <div key={i} className="grid-line vertical" style={{ left: `${i * 5}%` }}></div>
+                    ))}
                 </div>
 
-                <div className="loader-content-inner">
-                    {/* Header Section */}
-                    <div className="loader-header">
-                        <div className="loader-icon-wrapper">
-                            <div className="loader-icon-glow"></div>
-                            {/*<div className="loader-icon">✨</div>*/}
+                {/* Main Content */}
+                <div className="loader-card">
+                    {/* Progress Ring */}
+                    <div className="progress-ring-container">
+                        <svg className="progress-ring" width="140" height="140">
+                            <circle
+                                className="progress-ring-bg"
+                                stroke="rgba(255,255,255,0.1)"
+                                strokeWidth="3"
+                                fill="transparent"
+                                r="62"
+                                cx="70"
+                                cy="70"
+                            />
+                            <circle
+                                className="progress-ring-fill"
+                                stroke="url(#gradient)"
+                                strokeWidth="4"
+                                fill="transparent"
+                                r="62"
+                                cx="70"
+                                cy="70"
+                                style={{
+                                    strokeDasharray: `${2 * Math.PI * 62}`,
+                                    strokeDashoffset: `${2 * Math.PI * 62 * (1 - progress / 100)}`
+                                }}
+                            />
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#4776E6" />
+                                    <stop offset="100%" stopColor="#8E54E9" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div className="progress-ring-content">
+                            {/*{showPercentage ? (*/}
+                            {/*    <>*/}
+                                    <span className="progress-value">{Math.round(progress)}</span>
+                                    <span className="progress-unit">%</span>
+                                {/*</>*/}
+                            {/*) : (*/}
+                            {/*    <div className="progress-dots">*/}
+                            {/*        <span></span><span></span><span></span>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </div>
-                        <h2 className="loader-title">
-                            {title}
-                            <span className="title-dots">{dots}</span>
-                        </h2>
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="loader-text">
+                        <h3 className="loader-title">{title}</h3>
                         <p className="loader-subtitle">{subtitle}</p>
                     </div>
 
-                    {/* Main Animation Section */}
-                    <div className="loader-animation">
-                        <div className="spinner-container-loader">
-                            <div className="neo-spinner">
-                                <div className="spinner-ring ring-outer"></div>
-                                <div className="spinner-ring ring-middle"></div>
-                                <div className="spinner-ring ring-inner"></div>
-                                <div className="spinner-core">
-                                    <div className="core-pulse"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Progress Section */}
-                        <div className="progress-container-loader">
-                            <div className="progress-bar-loader">
-                                <div
-                                    className="progress-fill-loader"
-                                    style={{ width: `${progress}%` }}
-                                >
-                                    <div className="progress-glow"></div>
-                                </div>
-                            </div>
-                            <div className="progress-stats">
-                                <div className="progress-info">
-                                    <span className="progress-label">Loading</span>
-                                    <span className="progress-percentage">{progress}%</span>
-                                </div>
-                                <div className="progress-speed">
-                                    <span className="speed-value">{(progress * 0.85).toFixed(1)}</span>
-                                    <span className="speed-unit">MB/s</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Loading Message */}
-                        <div className="loading-message">
-                            <span className="message-icon">|</span>
-                            <p className="message-text">{loadingMessage}</p>
-                        </div>
-                    </div>
-
-                    {/* Steps Section */}
-                    {/*{showSteps && (*/}
-                    {/*    <div className="loading-steps">*/}
-                    {/*        <div className="steps-container">*/}
-                    {/*            <div className="step-item active">*/}
-                    {/*                <div className="step-marker">*/}
-                    {/*                    <span className="step-number">1</span>*/}
-                    {/*                    <div className="step-progress"></div>*/}
-                    {/*                </div>*/}
-                    {/*                <div className="step-content">*/}
-                    {/*                    <h4>Initializing</h4>*/}
-                    {/*                    <p>Setting up environment</p>*/}
-                    {/*                </div>*/}
-                    {/*                <div className="step-status">*/}
-                    {/*                    <span className="status-badge">In Progress</span>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div className="step-item">*/}
-                    {/*                <div className="step-marker">*/}
-                    {/*                    <span className="step-number">2</span>*/}
-                    {/*                </div>*/}
-                    {/*                <div className="step-content">*/}
-                    {/*                    <h4>Loading Assets</h4>*/}
-                    {/*                    <p>Fetching images and media</p>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div className="step-item">*/}
-                    {/*                <div className="step-marker">*/}
-                    {/*                    <span className="step-number">3</span>*/}
-                    {/*                </div>*/}
-                    {/*                <div className="step-content">*/}
-                    {/*                    <h4>Processing</h4>*/}
-                    {/*                    <p>Optimizing content</p>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div className="step-item">*/}
-                    {/*                <div className="step-marker">*/}
-                    {/*                    <span className="step-number">4</span>*/}
-                    {/*                </div>*/}
-                    {/*                <div className="step-content">*/}
-                    {/*                    <h4>Finalizing</h4>*/}
-                    {/*                    <p>Completing setup</p>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
+                    {/* Progress Stats */}
+                    {/*<div className="loader-stats">*/}
+                    {/*    <div className="stat">*/}
+                    {/*        <span className="stat-label">Elapsed</span>*/}
+                    {/*        <span className="stat-value">{formatTime(elapsedTime)}</span>*/}
                     {/*    </div>*/}
-                    {/*)}*/}
-
-                    {/* Footer Section */}
-                    {/*<div className="loader-footer">*/}
-                    {/*    {onCancel && progress < 100 && (*/}
-                    {/*        <button*/}
-                    {/*            className="btn-cancel"*/}
-                    {/*            onClick={onCancel}*/}
-                    {/*        >*/}
-                    {/*            <span className="btn-icon">✕</span>*/}
-                    {/*            <span className="btn-text">Cancel Loading</span>*/}
-                    {/*        </button>*/}
-                    {/*    )}*/}
-
-                    {/*    <div className="footer-note">*/}
-                    {/*        <span className="note-icon">🔒</span>*/}
-                    {/*        <span className="note-text">Secure connection</span>*/}
+                    {/*    <div className="stat-divider"></div>*/}
+                    {/*    <div className="stat">*/}
+                    {/*        <span className="stat-label">Estimated</span>*/}
+                    {/*        <span className="stat-value">{estimatedTime}</span>*/}
                     {/*    </div>*/}
                     {/*</div>*/}
+
+                    {/* Progress Bar */}
+                    {/*<div className="progress-bar-container">*/}
+                    {/*    <div className="progress-bar-track">*/}
+                    {/*        <div*/}
+                    {/*            className="progress-bar-fill"*/}
+                    {/*            style={{ width: `${progress}%` }}*/}
+                    {/*        >*/}
+                    {/*            <div className="progress-bar-glow"></div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                    {/* Loading Details */}
+                    <div className="loading-details">
+                        <span className="detail-item">Initializing</span>
+                        <span className="detail-dot">•</span>
+                        <span className="detail-item">Loading assets</span>
+                        <span className="detail-dot">•</span>
+                        <span className="detail-item">Processing</span>
+                    </div>
                 </div>
             </div>
         </div>
