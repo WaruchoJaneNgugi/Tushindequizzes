@@ -26,7 +26,6 @@
     --gradient-to: #00d4ff;
 
     width: 100%;
-    /*padding: 24px 0 40px;*/
     font-family: 'Satoshi', 'Inter', sans-serif;
     position: relative;
     background: radial-gradient(circle at 50% 0%, #1A1F37, #0B0E1A 80%);
@@ -83,7 +82,6 @@
 .hs-stage {
     position: relative;
     width: calc(100% - 80px);
-    /*max-width: 1400px;*/
     margin: 0 auto;
     border-radius: 32px;
     overflow: hidden;
@@ -171,7 +169,7 @@
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
 }
 
@@ -179,70 +177,117 @@
     opacity: 1;
 }
 
+/* UPDATED: Slower image zoom animation */
 .hs-bg-img {
     position: absolute;
     right: 0;
     top: 0;
-    /*width: 65%;*/
+    width: 65%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
     object-position: center;
     display: block;
     filter: brightness(0.7) saturate(1.3) contrast(1.2);
-    transform: scale(1.05);
-    transition: transform 12s ease;
 
-    /*mask-image: linear-gradient(*/
-    /*        to right,*/
-    /*        transparent 0%,*/
-    /*        rgba(0, 0, 0, 0.3) 15%,*/
-    /*        rgba(0, 0, 0, 0.7) 25%,*/
-    /*        black 35%,*/
-    /*        black 100%*/
-    /*);*/
-    /*-webkit-mask-image: linear-gradient(*/
-    /*        to right,*/
-    /*        transparent 0%,*/
-    /*        rgba(0, 0, 0, 0.3) 15%,*/
-    /*        rgba(0, 0, 0, 0.7) 25%,*/
-    /*        black 35%,*/
-    /*        black 100%*/
-    /*);*/
+    /* Start with slightly zoomed out */
+    transform: scale(1);
+
+    /* Much slower zoom in animation */
+    transition: transform 20s cubic-bezier(0.1, 0.7, 0.3, 1);
+
+    /* Soft fade on left side */
+    mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 15%,
+            rgba(0, 0, 0, 0.7) 25%,
+            black 35%,
+            black 100%
+    );
+    -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 15%,
+            rgba(0, 0, 0, 0.7) 25%,
+            black 35%,
+            black 100%
+    );
 }
 
+/* Slow zoom in when active */
 .hs-bg-active .hs-bg-img {
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
+/* Add a second image layer for subtle movement */
+.hs-bg-img-secondary {
+    position: absolute;
+    right: -5%;
+    top: -2%;
+    width: 70%;
+    height: 104%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: brightness(0.5) blur(2px) saturate(1.5);
+    opacity: 0.15;
+    transform: scale(1.1);
+    transition: transform 25s cubic-bezier(0.1, 0.8, 0.2, 1);
+    z-index: -1;
+}
+
+.hs-bg-active .hs-bg-img-secondary {
+    transform: scale(1.25);
+}
+
+/* UPDATED: Overlay with smoother gradient */
 .hs-bg-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
             270deg,
             transparent 0%,
-            transparent 20%,
-            rgba(11, 14, 26, 0.6) 30%,
-            rgba(11, 14, 26, 0.8) 40%,
-            var(--hs-bg-primary) 60%,
+            transparent 15%,
+            rgba(11, 14, 26, 0.5) 25%,
+            rgba(11, 14, 26, 0.7) 35%,
+            var(--hs-bg-primary) 55%,
             var(--hs-bg-primary) 100%
     );
     pointer-events: none;
     z-index: 1;
 }
 
+/* UPDATED: Subtle gradient overlay */
 .hs-bg-gradient {
     position: absolute;
     inset: 0;
     background: radial-gradient(
             ellipse at 30% 50%,
             transparent 0%,
-            transparent 40%,
-            rgba(0, 245, 212, 0.1) 60%,
-            rgba(0, 0, 0, 0.4) 100%
+            transparent 45%,
+            rgba(0, 245, 212, 0.08) 65%,
+            rgba(0, 0, 0, 0.3) 100%
     );
     pointer-events: none;
     z-index: 2;
     mix-blend-mode: overlay;
+}
+
+/* Add a soft edge blend */
+.hs-bg-soft-edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+            to right,
+            var(--hs-bg-primary) 0%,
+            rgba(11, 14, 26, 0.8) 30%,
+            transparent 100%
+    );
+    pointer-events: none;
+    z-index: 3;
 }
 
 /* ── Premium Corner Accents ── */
@@ -1174,7 +1219,8 @@
     .hs-thumb-progress,
     .hs-indicator-inner,
     .hs-points-badge::before,
-    .hs-bg-img {
+    .hs-bg-img,
+    .hs-bg-img-secondary {
         animation: none !important;
         transition: none !important;
     }

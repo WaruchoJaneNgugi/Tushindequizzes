@@ -1149,52 +1149,54 @@ input:-webkit-autofill:active {
 .main-game-grid-container {
     display: flex;
     flex-direction: column;
+    background: var(--bg-primary);
+
     /*align-items: center;*/
     /*justify-content: center;*/
 }
 
 
-.games-grid-card {
-    display: grid;
-    gap: 5px;
-    width: 100%;
-    /*max-width: 1600px;*/
-    margin: 5px auto;
-    border-radius: 10px;
-    align-items: center; /* Vertical alignment */
-    /*justify-items: center;   !* Horizontal alignment *!*/
-}
+/*.games-grid-card {*/
+/*    display: grid;*/
+/*    gap: 5px;*/
+/*    width: 100%;*/
+/*    !*max-width: 1600px;*!*/
+/*    margin: 5px auto;*/
+/*    border-radius: 10px;*/
+/*    align-items: center; !* Vertical alignment *!*/
+/*    !*justify-items: center;   !* Horizontal alignment *!*!*/
+/*}*/
 
 @media (max-width: 660px) {
-    .games-grid-card {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
-    }
+    /*.games-grid-card {*/
+    /*    grid-template-columns: repeat(3, 1fr);*/
+    /*    gap: 5px;*/
+    /*}*/
 }
 
 @media (min-width: 660px) and (max-width: 800px) {
-    .games-grid-card {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 5px;
-    }
+    /*.games-grid-card {*/
+    /*    grid-template-columns: repeat(5, 1fr);*/
+    /*    gap: 5px;*/
+    /*}*/
 }
 
 /*!* Large Desktop: 5 columns *!*/
-@media (min-width: 800px) and (max-width: 1200px) {
-    .games-grid-card {
-        grid-template-columns: repeat(6, 1fr);
-        gap: 5px;
-    }
-}
+/*@media (min-width: 800px) and (max-width: 1200px) {*/
+/*    .games-grid-card {*/
+/*        grid-template-columns: repeat(6, 1fr);*/
+/*        gap: 5px;*/
+/*    }*/
+/*}*/
 
-/*!* Desktop: 4 columns *!*/
-@media (min-width: 1200px) {
-    .games-grid-card {
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        /*padding: 5px;*/
-    }
-}
+/*!*!* Desktop: 4 columns *!*!*/
+/*@media (min-width: 1200px) {*/
+/*    !*.games-grid-card {*!*/
+/*    !*    grid-template-columns: repeat(7, 1fr);*!*/
+/*    !*    gap: 10px;*!*/
+/*    !*    !*padding: 5px;*!*!*/
+/*    !*}*!*/
+/*}*/
 
 
 /*.games-grid-card {*/
@@ -1347,10 +1349,10 @@ input:-webkit-autofill:active {
 
 /* Ensure proper spacing on very small screens */
 @media (max-width: 480px) {
-    .games-grid-card {
-        gap: 5px;
-        padding: 2px;
-    }
+    /*.games-grid-card {*/
+    /*    gap: 5px;*/
+    /*    padding: 2px;*/
+    /*}*/
 
     .game-card-image-container {
         display: flex;
@@ -2961,24 +2963,24 @@ input:-webkit-autofill:active {
 }
 
 /* Game Title Overlay */
-.game-card-title-overlay {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
-    padding: 4px 8px;
-    border-radius: 4px;
-    backdrop-filter: blur(2px);
-    z-index: 15; /* Lower than hover overlay */
-}
+/*.game-card-title-overlay {*/
+/*    position: absolute;*/
+/*    bottom: 8px;*/
+/*    left: 8px;*/
+/*    right: 8px;*/
+/*    color: white;*/
+/*    font-size: 0.8rem;*/
+/*    font-weight: 600;*/
+/*    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);*/
+/*    white-space: nowrap;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*    background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);*/
+/*    padding: 4px 8px;*/
+/*    border-radius: 4px;*/
+/*    backdrop-filter: blur(2px);*/
+/*    z-index: 15; !* Lower than hover overlay *!*/
+/*}*/
 
 /* Animations */
 @keyframes pulse {
@@ -3019,13 +3021,13 @@ input:-webkit-autofill:active {
         height: 30px;
     }
 
-    .game-card-title-overlay {
-        bottom: 6px;
-        left: 6px;
-        right: 6px;
-        font-size: 0.7rem;
-        padding: 3px 6px;
-    }
+    /*.game-card-title-overlay {*/
+    /*    bottom: 6px;*/
+    /*    left: 6px;*/
+    /*    right: 6px;*/
+    /*    font-size: 0.7rem;*/
+    /*    padding: 3px 6px;*/
+    /*}*/
 }
 
 @media (max-width: 480px) {
@@ -3053,13 +3055,13 @@ input:-webkit-autofill:active {
         font-size: 0.4rem;
     }
 
-    .game-card-title-overlay {
-        bottom: 4px;
-        left: 4px;
-        right: 4px;
-        font-size: 0.6rem;
-        padding: 2px 4px;
-    }
+    /*.game-card-title-overlay {*/
+    /*    bottom: 4px;*/
+    /*    left: 4px;*/
+    /*    right: 4px;*/
+    /*    font-size: 0.6rem;*/
+    /*    padding: 2px 4px;*/
+    /*}*/
 }
 
 /* Optional: Right-side tag variant */
