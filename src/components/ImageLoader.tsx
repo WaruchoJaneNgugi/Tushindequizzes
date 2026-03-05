@@ -28,7 +28,7 @@ export const ImageLoader: FC<ImageLoaderAltProps> = ({
     };
 
     return (
-        <div className={`loader-wrapper loader-${variant}`}>
+        <div className={`loader-wrapper-main loader-${variant}`}>
             {/* Abstract Background Pattern */}
             <div className="loader-backdrop">
                 <div className="backdrop-particles">
