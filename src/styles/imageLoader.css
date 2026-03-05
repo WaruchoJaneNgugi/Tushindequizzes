@@ -1,7 +1,7 @@
 /* styles/imageLoaderAlt.css */
 
 .loader-wrapper-main {
-    position: fixed !important; /* Force fixed positioning */
+    /*position: fixed !important; !* Force fixed positioning *!*/
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
