@@ -37,9 +37,8 @@
 .hs-grid-bg {
     position: absolute;
     inset: 0;
-    background-image:
-            linear-gradient(rgba(0, 245, 212, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 245, 212, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(0, 245, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 212, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
@@ -47,8 +46,12 @@
 }
 
 @keyframes gridPulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.5; }
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 /* ── Floating Particles ── */
@@ -72,10 +75,20 @@
 }
 
 @keyframes particleFloat {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    20% { opacity: 0.6; }
-    80% { opacity: 0.4; }
-    100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.6;
+    }
+    80% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(-20vh) scale(1);
+        opacity: 0;
+    }
 }
 
 /* ── Main Stage ── */
@@ -88,10 +101,9 @@
     background: var(--hs-bg-secondary);
     border: 1px solid var(--hs-border-medium);
     /*height: 320px;*/
-    box-shadow:
-            0 30px 60px -20px rgba(0, 0, 0, 0.8),
-            0 0 0 1px rgba(255, 255, 255, 0.03),
-            inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
     transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
     backdrop-filter: blur(10px);
 }
@@ -100,16 +112,15 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03), transparent 70%);
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.03), transparent 70%);
     pointer-events: none;
     z-index: 2;
 }
 
 .hs-stage:hover {
-    box-shadow:
-            0 40px 80px -20px rgba(0, 0, 0, 0.9),
-            0 0 0 2px var(--accent),
-            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9),
+    0 0 0 2px var(--accent),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
 }
 
@@ -146,8 +157,12 @@
 }
 
 @keyframes scanlineMove {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(200%); }
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(200%);
+    }
 }
 
 /* ── Glitch Effect ── */
@@ -156,12 +171,30 @@
 }
 
 @keyframes glitchEffect {
-    0% { transform: translate(0); filter: hue-rotate(0deg) blur(0); }
-    20% { transform: translate(-3px, 2px); filter: hue-rotate(90deg) blur(1px); }
-    40% { transform: translate(3px, -2px); filter: hue-rotate(180deg) blur(1px); }
-    60% { transform: translate(-2px, 3px); filter: hue-rotate(270deg) blur(0.5px); }
-    80% { transform: translate(2px, -3px); filter: hue-rotate(360deg) blur(0); }
-    100% { transform: translate(0); filter: hue-rotate(0deg) blur(0); }
+    0% {
+        transform: translate(0);
+        filter: hue-rotate(0deg) blur(0);
+    }
+    20% {
+        transform: translate(-3px, 2px);
+        filter: hue-rotate(90deg) blur(1px);
+    }
+    40% {
+        transform: translate(3px, -2px);
+        filter: hue-rotate(180deg) blur(1px);
+    }
+    60% {
+        transform: translate(-2px, 3px);
+        filter: hue-rotate(270deg) blur(0.5px);
+    }
+    80% {
+        transform: translate(2px, -3px);
+        filter: hue-rotate(360deg) blur(0);
+    }
+    100% {
+        transform: translate(0);
+        filter: hue-rotate(0deg) blur(0);
+    }
 }
 
 /* ── Background Image Layers ── */
@@ -316,12 +349,14 @@
     top: 15px;
     left: 15px;
 }
+
 .hs-corner-tl::before {
     top: 0;
     left: 0;
     width: 2px;
     height: 30px;
 }
+
 .hs-corner-tl::after {
     top: 0;
     left: 0;
@@ -333,12 +368,14 @@
     top: 15px;
     right: 15px;
 }
+
 .hs-corner-tr::before {
     top: 0;
     right: 0;
     width: 2px;
     height: 30px;
 }
+
 .hs-corner-tr::after {
     top: 0;
     right: 0;
@@ -350,12 +387,14 @@
     bottom: 15px;
     left: 15px;
 }
+
 .hs-corner-bl::before {
     bottom: 0;
     left: 0;
     width: 2px;
     height: 30px;
 }
+
 .hs-corner-bl::after {
     bottom: 0;
     left: 0;
@@ -367,12 +406,14 @@
     bottom: 15px;
     right: 15px;
 }
+
 .hs-corner-br::before {
     bottom: 0;
     right: 0;
     width: 2px;
     height: 30px;
 }
+
 .hs-corner-br::after {
     bottom: 0;
     right: 0;
@@ -587,8 +628,14 @@
 }
 
 @keyframes titlePulse {
-    0%, 100% { opacity: 0.5; filter: blur(12px); }
-    50% { opacity: 0.8; filter: blur(8px); }
+    0%, 100% {
+        opacity: 0.5;
+        filter: blur(12px);
+    }
+    50% {
+        opacity: 0.8;
+        filter: blur(8px);
+    }
 }
 
 .hs-subtitle {
@@ -638,8 +685,12 @@
 }
 
 @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .hs-points-icon {
@@ -800,13 +851,21 @@
 }
 
 @keyframes progress {
-    from { width: 0%; }
-    to { width: 100%; }
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
 }
 
 @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
 }
 
 .hs-progress-paused {
@@ -936,7 +995,6 @@
     /*.hs-stage {*/
     /*    height: 340px;*/
     /*}*/
-
     .hs-title {
         font-size: 2.8rem;
     }
@@ -987,7 +1045,6 @@
     /*    height: 260px;*/
     /*    width: calc(100% - 40px);*/
     /*}*/
-
     .hs-content {
         width: 60%;
         padding: 25px;
@@ -1046,6 +1103,7 @@
     }
 
     .hs-stage {
+        height: 260px;
         width: calc(100% - 6px);
         border-radius: 24px;
     }
@@ -1148,6 +1206,13 @@
     .hs-corner::after {
         width: 20px;
         height: 2px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hs-stage {
+        height: 260px; /* UNCOMMENT THIS */
+        width: calc(100% - 40px);
     }
 }
 
