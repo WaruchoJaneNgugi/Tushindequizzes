@@ -7,7 +7,6 @@ import {Footer} from "./components/Layout/Footer";
 import "./App.css";
 import "../src/Admin/style.css"
 import {type FC, useEffect, useState} from "react";
-import {ImageLoader} from "./components/ImageLoader.tsx";
 import {
     type AdminUser,
 } from "./Admin/types.ts";
@@ -17,21 +16,21 @@ import {apiService} from "./Admin/services/api.ts";
 import Dashboard from "./Admin/views/Dashboard.tsx";
 
 const App: FC = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [loadingProgress, setLoadingProgress] = useState(0);
+    // const [isLoading, setIsLoading] = useState(true);
+    // const [loadingProgress, setLoadingProgress] = useState(0);
     const [user, setUser] = useState<AdminUser | null>(null);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setLoadingProgress(prev => {
-                if (prev >= 100) {
-                    clearInterval(timer);
-                    setTimeout(() => setIsLoading(false), 500);
-                    return 100;
-                }
-                return prev + 10;
-            });
-        }, 300);
+        // const timer = setInterval(() => {
+        //     setLoadingProgress(prev => {
+        //         if (prev >= 100) {
+        //             clearInterval(timer);
+        //             setTimeout(() => setIsLoading(false), 500);
+        //             return 100;
+        //         }
+        //         return prev + 10;
+        //     });
+        // }, 300);
 
         // Check for stored token and user
         const token = localStorage.getItem('admin_token');
@@ -49,7 +48,7 @@ const App: FC = () => {
             }
         }
 
-        return () => clearInterval(timer);
+        // return () => clearInterval(timer);
     }, []);
 
     const handleLogin = (userData: AdminUser) => {
@@ -57,15 +56,6 @@ const App: FC = () => {
         localStorage.setItem('admin_user', JSON.stringify(userData));
     };
 
-    if (isLoading) {
-        return <ImageLoader
-            isLoading={isLoading}
-            progress={loadingProgress}
-            title="Tushinde Quiz"
-            subtitle="Preparing your gaming experience"
-            // onCancel={() => setIsLoading(false)}
-        />;
-    }
 
     return (
         <Router>
@@ -73,7 +63,7 @@ const App: FC = () => {
                 {/* Default route - redirect to admin login if not logged in,
                     or to admin dashboard if logged in */}
                 <Route path="/admin" element={
-                    user ? <Navigate to="/admin/" replace /> : <Navigate to="/admin/login" replace />
+                    user ? <Navigate to="/admin/" replace/> : <Navigate to="/admin/login" replace/>
                 }/>
 
                 {/* Admin Login Route */}
@@ -84,7 +74,7 @@ const App: FC = () => {
                 {/* Admin Dashboard Route */}
                 {user && (
                     <Route path="/admin/" element={
-                        <Dashboard user={user} />
+                        <Dashboard user={user}/>
                     }/>
                 )}
 

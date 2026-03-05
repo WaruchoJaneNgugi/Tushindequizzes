@@ -1,0 +1,708 @@
+/* Shimmer Loading Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-wrapper {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #1a1f35 0%, #0f1425 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.06) 25%,
+            rgba(255, 255, 255, 0.1) 37%,
+            rgba(255, 255, 255, 0.06) 63%,
+            transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+    pointer-events: none;
+}
+
+.shimmer-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Different shimmer variants for game cards */
+.shimmer-icon {
+    font-size: 2rem;
+    opacity: 0.5;
+    margin-bottom: 8px;
+    filter: grayscale(0.5);
+}
+
+.shimmer-title {
+    width: 80%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.shimmer-subtitle {
+    width: 60%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .shimmer-icon {
+        font-size: 2.5rem;
+    }
+
+    .shimmer-title {
+        height: 18px;
+    }
+
+    .shimmer-subtitle {
+        height: 14px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .shimmer-icon {
+        font-size: 3rem;
+    }
+
+    .shimmer-title {
+        height: 20px;
+    }
+}
+
+/* Optional: Pulse animation for a more subtle effect */
+@keyframes softPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.7; }
+}
+
+.shimmer-pulse {
+    animation: softPulse 2s ease-in-out infinite;
+}
+
+/* Optional: Gradient orb effect */
+.shimmer-orb {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 70%);
+    margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+    .shimmer-orb {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .shimmer-orb {
+        width: 80px;
+        height: 80px;
+    }
+}
+/* Hero Slider Shimmer Styles */
+.hero-shimmer-wrapper {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #1a1f35 0%, #0f1425 100%);
+    overflow: hidden;
+    z-index: 100;
+}
+
+.hero-shimmer-content {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40%;
+    z-index: 2;
+}
+
+.hero-shimmer-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.shimmer-tag {
+    width: 70px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-title {
+    width: 80%;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-subtitle {
+    width: 50%;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-description {
+    margin-bottom: 25px;
+}
+
+.shimmer-line {
+    width: 100%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-line:last-child {
+    width: 70%;
+}
+
+.hero-shimmer-badge {
+    width: 150px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-button {
+    width: 160px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-thumbnails {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 2;
+}
+
+.shimmer-thumb {
+    width: 80px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Thumbnail shimmer */
+.thumb-shimmer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+}
+
+/* Add shimmer effect to all shimmer elements */
+.shimmer-tag::after,
+.hero-shimmer-title::after,
+.hero-shimmer-subtitle::after,
+.shimmer-line::after,
+.hero-shimmer-badge::after,
+.hero-shimmer-button::after,
+.shimmer-thumb::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.08) 25%,
+            rgba(255, 255, 255, 0.1) 37%,
+            rgba(255, 255, 255, 0.08) 63%,
+            transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-shimmer-content {
+        left: 30px;
+        width: 60%;
+    }
+
+    .hero-shimmer-title {
+        height: 40px;
+    }
+
+    .hero-shimmer-subtitle {
+        height: 20px;
+    }
+
+    .shimmer-thumb {
+        width: 60px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-shimmer-content {
+        left: 20px;
+        width: 70%;
+    }
+
+    .hero-shimmer-title {
+        height: 32px;
+    }
+
+    .hero-shimmer-tags {
+        margin-bottom: 15px;
+    }
+
+    .shimmer-tag {
+        width: 50px;
+        height: 24px;
+    }
+
+    .hero-shimmer-description {
+        display: none;
+    }
+
+    .hero-shimmer-thumbnails {
+        display: none;
+    }
+}
+
+/* Shimmer Loading Effect - Game Grid Version */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Main shimmer wrapper for game cards */
+.shimmer-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(145deg, #1a1f35 0%, #0f1425 100%);
+    overflow: hidden;
+    z-index: 5;
+    border-radius: 10px;
+}
+
+/* The moving shimmer effect */
+.shimmer-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.06) 25%,
+            rgba(255, 255, 255, 0.1) 37%,
+            rgba(255, 255, 255, 0.06) 63%,
+            transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+    pointer-events: none;
+    z-index: 6;
+}
+
+/* Content inside shimmer */
+.shimmer-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+    padding: 10px;
+}
+
+/* Game icon in shimmer */
+.shimmer-icon {
+    font-size: 2rem;
+    opacity: 0.5;
+    margin-bottom: 8px;
+    filter: grayscale(0.5);
+    color: rgba(255, 255, 255, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Game title placeholder */
+.shimmer-title {
+    width: 80%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Optional subtitle placeholder */
+.shimmer-subtitle {
+    width: 60%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add shimmer effect to all placeholder elements */
+.shimmer-title::after,
+.shimmer-subtitle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.08) 25%,
+            rgba(255, 255, 255, 0.1) 37%,
+            rgba(255, 255, 255, 0.08) 63%,
+            transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+    pointer-events: none;
+}
+
+/* Soft pulse animation for icon */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* Different shimmer variants */
+.shimmer-wrapper.icon-only .shimmer-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+.shimmer-wrapper.with-orb .shimmer-orb {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 70%);
+    margin-bottom: 12px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .shimmer-icon {
+        font-size: 2.5rem;
+    }
+
+    .shimmer-title {
+        height: 18px;
+    }
+
+    .shimmer-subtitle {
+        height: 14px;
+    }
+
+    .shimmer-wrapper.with-orb .shimmer-orb {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .shimmer-icon {
+        font-size: 3rem;
+    }
+
+    .shimmer-title {
+        height: 20px;
+    }
+
+    .shimmer-wrapper.with-orb .shimmer-orb {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .shimmer-icon {
+        font-size: 1.8rem;
+        margin-bottom: 4px;
+    }
+
+    .shimmer-title {
+        height: 14px;
+        width: 70%;
+    }
+
+    .shimmer-subtitle {
+        display: none; /* Hide subtitle on mobile to save space */
+    }
+}
+
+/* Optional: Add a gradient orb for visual interest */
+.shimmer-orb {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent 70%);
+    margin-bottom: 10px;
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+/* Make sure images fade in nicely */
+.grid-game-card-image {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.grid-game-card-image[style*="opacity: 1"] {
+    opacity: 1;
+}
+
+/* Ensure the image container positions properly */
+.game-card-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ensure tags appear above shimmer */
+.game-tag-hot,
+.game-tag-new {
+    z-index: 10;
+}
+
+/* Optional: Skeleton loading animation for cards */
+@keyframes skeleton-loading {
+    0% {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    50% {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.skeleton-loading {
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+/* Hero Slider Shimmer Overlay */
+.hero-shimmer-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #1a1f35 0%, #0f1425 100%);
+    z-index: 200;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.hero-shimmer-content {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40%;
+    z-index: 201;
+}
+
+.hero-shimmer-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.shimmer-tag {
+    width: 70px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-title {
+    width: 80%;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-subtitle {
+    width: 50%;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-description {
+    margin-bottom: 25px;
+}
+
+.shimmer-line {
+    width: 100%;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-line:last-child {
+    width: 70%;
+}
+
+.hero-shimmer-badge {
+    width: 150px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-shimmer-button {
+    width: 160px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Thumbnail shimmer */
+.thumb-shimmer-wrapper {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #1a1f35, #0f1425);
+    z-index: 2;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Ensure images fade in */
+.hs-bg-layer {
+    transition: opacity 0.5s ease;
+}
+
+.hs-thumb-img {
+    transition: opacity 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-shimmer-content {
+        left: 30px;
+        width: 60%;
+    }
+
+    .hero-shimmer-title {
+        height: 40px;
+    }
+
+    .hero-shimmer-subtitle {
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-shimmer-content {
+        left: 20px;
+        width: 70%;
+    }
+
+    .hero-shimmer-title {
+        height: 32px;
+    }
+
+    .hero-shimmer-tags {
+        margin-bottom: 15px;
+    }
+
+    .shimmer-tag {
+        width: 50px;
+        height: 24px;
+    }
+
+    .hero-shimmer-description {
+        display: none;
+    }
+}

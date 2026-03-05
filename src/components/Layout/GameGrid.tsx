@@ -1,8 +1,10 @@
 import { GamesFilter } from "./GamesFilter";
 import { useGames } from '../../hooks/useGames';
 import "../../styles/game-grid.css";
+import "../../styles/shimmer.css";
 import type { GameCard } from "../../types/game.ts";
 import { useGameClick } from "../../hooks/useGameClick.ts";
+import { useState, useEffect } from 'react';
 
 export const GameGrid = () => {
     const {
@@ -12,6 +14,8 @@ export const GameGrid = () => {
     } = useGames();
 
     const { handleGameClick } = useGameClick();
+    const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+    const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
     const handleGameCardClick = (game: GameCard) => {
         handleGameClick(game.id, game);
@@ -21,18 +25,48 @@ export const GameGrid = () => {
         return game.tags?.includes(tagName) || false;
     };
 
+    // Convert id to string to ensure type safety
+    const handleImageLoad = (gameId: string | number) => {
+        const id = String(gameId);
+        setLoadedImages(prev => ({ ...prev, [id]: true }));
+    };
+
+    const handleImageError = (gameId: string | number) => {
+        const id = String(gameId);
+        setFailedImages(prev => ({ ...prev, [id]: true }));
+        setLoadedImages(prev => ({ ...prev, [id]: false }));
+    };
+
+    // Check if we should show shimmer
+    const shouldShowShimmer = (card: GameCard) => {
+        const id = String(card.id);
+        return !loadedImages[id] || failedImages[id] || !card.imageUrl;
+    };
+
+    // Preload images when component mounts or filteredGames change
+    useEffect(() => {
+        // Only preload images that haven't been loaded or failed yet
+        const newGames = filteredGames.filter(game => {
+            const id = String(game.id);
+            return game.imageUrl && !loadedImages[id] && !failedImages[id];
+        });
+
+        newGames.forEach(game => {
+            if (game.imageUrl) {
+                const img = new Image();
+                img.src = game.imageUrl;
+                img.onload = () => handleImageLoad(game.id);
+                img.onerror = () => handleImageError(game.id);
+            }
+        });
+    }, [filteredGames]); // Only depend on filteredGames, not loadedImages/failedImages to avoid loops
+
     return (
         <div className="main-game-grid-container">
             <GamesFilter
                 onFilterChange={setActiveFilter}
                 activeFilter={activeFilter}
             />
-
-            {/*<div className="game-category-title">*/}
-            {/*    <div className="game-subtitle">*/}
-            {/*        <span className="game-tags">Top Picks</span>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
 
             <div className="games-grid-card">
                 {filteredGames.length > 0 ? (
@@ -57,34 +91,33 @@ export const GameGrid = () => {
                                     </div>
                                 )}
 
-                                {card.imageUrl ? (
+                                {/* Show shimmer while loading or if no image */}
+                                {shouldShowShimmer(card) && (
+                                    <div className="shimmer-wrapper">
+                                        <div className="shimmer-effect" />
+                                        <div className="shimmer-content">
+                                            <div className="shimmer-icon">🎮</div>
+                                            <div className="shimmer-title">{card.title}</div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Actual image - always render but control opacity */}
+                                {card.imageUrl && !failedImages[String(card.id)] && (
                                     <img
                                         src={card.imageUrl}
                                         alt={card.title}
                                         className="grid-game-card-image"
-                                        loading="lazy"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                            const container = e.currentTarget.parentElement;
-                                            if (container) {
-                                                const hotTag = container.querySelector('.game-tag-hot')?.outerHTML || '';
-                                                const newTag = container.querySelector('.game-tag-new')?.outerHTML || '';
-                                                container.innerHTML = `
-                                                    <div class="game-image-fallback">
-                                                        <div class="fallback-icon">🎮</div>
-                                                        <div class="fallback-title">${card.title}</div>
-                                                    </div>
-                                                    ${hotTag}${newTag}
-                                                `;
-                                            }
+                                        style={{
+                                            opacity: loadedImages[String(card.id)] ? 1 : 0,
+                                            transition: 'opacity 0.4s ease-in-out'
                                         }}
+                                        loading="lazy"
+                                        onLoad={() => handleImageLoad(card.id)}
+                                        onError={() => handleImageError(card.id)}
                                     />
-                                ) : (
-                                    <div className="game-image-fallback">
-                                        <div className="fallback-icon">🎮</div>
-                                        <div className="fallback-title">{card.title}</div>
-                                    </div>
                                 )}
+
                                 <div className="game-card-title-overlay">{card.title}</div>
                             </div>
 

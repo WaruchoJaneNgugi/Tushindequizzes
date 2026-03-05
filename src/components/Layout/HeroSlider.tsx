@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import '../../styles/carousel.css';
+import '../../styles/shimmer.css';
 import bibleQuizBanner from '../../assests/banners/BibleQuiz-banner.png';
 import chemshabongo from '../../assests/banners/ChemshaBongo-banner.png';
 import checkers from '../../assests/banners/checkers-banner.png';
@@ -30,9 +31,8 @@ interface Slide {
 // Generate deterministic particle positions
 const generateParticlePositions = (count: number) => {
     return Array.from({ length: count }, (_, i) => ({
-        // Use index to create deterministic but varied values
-        left: `${(i * 17) % 100}%`, // 17 is prime to create variation
-        top: `${(i * 23) % 100}%`, // 23 is prime for different pattern
+        left: `${(i * 17) % 100}%`,
+        top: `${(i * 23) % 100}%`,
         animationDelay: `${(i * 0.25) % 5}s`,
         animationDuration: `${3 + ((i * 0.35) % 7)}s`
     }));
@@ -42,6 +42,7 @@ const HeroSlider = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
     const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>({});
+    const [failedImages, setFailedImages] = useState<{ [key: string]: boolean }>({});
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const [touchStart, setTouchStart] = useState<number | null>(null);
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -122,7 +123,6 @@ const HeroSlider = () => {
     ];
 
     const triggerGlitch = useCallback(() => {
-        // Clear any existing glitch timeout
         if (glitchTimeoutRef.current) {
             clearTimeout(glitchTimeoutRef.current);
         }
@@ -158,7 +158,6 @@ const HeroSlider = () => {
         // Reset progress animation
         if (progressRef.current) {
             progressRef.current.style.animation = 'none';
-            // Force reflow
             void progressRef.current.offsetHeight;
             progressRef.current.style.animation = 'hs-progress 5s linear forwards';
         }
@@ -209,8 +208,26 @@ const HeroSlider = () => {
         };
     }, [isHovering, nextSlide]);
 
-    const handleImageLoad = (url: string) =>
+    const handleImageLoad = (url: string) => {
         setLoadedImages(prev => ({ ...prev, [url]: true }));
+    };
+
+    const handleImageError = (url: string) => {
+        setFailedImages(prev => ({ ...prev, [url]: true }));
+        setLoadedImages(prev => ({ ...prev, [url]: false }));
+    };
+
+    // Preload all images on mount
+    useEffect(() => {
+        slides.forEach(slide => {
+            if (!loadedImages[slide.image] && !failedImages[slide.image]) {
+                const img = new Image();
+                img.src = slide.image;
+                img.onload = () => handleImageLoad(slide.image);
+                img.onerror = () => handleImageError(slide.image);
+            }
+        });
+    }, []);
 
     const getTagClass = (type: string) => {
         const classes = {
@@ -228,6 +245,9 @@ const HeroSlider = () => {
 
     const active = slides[currentSlide];
 
+    // Check if current slide image is loaded
+    const isCurrentImageLoaded = loadedImages[active.image];
+
     return (
         <div
             className="hs-root"
@@ -240,7 +260,7 @@ const HeroSlider = () => {
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
         >
-            {/* Animated background particles - using deterministic positions */}
+            {/* Animated background particles */}
             <div className="hs-particles">
                 {particlePositions.map((pos, i) => (
                     <div
@@ -265,6 +285,28 @@ const HeroSlider = () => {
                 onTouchEnd={onTouchEnd}
                 onMouseMove={handleMouseMove}
             >
+                {/* Full-screen shimmer overlay that fades out as images load */}
+                {!isCurrentImageLoaded && (
+                    <div className="hero-shimmer-overlay">
+                        <div className="shimmer-effect" />
+                        <div className="hero-shimmer-content">
+                            <div className="hero-shimmer-tags">
+                                <div className="shimmer-tag" />
+                                <div className="shimmer-tag" />
+                            </div>
+                            <div className="hero-shimmer-title" />
+                            <div className="hero-shimmer-subtitle" />
+                            <div className="hero-shimmer-description">
+                                <div className="shimmer-line" />
+                                <div className="shimmer-line" />
+                                <div className="shimmer-line" />
+                            </div>
+                            <div className="hero-shimmer-badge" />
+                            <div className="hero-shimmer-button" />
+                        </div>
+                    </div>
+                )}
+
                 {/* Background layers with parallax effect */}
                 {slides.map((slide, i) => (
                     <div
@@ -273,17 +315,21 @@ const HeroSlider = () => {
                         style={{
                             transform: i === currentSlide
                                 ? `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`
-                                : 'none'
+                                : 'none',
+                            opacity: loadedImages[slide.image] ? 1 : 0,
+                            transition: 'opacity 0.5s ease'
                         }}
                     >
-                        <img
-                            src={slide.image}
-                            alt=""
-                            aria-hidden="true"
-                            className={`hs-bg-img ${loadedImages[slide.image] ? 'loaded' : ''}`}
-                            onLoad={() => handleImageLoad(slide.image)}
-                            // loading={i === 0 ? 'eager' : 'lazy'}
-                        />
+                        {!failedImages[slide.image] && (
+                            <img
+                                src={slide.image}
+                                alt=""
+                                aria-hidden="true"
+                                className="hs-bg-img"
+                                onLoad={() => handleImageLoad(slide.image)}
+                                onError={() => handleImageError(slide.image)}
+                            />
+                        )}
                         <div className="hs-bg-overlay" />
                         <div className="hs-bg-blend" />
                         <div className="hs-bg-soft-edge" />
@@ -363,7 +409,23 @@ const HeroSlider = () => {
                             onClick={() => goToSlide(i)}
                             aria-label={`Go to ${slide.title}`}
                         >
-                            <img src={slide.image} alt={slide.title} className="hs-thumb-img" loading="lazy" />
+                            {!loadedImages[slide.image] && (
+                                <div className="thumb-shimmer-wrapper">
+                                    <div className="shimmer-effect" />
+                                </div>
+                            )}
+                            <img
+                                src={slide.image}
+                                alt={slide.title}
+                                className="hs-thumb-img"
+                                loading="lazy"
+                                style={{
+                                    opacity: loadedImages[slide.image] ? 1 : 0,
+                                    transition: 'opacity 0.3s ease'
+                                }}
+                                onLoad={() => handleImageLoad(slide.image)}
+                                onError={() => handleImageError(slide.image)}
+                            />
                             <div className="hs-thumb-overlay" />
                             <div className="hs-thumb-border" />
                             <div className="hs-thumb-progress" />
