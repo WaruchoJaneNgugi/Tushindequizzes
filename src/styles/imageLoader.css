@@ -56,7 +56,7 @@
 
 /* Main Container - This is what needs to be centered */
 .loader-container {
-    position: relative;
+    /*position: relative;*/
     z-index: 2;
     display: flex;
     flex-direction: column;
