@@ -10,7 +10,7 @@
     height: 100vh !important; /* Force full viewport height */
     display: flex !important;
     align-items: center !important; /* Center vertically */
-    justify-content: center !important; /* Center horizontally */
+    /*justify-content: center !important; !* Center horizontally *!*/
     background: linear-gradient(135deg, #0f0c29 0%, #131327 50%, #141c36 100%);
     z-index: 9999;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
