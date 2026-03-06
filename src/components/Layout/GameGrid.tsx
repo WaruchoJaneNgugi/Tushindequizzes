@@ -90,6 +90,12 @@ export const GameGrid = () => {
                                         <span className="tag-text">NEW</span>
                                     </div>
                                 )}
+                                {hasTag(card, 'soon') && (
+                                    <div className="game-tag-soon">
+                                        <span className="tag-dot-soon">⬤</span>
+                                        <span className="tag-text-soon">coming soon</span>
+                                    </div>
+                                )}
 
                                 {/* Show shimmer while loading or if no image */}
                                 {shouldShowShimmer(card) && (

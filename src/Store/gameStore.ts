@@ -6,6 +6,7 @@ import ChemshaBongo from '../assests/chemsha-bongo-new.png';
 import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
 import checkers from '../assests/checkers.png';
+import Sodoku from '../assests/sodoku.png';
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -93,8 +94,8 @@ const DEFAULT_GAMES: GameCard[] = [
         title: "chess",
         content: "Fun arcade challenges",
         imageUrl: IMGChess,
-        category: 'latest',
-        tags: ['new','arcade', 'fun'],
+        category: 'popular',
+        tags: ['soon','arcade', 'fun'],
         description: "An action-packed arcade game with multiple mini-games. Perfect for quick gaming sessions!",
         players: 1900,
         difficulty: 'Hard',
@@ -102,20 +103,20 @@ const DEFAULT_GAMES: GameCard[] = [
         duration: '15-20 min',
         isFeatured: true,
     },
-    // {
-    //     id: 6,
-    //     title: "Brain Puzzle",
-    //     content: "Logic and reasoning game",
-    //     imageUrl: RandomQuizIMG,
-    //     category: 'puzzle',
-    //     tags: ['puzzle', 'brain', 'logic'],
-    //     description: "Exercise your brain with challenging logic puzzles that require creative thinking and pattern recognition.",
-    //     players: 2400,
-    //     difficulty: 'Medium',
-    //     points: 120,
-    //     duration: '8-12 min',
-    //     isFeatured: true,
-    // },
+    {
+        id: 'sodoku',
+        title: "Sodoku",
+        content: "Logic and reasoning game",
+        imageUrl: Sodoku,
+        category: 'puzzle',
+        tags: ['soon','puzzle', 'brain', 'logic'],
+        description: "Exercise your brain with challenging logic puzzles that require creative thinking and pattern recognition.",
+        players: 2400,
+        difficulty: 'Medium',
+        points: 120,
+        duration: '8-12 min',
+        isFeatured: true,
+    },
     // {
     //     id: 7,
     //     title: "Trivia Showdown",
