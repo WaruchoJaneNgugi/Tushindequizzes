@@ -218,6 +218,7 @@ const GameLobby: React.FC<GameLobbyProps> = ({ points, onStartGame, onResetPoint
                       </div>
                     </div>
                     <div>
+
                       <span style={{ color: '#5a4030', fontSize: 10, letterSpacing: '0.1em',  }}>WIN</span>
                       <div style={{ color: '#4ade80',  fontSize: 16, fontWeight: 700 }}>
                         +{cfg.reward} pts
