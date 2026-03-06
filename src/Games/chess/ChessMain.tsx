@@ -1,443 +1,335 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {type FC, useCallback, useEffect, useRef, useState} from 'react';
 import {
-    DIFFICULTY_CONFIG,
-    type Position,
-    type Move,
-    type GameState,
-    type Difficulty,
-    type GameStatus,
-    type PlayerStats
-} from "./types/chess.ts";
-import {
-    applyMoveToBoard,
-    cloneBoard,
-    createInitialBoard,
-    isInCheck as isInCheckFn,
-    hasAnyLegalMoves as hasAnyLegal,
-    getLegalMoves,
-    PIECE_SYMBOLS,
-    posEquals
-} from "./utils/boardUtils.ts";
-import { getBestMove as getBestAIMove } from "./utils/chessAI.ts";
-import { DifficultySelector } from "./components/DifficultySelector.tsx";
-import { ChessBoard } from "./components/ChessBoard.tsx";
-// import MoveHistory from "./components/MoveHistory.tsx";
-import { GameOverModal } from "./components/GameOverModal.tsx";
-import { loadStats, saveStats } from "./hook/usePlayerStats.ts";
-import "./assets/game.css";
+    type DifficultyLevel,
+    type GameResult,
+    type GameScreen,
+    LEVEL_CONFIGS,
+    type LevelConfig
+} from "./assets/types/game.types.ts";
+import {usePoints} from "./assets/hooks/usePoints.ts";
+import {useChessGame} from "./assets/hooks/useChessGame.ts";
+import {useAI} from "./assets/hooks/useAI.ts";
+import GameLobby from "./assets/components/GameLobby.tsx";
+import GameResultScreen from "./assets/components/GameResultScreen.tsx";
+import Board from "./assets/components/Board.tsx";
+import GameStatus from "./assets/components/GameStatus.tsx";
+import PromotionModal from "./assets/components/PromotionModal.tsx";
 
-const createGame = (): GameState => ({
-    board: createInitialBoard(),
-    currentTurn: 'white',
-    selectedSquare: null,
-    validMoves: [],
-    moveHistory: [],
-    capturedByWhite: [],
-    capturedByBlack: [],
-    status: 'playing',
-    enPassantTarget: null,
-    halfMoveClock: 0,
-    fullMoveNumber: 1,
-    inCheck: false,
-});
 
-export const ChessMain=()=> {
-    const [phase, setPhase] = useState<'lobby' | 'playing'>('lobby');
-    const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-    const [stats, setStats] = useState<PlayerStats>(() => loadStats());
-    const [gameState, setGameState] = useState<GameState | null>(null);
+export const ChessMain: FC = () => {
+    const [screen, setScreen] = useState<GameScreen>('lobby');
+    const [activeConfig, setActiveConfig] = useState<LevelConfig>(LEVEL_CONFIGS.easy);
+    const [gameResult, setGameResult] = useState<GameResult | null>(null);
     const [isAIThinking, setIsAIThinking] = useState(false);
-    const [showGameOver, setShowGameOver] = useState(false);
-    const [playerWon, setPlayerWon] = useState(false);
-    const gameEndProcessed = useRef(false);
+    const resultHandled = useRef(false);
 
-    const PLAYER_COLOR = 'white';
-    const AI_COLOR = 'black';
+    const { points, canAfford, placeBet, resolveBet, resetPoints } = usePoints();
+    const {
+        gameState,
+        selectSquare,
+        applyExternalMove,
+        resolvePromotion,
+        resetGame,
+        isGameOver,
+    } = useChessGame();
 
-    const updateStats = useCallback((updater: ((prev: PlayerStats) => PlayerStats) | PlayerStats) => {
-        setStats(prev => {
-            const next = typeof updater === 'function' ? updater(prev) : updater;
-            saveStats(next);
-            return next;
-        });
-    }, []);
+    // ── Start Game ──────────────────────────────────────────────────────────────
+    const handleStartGame = useCallback(
+        (level: DifficultyLevel) => {
+            const cfg = LEVEL_CONFIGS[level];
+            if (!canAfford(cfg.cost)) return;
+            const ok = placeBet(cfg.cost);
+            if (!ok) return;
+            setActiveConfig(cfg);
+            resultHandled.current = false;
+            setGameResult(null);
+            resetGame();
+            setScreen('playing');
+        },
+        [canAfford, placeBet, resetGame]
+    );
 
-    const startGame = useCallback((diff: Difficulty) => {
-        const cfg = DIFFICULTY_CONFIG[diff];
-        updateStats(prev => ({ ...prev, points: prev.points - cfg.cost, gamesPlayed: prev.gamesPlayed + 1 }));
-        gameEndProcessed.current = false;
-        setGameState(createGame());
-        setShowGameOver(false);
-        setIsAIThinking(false);
-        setPhase('playing');
-    }, [updateStats]);
+    // ── AI Hook ─────────────────────────────────────────────────────────────────
+    const handleAIMove = useCallback(
+        (move: Parameters<typeof applyExternalMove>[0]) => {
+            setIsAIThinking(false);
+            applyExternalMove(move);
+        },
+        [applyExternalMove]
+    );
 
-    const handleSquareClick = useCallback((pos: Position) => {
-        setGameState(prev => {
-            if (!prev) return prev;
-            if (prev.status === 'checkmate' || prev.status === 'stalemate') return prev;
-            if (prev.currentTurn !== PLAYER_COLOR) return prev;
+    useAI({
+        gameState,
+        aiColor: 'black',
+        difficulty: activeConfig.level,
+        enabled: screen === 'playing' && !isGameOver && !gameState.promotionPending,
+        onMoveMade: handleAIMove,
+    });
 
-            const piece = prev.board[pos.row][pos.col];
-
-            // Execute a move
-            if (prev.selectedSquare && prev.validMoves.some(m => posEquals(m, pos))) {
-                const fromPiece = prev.board[prev.selectedSquare.row][prev.selectedSquare.col];
-                if (!fromPiece) return prev;
-
-                const nb = cloneBoard(prev.board);
-                const captured = nb[pos.row][pos.col];
-
-                // Detect en passant capture before applying move
-                let epCapture = null;
-                if (fromPiece.type === 'pawn' && prev.selectedSquare.col !== pos.col && !captured) {
-                    epCapture = nb[prev.selectedSquare.row][pos.col];
-                }
-
-                applyMoveToBoard(nb, prev.selectedSquare, pos, fromPiece);
-
-                // New en passant target
-                let newEnPassant: Position | null = null;
-                if (fromPiece.type === 'pawn' && Math.abs(pos.row - prev.selectedSquare.row) === 2)
-                    newEnPassant = { row: (prev.selectedSquare.row + pos.row) / 2, col: pos.col };
-
-                const newCapW = [...prev.capturedByWhite];
-                if (captured && captured.color === AI_COLOR) newCapW.push(captured);
-                if (epCapture) newCapW.push(epCapture);
-
-                const move: Move = {
-                    from: prev.selectedSquare,
-                    to: pos,
-                    piece: fromPiece,
-                    captured: captured || undefined,
-                    isEnPassant: !!epCapture,
-                    isCastle: fromPiece.type === 'king' && Math.abs(pos.col - prev.selectedSquare.col) === 2,
-                };
-
-                const inChk = isInCheckFn(nb, AI_COLOR);
-                const hasMoves = hasAnyLegal(nb, AI_COLOR, newEnPassant);
-                let status: GameStatus = 'playing';
-                if (!hasMoves && inChk) status = 'checkmate';
-                else if (!hasMoves) status = 'stalemate';
-
-                return {
-                    ...prev,
-                    board: nb,
-                    currentTurn: AI_COLOR,
-                    selectedSquare: null,
-                    validMoves: [],
-                    moveHistory: [...prev.moveHistory, move],
-                    capturedByWhite: newCapW,
-                    enPassantTarget: newEnPassant,
-                    status,
-                    inCheck: inChk,
-                    halfMoveClock: prev.halfMoveClock + 1,
-                    fullMoveNumber: fromPiece.color === 'black' ? prev.fullMoveNumber + 1 : prev.fullMoveNumber,
-                };
-            }
-
-            // Select a piece
-            if (piece && piece.color === PLAYER_COLOR) {
-                const moves = getLegalMoves(prev.board, pos, prev.enPassantTarget);
-                return { ...prev, selectedSquare: pos, validMoves: moves };
-            }
-
-            // Deselect
-            return { ...prev, selectedSquare: null, validMoves: [] };
-        });
-    }, []);
-
-    // Game end detection - wrapped in a stable callback to avoid ESLint warning
-    const checkGameEnd = useCallback(() => {
-        if (!gameState) return;
-        if (gameEndProcessed.current) return;
-        if (gameState.status !== 'checkmate' && gameState.status !== 'stalemate') return;
-
-        gameEndProcessed.current = true;
-        const won = gameState.status === 'checkmate' && gameState.currentTurn === AI_COLOR;
-        setPlayerWon(won);
-        setShowGameOver(true);
-
-        if (won) {
-            const cfg = DIFFICULTY_CONFIG[difficulty];
-            updateStats(prev => ({ ...prev, points: prev.points + cfg.reward, wins: prev.wins + 1 }));
-        } else if (gameState.status === 'checkmate') {
-            updateStats(prev => ({ ...prev, losses: prev.losses + 1 }));
+    // Track AI thinking state
+    useEffect(() => {
+        if (gameState.currentTurn === 'black' && !isGameOver) {
+            setIsAIThinking(true);
+        } else {
+            setIsAIThinking(false);
         }
-    }, [gameState, difficulty, updateStats]);
+    }, [gameState.currentTurn, isGameOver]);
 
+    // ── Detect Game Over ─────────────────────────────────────────────────────────
     useEffect(() => {
-        checkGameEnd();
-    }, [checkGameEnd]);
+        if (!isGameOver || screen !== 'playing' || resultHandled.current) return;
+        resultHandled.current = true;
 
-    // AI move
-    useEffect(() => {
-        if (!gameState) return;
-        if (gameState.currentTurn !== AI_COLOR) return;
-        if (gameState.status === 'checkmate' || gameState.status === 'stalemate') return;
+        let type: GameResult['type'];
+        let reason: string;
 
-        // Use a ref to track if the effect is still mounted
-        const isMounted = { current: true };
+        if (gameState.isCheckmate) {
+            if (gameState.currentTurn === 'white') {
+                // White is checkmated — AI wins
+                type = 'computer_win';
+                reason = 'Checkmate — the AI delivered the killing blow.';
+            } else {
+                // Black is checkmated — player wins
+                type = 'player_win';
+                reason = 'Checkmate — you outwitted the machine!';
+            }
+        } else {
+            type = 'draw';
+            reason = 'Stalemate — neither side could move.';
+        }
 
-        setIsAIThinking(true);
-        const cfg = DIFFICULTY_CONFIG[difficulty];
+        const delta = resolveBet(type, activeConfig);
+        const result: GameResult = { type, reason, pointsChange: delta };
+        setGameResult(result);
 
-        const timer = setTimeout(() => {
-            if (!isMounted.current) return;
+        // Short delay before showing result screen
+        setTimeout(() => setScreen('result'), 1800);
+    }, [isGameOver, gameState.isCheckmate, gameState.currentTurn, gameState.isStalemate, screen, resolveBet, activeConfig]);
 
-            setGameState(prev => {
-                if (!prev || prev.currentTurn !== AI_COLOR) {
-                    setIsAIThinking(false);
-                    return prev;
-                }
-
-                const aiMove = getBestAIMove(prev.board, AI_COLOR, cfg.depth, prev.enPassantTarget);
-                if (!aiMove) {
-                    setIsAIThinking(false);
-                    return prev;
-                }
-
-                const piece = prev.board[aiMove.from.row][aiMove.from.col];
-                if (!piece) {
-                    setIsAIThinking(false);
-                    return prev;
-                }
-
-                const nb = cloneBoard(prev.board);
-                const captured = nb[aiMove.to.row][aiMove.to.col];
-
-                let epCapture = null;
-                if (piece.type === 'pawn' && aiMove.from.col !== aiMove.to.col && !captured) {
-                    epCapture = nb[aiMove.from.row][aiMove.to.col];
-                }
-
-                applyMoveToBoard(nb, aiMove.from, aiMove.to, piece);
-
-                let newEnPassant: Position | null = null;
-                if (piece.type === 'pawn' && Math.abs(aiMove.to.row - aiMove.from.row) === 2)
-                    newEnPassant = { row: (aiMove.from.row + aiMove.to.row) / 2, col: aiMove.to.col };
-
-                const newCapB = [...prev.capturedByBlack];
-                if (captured && captured.color === PLAYER_COLOR) newCapB.push(captured);
-                if (epCapture) newCapB.push(epCapture);
-
-                const move: Move = {
-                    from: aiMove.from,
-                    to: aiMove.to,
-                    piece,
-                    captured: captured || undefined
-                };
-
-                const inChk = isInCheckFn(nb, PLAYER_COLOR);
-                const hasMoves = hasAnyLegal(nb, PLAYER_COLOR, newEnPassant);
-                let status: GameStatus = 'playing';
-                if (!hasMoves && inChk) status = 'checkmate';
-                else if (!hasMoves) status = 'stalemate';
-
-                if (isMounted.current) {
-                    setIsAIThinking(false);
-                }
-
-                return {
-                    ...prev,
-                    board: nb,
-                    currentTurn: PLAYER_COLOR,
-                    selectedSquare: null,
-                    validMoves: [],
-                    moveHistory: [...prev.moveHistory, move],
-                    capturedByBlack: newCapB,
-                    enPassantTarget: newEnPassant,
-                    status,
-                    inCheck: inChk,
-                    halfMoveClock: prev.halfMoveClock + 1,
-                    fullMoveNumber: prev.fullMoveNumber + 1,
-                };
-            });
-        }, 500);
-
-        return () => {
-            isMounted.current = false;
-            clearTimeout(timer);
+    // ── Resign ───────────────────────────────────────────────────────────────────
+    const handleResign = useCallback(() => {
+        if (resultHandled.current) return;
+        resultHandled.current = true;
+        const delta = resolveBet('computer_win', activeConfig);
+        const result: GameResult = {
+            type: 'computer_win',
+            reason: 'You resigned — the throne belongs to the AI.',
+            pointsChange: delta,
         };
-    }, [difficulty, gameState?.currentTurn, gameState?.status]);
+        setGameResult(result);
+        setScreen('result');
+    }, [resolveBet, activeConfig]);
 
-    const goToLobby = useCallback(() => {
-        setPhase('lobby');
-        setGameState(null);
-        setShowGameOver(false);
-        setIsAIThinking(false);
-        gameEndProcessed.current = false;
-    }, []);
-
-    // Helper function to get dynamic class names
-    const getAIPanelClass = () => {
-        return `ai-panel ${isAIThinking ? 'ai-panel-thinking' : ''}`;
-    };
-
-    const getStatusBarClass = () => {
-        return `status-bar ${gameState?.inCheck ? 'status-bar-check' : ''}`;
-    };
-    useEffect(() => {
-        // Add Font Awesome CSS if not already present
-        if (!document.querySelector('#font-awesome-css')) {
-            const link = document.createElement('link');
-            link.id = 'font-awesome-css';
-            link.rel = 'stylesheet';
-            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-            document.head.appendChild(link);
+    // ── Play Again ───────────────────────────────────────────────────────────────
+    const handlePlayAgain = useCallback(() => {
+        const cfg = activeConfig;
+        if (!canAfford(cfg.cost)) {
+            setScreen('lobby');
+            return;
         }
-    }, []);
+        const ok = placeBet(cfg.cost);
+        if (!ok) {
+            setScreen('lobby');
+            return;
+        }
+        resultHandled.current = false;
+        setGameResult(null);
+        resetGame();
+        setScreen('playing');
+    }, [activeConfig, canAfford, placeBet, resetGame]);
+
+    // ── Responsive square size ────────────────────────────────────────────────
+    const squareSize = Math.min(72, Math.floor((window.innerWidth - 300) / 8));
+
+    // ── Render ───────────────────────────────────────────────────────────────────
+    if (screen === 'lobby') {
+        return (
+            <GameLobby
+                points={points}
+                onStartGame={handleStartGame}
+                onResetPoints={resetPoints}
+            />
+        );
+    }
+
+    if (screen === 'result' && gameResult) {
+        return (
+            <GameResultScreen
+                result={gameResult}
+                config={activeConfig}
+                points={points}
+                onPlayAgain={handlePlayAgain}
+                onBackToLobby={() => setScreen('lobby')}
+            />
+        );
+    }
+
+    // Playing screen
     return (
-        <div className="app-container">
-            {/* Header */}
-            <div className="header-chess">
-                <h1 className="header-title">♟ ROYAL CHESS</h1>
-                {/*<p className="header-subtitle">Point-Based Gaming</p>*/}
-            </div>
+        <div
+            style={{
+                minHeight: '100vh',
+                background: 'radial-gradient(ellipse at 20% 30%, #1a0e00 0%, #0a0a0f 55%, #050508 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '24px 16px',
+                gap: 24,
+            }}
+        >
+            {/* Top bar */}
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    maxWidth: squareSize * 8 + 260,
+                }}
+            >
+                <h2
+                    style={{
+                        // fontFamily: 'Cinzel, serif',
+                        fontSize: 22,
+                        fontWeight: 900,
+                        color: '#d4a820',
+                        margin: 0,
+                        letterSpacing: '0.2em',
+                        background: 'linear-gradient(180deg, #f0c040 0%, #d4a820 60%, #a07010 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                    }}
+                >
+                    Chess
+                </h2>
 
-            {/* Points bar */}
-            <div className="points-bar">
-                <div>
-                    <span className="points-value">{stats.points}</span>
-                    <span className="points-label">pts</span>
-                </div>
-                <div className="points-divider" />
-                <div className="stats-text">
-                    W: <span className="wins-text">{stats.wins}</span>
-                    <span style={{ margin: '0 4px' }}>·</span>
-                    L: <span className="losses-text">{stats.losses}</span>
-                </div>
-                {stats.points < 2 && (
-                    <button
-                        onClick={() => updateStats(prev => ({ ...prev, points: prev.points + 20 }))}
-                        className="reset-points-btn"
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <div
+                        style={{
+                            background: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            borderRadius: 8,
+                            padding: '6px 16px',
+                            display: 'flex',
+                            gap: 12,
+                            alignItems: 'center',
+                        }}
                     >
-                        +20 pts
-                    </button>
-                )}
-            </div>
-
-            {/* LOBBY */}
-            {phase === 'lobby' && (
-                <div className="lobby-container">
-                    <div className="lobby-card">
-                        <h2 className="lobby-title">Choose Your Battle</h2>
-                        <DifficultySelector
-                            selectedDifficulty={difficulty}
-                            onSelect={setDifficulty}
-                            playerPoints={stats.points}
-                            onStartGame={() => startGame(difficulty)}
-                        />
+            <span style={{ color: '#5a4030',fontSize: 10, letterSpacing: '0.1em' }}>
+              BALANCE
+            </span>
+                        <span
+                            style={{
+                                color: points.balance <= 8 ? '#f87171' : '#d4a820',
+                                // fontFamily: 'Cinzel, serif',
+                                fontSize: 18,
+                                fontWeight: 700,
+                            }}
+                        >
+              {points.balance} pts
+            </span>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* GAME */}
-            {phase === 'playing' && gameState && (
-                <div className="game-container">
-                    {/* AI Panel */}
-                    <div className={getAIPanelClass()}>
-                        <div className="ai-info">
-                            <div className="ai-avatar">♚</div>
-                            <div>
-                                <div className="ai-name">
-                                    AI · {DIFFICULTY_CONFIG[difficulty].label}
-                                    {isAIThinking && (
-                                        <span className="ai-thinking-text">thinking...</span>
-                                    )}
-                                </div>
-                                <div className="ai-captured">
-                                    {gameState.capturedByBlack.map((p, i) => (
-                                        <span key={i} className="ai-captured-piece">
-                                            {PIECE_SYMBOLS[p.type][p.color]}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <span className="ai-emoji">{DIFFICULTY_CONFIG[difficulty].label || '🤖'}</span>
+            {/* Main game area */}
+            <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+                {/* Board */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {/* AI label */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            padding: '6px 12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.07)',
+                            borderRadius: 6,
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                background: isAIThinking ? '#7dd3fc' : '#3a3a4a',
+                                boxShadow: isAIThinking ? '0 0 8px #7dd3fc' : 'none',
+                                transition: 'all 0.3s ease',
+                            }}
+                        />
+                        <span
+                            style={{
+                                color: '#6a5a40',
+                                // fontFamily: 'Cinzel, serif',
+                                fontSize: 11,
+                                letterSpacing: '0.1em',
+                            }}
+                        >
+              {isAIThinking ? 'AI is thinking…' : `AI · ${activeConfig.label}`}
+            </span>
                     </div>
 
-                    {/* Board */}
-                    <ChessBoard
-                        board={gameState.board}
-                        selectedSquare={gameState.selectedSquare}
-                        validMoves={gameState.validMoves}
-                        moveHistory={gameState.moveHistory}
-                        inCheck={gameState.inCheck}
-                        currentTurn={gameState.currentTurn}
-                        onSquareClick={handleSquareClick}
+                    <Board
+                        gameState={gameState}
+                        onSquareClick={selectSquare}
+                        isAITurn={gameState.currentTurn === 'black' || isAIThinking}
+                        squareSize={squareSize}
                     />
 
-                    {/* Status */}
-                    <div className={getStatusBarClass()}>
-                        {gameState.inCheck
-                            ? '⚠️  CHECK!'
-                            : gameState.currentTurn === 'white'
-                                ? '🎯 Your turn · Click a piece to move'
-                                : '🤖 AI is thinking...'}
-                    </div>
-
-                    {/* Player Panel */}
-                    <div className="player-panel">
-                        <div className="player-avatar">♔</div>
-                        <div>
-                            <div className="player-name">
-                                You · White
-                                {gameState.currentTurn === 'white' && (
-                                    <span className="player-turn-indicator">▶ Your turn</span>
-                                )}
-                            </div>
-                            <div className="player-captured">
-                                {gameState.capturedByWhite.map((p, i) => (
-                                    <span key={i} className="player-captured-piece">
-                                        {PIECE_SYMBOLS[p.type][p.color]}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Move History */}
-                    {/*<MoveHistory moves={gameState.moveHistory} />*/}
-
-                    {/* Controls */}
-                    <div className="controls-container">
-                        <button onClick={goToLobby} className="control-btn">
-                            ← Lobby
-                        </button>
-                        <button
-                            onClick={() => {
-                                gameEndProcessed.current = false;
-                                setGameState(createGame());
-                                setShowGameOver(false);
-                                setIsAIThinking(false);
-                                updateStats(prev => ({
-                                    ...prev,
-                                    points: prev.points - DIFFICULTY_CONFIG[difficulty].cost,
-                                    gamesPlayed: prev.gamesPlayed + 1,
-                                }));
+                    {/* Player label */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            padding: '6px 12px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.07)',
+                            borderRadius: 6,
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                background: gameState.currentTurn === 'white' ? '#d4a820' : '#3a3a4a',
+                                boxShadow: gameState.currentTurn === 'white' ? '0 0 8px #d4a820' : 'none',
+                                transition: 'all 0.3s ease',
                             }}
-                            className="control-btn"
+                        />
+                        <span
+                            style={{
+                                color: '#8a7050',
+                                // fontFamily: 'Cinzel, serif',
+                                fontSize: 11,
+                                letterSpacing: '0.1em',
+                            }}
                         >
-                            ↺ New Game
-                        </button>
+              You · White
+            </span>
                     </div>
                 </div>
-            )}
 
-            {/* Game Over Modal */}
-            {showGameOver && gameState && (
-                <GameOverModal
-                    playerWon={playerWon}
-                    status={gameState.status}
-                    difficulty={difficulty}
-                    onPlayAgain={() => startGame(difficulty)}
-                    onChangeLevel={goToLobby}
-                    pointsEarned={DIFFICULTY_CONFIG[difficulty].reward}
-                    pointsLost={DIFFICULTY_CONFIG[difficulty].cost}
+                {/* Sidebar */}
+                <GameStatus
+                    gameState={gameState}
+                    config={activeConfig}
+                    isAIThinking={isAIThinking}
+                    onResign={handleResign}
+                />
+            </div>
+
+            {/* Promotion Modal */}
+            {gameState.promotionPending && (
+                <PromotionModal
+                    color={gameState.promotionPending.color}
+                    onChoose={resolvePromotion}
                 />
             )}
         </div>
     );
-}
+};
+
