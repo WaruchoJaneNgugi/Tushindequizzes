@@ -171,85 +171,36 @@ export const GameOverlay = () => {
                 {/*)}*/}
 
                 {/* Game Content */}
+                {GameComponent ? (
+                    <GameComponent/>
+            ) : (
                 <div className="game-overlay-content-wrapper">
-                    {GameComponent ? (
-                        <div className="game-component-container">
-                            {/* Game Info Notice */}
-                            {/*<div className="entry-fee-notice">*/}
-                            {/*    <span className="entry-fee-icon">💰</span>*/}
-                            {/*    /!*<span>*!/*/}
-                            {/*    /!*    {selectedGame.entryFee > 0*!/*/}
-                            {/*    /!*        ? `This game costs ${selectedGame.entryFee} points to play`*!/*/}
-                            {/*    /!*        : 'Free to play!'}*!/*/}
-                            {/*    /!*</span>*!/*/}
-                            {/*</div>*/}
-
-                            <GameComponent/>
-
-                            {/*/!* Game Instructions *!/*/}
-                            {/*{selectedGame.instructions && (*/}
-                            {/*    <div className="game-instructions">*/}
-                            {/*        <h3>How to Play</h3>*/}
-                            {/*        <p>{selectedGame.instructions}</p>*/}
-                            {/*    </div>*/}
-                            {/*)}*/}
+                    <div className="game-not-available">
+                        <div className="not-available-icon" aria-hidden="true">🎮</div>
+                        <h3 className="coming-soon">Game Coming Soon!</h3>
+                        <p>
+                            {selectedGame.title} is not available yet.
+                            Please check back later or try another game.
+                        </p>
+                        <div className="game-actions">
+                            <button
+                                className="btn-play-again"
+                                onClick={() => {
+                                    setShowGameOverlay(false);
+                                }}
+                            >
+                                Browse Games
+                            </button>
+                            <button
+                                className="btn-exit"
+                                onClick={handleClose}
+                            >
+                                Back to Home
+                            </button>
                         </div>
-                    ) : (
-                        <div className="game-not-available">
-                            <div className="not-available-icon" aria-hidden="true">🎮</div>
-                            <h3 className="coming-soon">Game Coming Soon!</h3>
-                            <p>
-                                {selectedGame.title} is not available yet.
-                                Please check back later or try another game.
-                            </p>
-                            <div className="game-actions">
-                                <button
-                                    className="btn-play-again"
-                                    onClick={() => {
-                                        // You could navigate to similar games here
-                                        setShowGameOverlay(false);
-                                    }}
-                                >
-                                    Browse Games
-                                </button>
-                                <button
-                                    className="btn-exit"
-                                    onClick={handleClose}
-                                >
-                                    Back to Home
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
-
-                {/* Footer with Game Stats */}
-                {/*{GameComponent && (*/}
-                {/*    <div className="game-overlay-footer">*/}
-                {/*        <div className="game-stats">*/}
-                {/*            <div className="stat-item">*/}
-                {/*                <span className="stat-label">Players Online</span>*/}
-                {/*                <span className="stat-value">1.2k</span>*/}
-                {/*            </div>*/}
-                {/*            <div className="stat-item">*/}
-                {/*                <span className="stat-label">Win Rate</span>*/}
-                {/*                <span className="stat-value">78%</span>*/}
-                {/*            </div>*/}
-                {/*            <div className="stat-item">*/}
-                {/*                <span className="stat-label">High Score</span>*/}
-                {/*                <span className="stat-value">2,450</span>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*        <div className="game-feedback">*/}
-                {/*            <button className="feedback-btn">*/}
-                {/*                👍 Like*/}
-                {/*            </button>*/}
-                {/*            <button className="feedback-btn">*/}
-                {/*                Report Issue*/}
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*)}*/}
+            )}
             </div>
         </div>
     );

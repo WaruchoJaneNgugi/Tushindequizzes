@@ -1484,12 +1484,12 @@ input:-webkit-autofill:active {
     /*overflow-y: auto;*/
 }
 
-.game-component-container {
-    /*padding: 20px;*/
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border-radius: 20px;
-    color: white;
-}
+/*.game-component-container {*/
+/*    !*padding: 20px;*!*/
+/*    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);*/
+/*    border-radius: 20px;*/
+/*    color: white;*/
+/*}*/
 
 /*.game-instructions {*/
 /*    background: rgba(255, 255, 255, 0.05);*/
@@ -3232,7 +3232,7 @@ input:-webkit-autofill:active {
     overflow-y: auto;
     padding: 24px;
     min-height: 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #21253a 0%, #181d33 100%);
 }
 
 /* Balance Tooltip */

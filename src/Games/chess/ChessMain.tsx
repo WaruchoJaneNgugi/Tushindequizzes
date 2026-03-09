@@ -5,16 +5,16 @@ import {
     type GameScreen,
     LEVEL_CONFIGS,
     type LevelConfig
-} from "./assets/types/game.types.ts";
-import {usePoints} from "./assets/hooks/usePoints.ts";
-import {useChessGame} from "./assets/hooks/useChessGame.ts";
-import {useAI} from "./assets/hooks/useAI.ts";
-import GameLobby from "./assets/components/GameLobby.tsx";
-import GameResultScreen from "./assets/components/GameResultScreen.tsx";
-import Board from "./assets/components/Board.tsx";
-import GameStatus from "./assets/components/GameStatus.tsx";
-import PromotionModal from "./assets/components/PromotionModal.tsx";
-
+} from "./types/game.types.ts";
+import {useWindowSize} from "./hooks/useWindowSize.ts";
+import {usePoints} from "./hooks/usePoints.ts";
+import {useChessGame} from "./hooks/useChessGame.ts";
+import {useAI} from "./hooks/useAI.ts";
+import GameLobby from "./components/GameLobby.tsx";
+import GameResultScreen from "./components/GameResultScreen.tsx";
+import Board from "./components/Board.tsx";
+import GameStatus from "./components/GameStatus.tsx";
+import PromotionModal from "./components/PromotionModal.tsx";
 
 export const ChessMain: FC = () => {
     const [screen, setScreen] = useState<GameScreen>('lobby');
@@ -22,6 +22,7 @@ export const ChessMain: FC = () => {
     const [gameResult, setGameResult] = useState<GameResult | null>(null);
     const [isAIThinking, setIsAIThinking] = useState(false);
     const resultHandled = useRef(false);
+    const { width, isMobile, isTablet } = useWindowSize();
 
     const { points, canAfford, placeBet, resolveBet, resetPoints } = usePoints();
     const {
@@ -33,7 +34,14 @@ export const ChessMain: FC = () => {
         isGameOver,
     } = useChessGame();
 
-    // ── Start Game ──────────────────────────────────────────────────────────────
+    // ── Compute square size responsively ─────────────────────────────────────
+    const squareSize = (() => {
+        if (isMobile) return Math.floor((Math.min(width, 480) - 16) / 8);
+        if (isTablet) return Math.floor((Math.min(width * 0.92, 560) - 16) / 8);
+        return Math.min(72, Math.floor((width - 340) / 8));
+    })();
+
+    // ── Start Game ─────────────────────────────────────────────────────────────
     const handleStartGame = useCallback(
         (level: DifficultyLevel) => {
             const cfg = LEVEL_CONFIGS[level];
@@ -49,7 +57,7 @@ export const ChessMain: FC = () => {
         [canAfford, placeBet, resetGame]
     );
 
-    // ── AI Hook ─────────────────────────────────────────────────────────────────
+    // ── AI Hook ────────────────────────────────────────────────────────────────
     const handleAIMove = useCallback(
         (move: Parameters<typeof applyExternalMove>[0]) => {
             setIsAIThinking(false);
@@ -75,7 +83,7 @@ export const ChessMain: FC = () => {
         }
     }, [gameState.currentTurn, isGameOver]);
 
-    // ── Detect Game Over ─────────────────────────────────────────────────────────
+    // ── Detect Game Over ───────────────────────────────────────────────────────
     useEffect(() => {
         if (!isGameOver || screen !== 'playing' || resultHandled.current) return;
         resultHandled.current = true;
@@ -85,11 +93,9 @@ export const ChessMain: FC = () => {
 
         if (gameState.isCheckmate) {
             if (gameState.currentTurn === 'white') {
-                // White is checkmated — AI wins
                 type = 'computer_win';
                 reason = 'Checkmate — the AI delivered the killing blow.';
             } else {
-                // Black is checkmated — player wins
                 type = 'player_win';
                 reason = 'Checkmate — you outwitted the machine!';
             }
@@ -99,57 +105,38 @@ export const ChessMain: FC = () => {
         }
 
         const delta = resolveBet(type, activeConfig);
-        const result: GameResult = { type, reason, pointsChange: delta };
-        setGameResult(result);
-
-        // Short delay before showing result screen
+        setGameResult({ type, reason, pointsChange: delta });
         setTimeout(() => setScreen('result'), 1800);
     }, [isGameOver, gameState.isCheckmate, gameState.currentTurn, gameState.isStalemate, screen, resolveBet, activeConfig]);
 
-    // ── Resign ───────────────────────────────────────────────────────────────────
+    // ── Resign ─────────────────────────────────────────────────────────────────
     const handleResign = useCallback(() => {
         if (resultHandled.current) return;
         resultHandled.current = true;
         const delta = resolveBet('computer_win', activeConfig);
-        const result: GameResult = {
+        setGameResult({
             type: 'computer_win',
             reason: 'You resigned — the throne belongs to the AI.',
             pointsChange: delta,
-        };
-        setGameResult(result);
+        });
         setScreen('result');
     }, [resolveBet, activeConfig]);
 
-    // ── Play Again ───────────────────────────────────────────────────────────────
+    // ── Play Again ─────────────────────────────────────────────────────────────
     const handlePlayAgain = useCallback(() => {
         const cfg = activeConfig;
-        if (!canAfford(cfg.cost)) {
-            setScreen('lobby');
-            return;
-        }
+        if (!canAfford(cfg.cost)) { setScreen('lobby'); return; }
         const ok = placeBet(cfg.cost);
-        if (!ok) {
-            setScreen('lobby');
-            return;
-        }
+        if (!ok) { setScreen('lobby'); return; }
         resultHandled.current = false;
         setGameResult(null);
         resetGame();
         setScreen('playing');
     }, [activeConfig, canAfford, placeBet, resetGame]);
 
-    // ── Responsive square size ────────────────────────────────────────────────
-    const squareSize = Math.min(72, Math.floor((window.innerWidth - 300) / 8));
-
-    // ── Render ───────────────────────────────────────────────────────────────────
+    // ── Screens ────────────────────────────────────────────────────────────────
     if (screen === 'lobby') {
-        return (
-            <GameLobby
-                points={points}
-                onStartGame={handleStartGame}
-                onResetPoints={resetPoints}
-            />
-        );
+        return <GameLobby points={points} onStartGame={handleStartGame} onResetPoints={resetPoints} />;
     }
 
     if (screen === 'result' && gameResult) {
@@ -164,109 +151,96 @@ export const ChessMain: FC = () => {
         );
     }
 
-    // Playing screen
+    // ── Playing Screen ─────────────────────────────────────────────────────────
+    const boardPx = squareSize * 8;
+
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                background: 'radial-gradient(ellipse at 20% 30%, #1a0e00 0%, #0a0a0f 55%, #050508 100%)',
+        <div style={{
+            minHeight: '100vh',
+            background: 'radial-gradient(ellipse at 20% 30%, #1a0e00 0%, #0a0a0f 55%, #050508 100%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: isMobile ? '10px 8px 20px' : '20px 16px 32px',
+            gap: isMobile ? 10 : 16,
+            boxSizing: 'border-box',
+            overflowX: 'hidden',
+        }}>
+
+            {/* ── Top Bar ── */}
+            <div style={{
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                padding: '24px 16px',
-                gap: 24,
-            }}
-        >
-            {/* Top bar */}
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    maxWidth: squareSize * 8 + 260,
-                }}
-            >
-                <h2
-                    style={{
-                        // fontFamily: 'Cinzel, serif',
-                        fontSize: 22,
-                        fontWeight: 900,
-                        color: '#d4a820',
-                        margin: 0,
-                        letterSpacing: '0.2em',
-                        background: 'linear-gradient(180deg, #f0c040 0%, #d4a820 60%, #a07010 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                    }}
-                >
-                    Chess
+                justifyContent: 'space-between',
+                width: '100%',
+                maxWidth: isMobile ? '100%' : boardPx + 260,
+            }}>
+                <h2 style={{
+
+                    fontSize: isMobile ? 18 : 22,
+                    fontWeight: 900,
+                    margin: 0,
+                    letterSpacing: '0.2em',
+                    background: 'linear-gradient(180deg, #f0c040 0%, #d4a820 60%, #a07010 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                }}>
+                    CHESS
                 </h2>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                    <div
-                        style={{
-                            background: 'rgba(255,255,255,0.04)',
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            borderRadius: 8,
-                            padding: '6px 16px',
-                            display: 'flex',
-                            gap: 12,
-                            alignItems: 'center',
-                        }}
-                    >
-            <span style={{ color: '#5a4030',fontSize: 10, letterSpacing: '0.1em' }}>
-              BALANCE
-            </span>
-                        <span
-                            style={{
-                                color: points.balance <= 8 ? '#f87171' : '#d4a820',
-                                // fontFamily: 'Cinzel, serif',
-                                fontSize: 18,
-                                fontWeight: 700,
-                            }}
-                        >
-              {points.balance} pts
-            </span>
-                    </div>
+                <div style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: 8,
+                    padding: isMobile ? '5px 10px' : '6px 16px',
+                    display: 'flex',
+                    gap: 8,
+                    alignItems: 'center',
+                }}>
+          <span style={{ color: '#5a4030', fontSize: 9, letterSpacing: '0.1em' }}>
+            BALANCE
+          </span>
+                    <span style={{
+                        color: points.balance <= 8 ? '#f87171' : '#d4a820',
+                        fontSize: isMobile ? 14 : 18,
+                        fontWeight: 700,
+                    }}>
+            {points.balance} pts
+          </span>
                 </div>
             </div>
 
-            {/* Main game area */}
-            <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-                {/* Board */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {/* AI label */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            padding: '6px 12px',
-                            background: 'rgba(255,255,255,0.03)',
-                            border: '1px solid rgba(255,255,255,0.07)',
-                            borderRadius: 6,
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                background: isAIThinking ? '#7dd3fc' : '#3a3a4a',
-                                boxShadow: isAIThinking ? '0 0 8px #7dd3fc' : 'none',
-                                transition: 'all 0.3s ease',
-                            }}
-                        />
-                        <span
-                            style={{
-                                color: '#6a5a40',
-                                // fontFamily: 'Cinzel, serif',
-                                fontSize: 11,
-                                letterSpacing: '0.1em',
-                            }}
-                        >
+            {/* ── Main Layout: board + status ── */}
+            <div style={{
+                display: 'flex',
+                flexDirection: isMobile || isTablet ? 'column' : 'row',
+                alignItems: isMobile || isTablet ? 'center' : 'flex-start',
+                gap: isMobile ? 10 : 20,
+                width: '100%',
+                maxWidth: isMobile ? '100%' : boardPx + 280,
+            }}>
+
+                {/* ── Board Column ── */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+
+                    {/* AI row */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '5px 10px',
+                        background: 'rgba(255,255,255,0.03)',
+                        border: '1px solid rgba(255,255,255,0.07)',
+                        borderRadius: 6,
+                    }}>
+                        <div style={{
+                            width: 9, height: 9, borderRadius: '50%',
+                            background: isAIThinking ? '#7dd3fc' : '#3a3a4a',
+                            boxShadow: isAIThinking ? '0 0 8px #7dd3fc' : 'none',
+                            transition: 'all 0.3s ease',
+                            flexShrink: 0,
+                        }} />
+                        <span style={{ color: '#6a5a40', fontSize: 10, letterSpacing: '0.08em' }}>
               {isAIThinking ? 'AI is thinking…' : `AI · ${activeConfig.label}`}
             </span>
                     </div>
@@ -278,47 +252,37 @@ export const ChessMain: FC = () => {
                         squareSize={squareSize}
                     />
 
-                    {/* Player label */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            padding: '6px 12px',
-                            background: 'rgba(255,255,255,0.03)',
-                            border: '1px solid rgba(255,255,255,0.07)',
-                            borderRadius: 6,
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: '50%',
-                                background: gameState.currentTurn === 'white' ? '#d4a820' : '#3a3a4a',
-                                boxShadow: gameState.currentTurn === 'white' ? '0 0 8px #d4a820' : 'none',
-                                transition: 'all 0.3s ease',
-                            }}
-                        />
-                        <span
-                            style={{
-                                color: '#8a7050',
-                                // fontFamily: 'Cinzel, serif',
-                                fontSize: 11,
-                                letterSpacing: '0.1em',
-                            }}
-                        >
+                    {/* Player row */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '5px 10px',
+                        background: 'rgba(255,255,255,0.03)',
+                        border: '1px solid rgba(255,255,255,0.07)',
+                        borderRadius: 6,
+                    }}>
+                        <div style={{
+                            width: 9, height: 9, borderRadius: '50%',
+                            background: gameState.currentTurn === 'white' ? '#d4a820' : '#3a3a4a',
+                            boxShadow: gameState.currentTurn === 'white' ? '0 0 8px #d4a820' : 'none',
+                            transition: 'all 0.3s ease',
+                            flexShrink: 0,
+                        }} />
+                        <span style={{ color: '#8a7050', fontSize: 10, letterSpacing: '0.08em' }}>
               You · White
             </span>
                     </div>
                 </div>
 
-                {/* Sidebar */}
+                {/* ── Status Panel ── */}
                 <GameStatus
                     gameState={gameState}
                     config={activeConfig}
                     isAIThinking={isAIThinking}
                     onResign={handleResign}
+                    isMobile={isMobile || isTablet}
+                    boardWidth={boardPx}
                 />
             </div>
 

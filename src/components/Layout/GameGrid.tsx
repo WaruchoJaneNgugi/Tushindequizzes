@@ -93,7 +93,13 @@ export const GameGrid = () => {
                                 {hasTag(card, 'soon') && (
                                     <div className="game-tag-soon">
                                         <span className="tag-dot-soon">⬤</span>
-                                        <span className="tag-text-soon">coming soon</span>
+                                        <span className="tag-text-soon">upcoming</span>
+                                    </div>
+                                )}
+                                {hasTag(card, 'featured') && (
+                                    <div className="game-tag-featured">
+                                        <span className="tag-dot-featured">⬤</span>
+                                        <span className="tag-text-featured">Featured</span>
                                     </div>
                                 )}
 

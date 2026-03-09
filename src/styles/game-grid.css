@@ -122,7 +122,7 @@
 
 /* Game Tags - Inline Theme Style */
 .game-tag-hot,
-.game-tag-new ,.game-tag-soon{
+.game-tag-new ,.game-tag-soon,.game-tag-featured{
     position: absolute;
     top: 6px;
     left: 6px;
@@ -146,7 +146,7 @@
 /* Responsive tag sizes */
 @media (min-width: 768px) {
     .game-tag-hot,
-    .game-tag-new {
+    .game-tag-new,.game-tag-featured,.game-tag-soon {
         top: 8px;
         left: 8px;
         padding: 4px 8px;
@@ -157,7 +157,7 @@
 
 @media (min-width: 1024px) {
     .game-tag-hot,
-    .game-tag-new ,.game-tag-soon{
+    .game-tag-new ,.game-tag-soon, .game-tag-featured{
         top: 10px;
         left: 10px;
         padding: 5px 10px;
@@ -189,6 +189,12 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+.game-tag-featured .tag-text-featured {
+    background: linear-gradient(to right, #d4c9ec, #bf00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
 /* NEW Tag Specific */
 .game-tag-new {
@@ -201,8 +207,19 @@
     border-color: rgb(103, 255, 0);
 }
 
+.game-tag-featured {
+    background: linear-gradient(90deg, rgba(15, 20, 30, 0.95), rgba(15, 25, 35, 0.95));
+    border-color: rgb(191, 0, 255);
+}
+
 .game-tag-soon .tag-dot-soon{
     color: #67ff00;
+    font-size: 0.45rem;
+    animation: pulse 1.5s infinite;
+}
+
+.game-tag-featured .tag-dot-featured{
+    color: #bf00ff;
     font-size: 0.45rem;
     animation: pulse 1.5s infinite;
 }
@@ -220,6 +237,10 @@
         font-size: 0.5rem;
 
     }
+    .game-tag-featured .tag-dot-featured {
+        font-size: 0.5rem;
+
+    }
 
 }
 
@@ -232,6 +253,13 @@
 
 .game-tag-soon .tag-text-soon {
     background: linear-gradient(90deg, #67ff00, #67ff00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-tag-featured .tag-dot-featured {
+    background: linear-gradient(90deg, #bf00ff, #bf00ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
