@@ -39,7 +39,7 @@ const DEFAULT_GAMES: GameCard[] = [
         content: "Quick trivia challenge",
         imageUrl: wordQuest,
         category: 'popular',
-        tags: ['hot','timed', 'trivia', 'fast-paced'],
+        tags: ['hot','timed', 'trivia', 'fast-paced',"puzzle"],
         description: "Race against the clock in this fast-paced trivia game. Answer as many questions as you can before time runs out!",
         players: 2800,
         difficulty: 'Medium',
