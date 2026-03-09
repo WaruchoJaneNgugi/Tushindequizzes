@@ -405,7 +405,10 @@ export const CanvasGame: React.FC<CanvasGameProps> = (props) => {
   return (
       <div ref={containerRef} className="sudoku-canvas-container">
         <canvas
+
             ref={canvasRef}
+            width={900}
+            height={1000}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerCancel}

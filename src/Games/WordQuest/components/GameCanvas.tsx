@@ -204,7 +204,7 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ gameState, onWordSelection, wid
       }
     }
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= cols; i++) {
       ctx.beginPath();

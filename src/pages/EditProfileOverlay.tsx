@@ -1,12 +1,11 @@
-// pages/EditProfileOverlay.tsx
 import type { FC } from "react";
 import { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import "../styles/featureoverlay.css";
+import { useAuth } from "../hooks/useAuth.ts";
+import "../styles/edit-profile-overlay.css";
 
 interface EditProfileOverlayProps {
     onClose: () => void;
-    onSave: () => Promise<void>; // This matches what TopBar is passing
+    onSave: () => Promise<void>;
 }
 
 export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSave }) => {
@@ -16,87 +15,48 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
         username: user?.username || "",
         currentPassword: "",
         newPassword: "",
-        confirmPassword: ""
+        confirmPassword: "",
     });
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [loading, setLoading]     = useState(false);
+    const [error, setError]         = useState("");
+    const [success, setSuccess]     = useState("");
     const [activeTab, setActiveTab] = useState<'profile' | 'security'>('profile');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
         if (error) setError("");
     };
 
     const validateForm = () => {
         if (activeTab === 'profile') {
-            if (!formData.username.trim()) {
-                setError("Username is required");
-                return false;
-            }
-            if (formData.username.trim().length < 3) {
-                setError("Username must be at least 3 characters");
-                return false;
-            }
-        } else if (activeTab === 'security') {
-            if (!formData.currentPassword) {
-                setError("Current password is required");
-                return false;
-            }
-            if (!formData.newPassword) {
-                setError("New password is required");
-                return false;
-            }
-            if (formData.newPassword.length < 6) {
-                setError("New password must be at least 6 characters");
-                return false;
-            }
-            if (formData.newPassword !== formData.confirmPassword) {
-                setError("New passwords do not match");
-                return false;
-            }
+            if (!formData.username.trim())             { setError("Username is required"); return false; }
+            if (formData.username.trim().length < 3)   { setError("Username must be at least 3 characters"); return false; }
+        } else {
+            if (!formData.currentPassword)             { setError("Current password is required"); return false; }
+            if (!formData.newPassword)                 { setError("New password is required"); return false; }
+            if (formData.newPassword.length < 6)       { setError("New password must be at least 6 characters"); return false; }
+            if (formData.newPassword !== formData.confirmPassword) { setError("Passwords do not match"); return false; }
         }
         return true;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!validateForm()) return;
-
-        setLoading(true);
-        setError("");
-        setSuccess("");
-
+        setLoading(true); setError(""); setSuccess("");
         try {
             if (activeTab === 'profile') {
-                // Handle username update
                 if (formData.username !== user?.username) {
                     await updateUser({ username: formData.username.trim() });
                     setSuccess("Username updated successfully!");
                 }
-            } else if (activeTab === 'security') {
-                // Handle password change
+            } else {
                 await changePassword(formData.currentPassword, formData.newPassword);
                 setSuccess("Password changed successfully!");
-
-                // Reset password fields after successful change
-                setFormData(prev => ({
-                    ...prev,
-                    currentPassword: "",
-                    newPassword: "",
-                    confirmPassword: ""
-                }));
+                setFormData(prev => ({ ...prev, currentPassword: "", newPassword: "", confirmPassword: "" }));
             }
-
-            // Call the onSave prop after successful save
             await onSave();
-
         } catch (err: any) {
             setError(err.message || "Something went wrong. Please try again.");
         } finally {
@@ -104,217 +64,201 @@ export const EditProfileOverlay: FC<EditProfileOverlayProps> = ({ onClose, onSav
         }
     };
 
-    const handleCancel = () => {
-        onClose();
-    };
+    // Password strength
+    const pwLen   = formData.newPassword.length;
+    const pwStrength = pwLen === 0 ? 0 : pwLen < 6 ? 1 : pwLen < 10 ? 2 : 3;
+    const pwMatch = formData.confirmPassword.length > 0 && formData.newPassword === formData.confirmPassword;
+    const initial = user?.username?.charAt(0).toUpperCase() || 'U';
 
     return (
         <>
-            <div className="overlay-overlay-editprofile" onClick={onClose} />
-            <div className="feature-overlay-editprofile">
-                <div className="feature-overlay-header">
-                    <div className="feature-header-left">
-                        <button className="feature-back-button" onClick={onClose}>
-                            <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div className="feature-header-center">
-                        <h2 className="feature-title">Edit Profile</h2>
-                        <p className="feature-subtitle">Update your account information</p>
-                    </div>
-                    <div className="feature-header-right">
-                        <button className="feature-action-button" onClick={onClose}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+            <div className="ep-backdrop" onClick={onClose} />
+            <div className="ep-shell">
 
-                <div className="feature-overlay-content">
-                    <div className="edit-profile-container">
-                        {/* Tab Navigation */}
-                        <div className="edit-profile-tabs">
-                            <button
-                                className={`edit-profile-tab ${activeTab === 'profile' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('profile')}
-                            >
-                                <span className="tab-icon">👤</span>
-                                <span className="tab-label">Profile Info</span>
-                            </button>
-                            <button
-                                className={`edit-profile-tab ${activeTab === 'security' ? 'active' : ''}`}
-                                onClick={() => setActiveTab('security')}
-                            >
-                                <span className="tab-icon">🔒</span>
-                                <span className="tab-label">Security</span>
-                            </button>
+                {/* ── TOPBAR ── */}
+                <header className="ep-topbar">
+                    <button className="ep-back" onClick={onClose}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Back
+                    </button>
+                    <div className="ep-topbar-center">
+                        <span className="ep-topbar-title">Edit Profile</span>
+                        <span className="ep-topbar-sub">Update your account</span>
+                    </div>
+                    <button className="ep-close-btn" onClick={onClose} aria-label="Close">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                        </svg>
+                    </button>
+                </header>
+
+                <div className="ep-body">
+
+                    {/* ── USER ROW ── */}
+                    <div className="ep-user-row">
+                        <div className="ep-avatar">{initial}</div>
+                        <div className="ep-user-info">
+                            <span className="ep-user-name">{user?.username || 'User'}</span>
+                            <span className="ep-user-sub">{user?.phoneNumber || '—'}</span>
                         </div>
+                    </div>
 
-                        {/* Messages */}
-                        {error && (
-                            <div className="edit-profile-message error">
-                                <span className="message-icon">⚠️</span>
-                                <span className="message-text">{error}</span>
+                    {/* ── TABS ── */}
+                    <div className="ep-tabs">
+                        <button
+                            className={`ep-tab ${activeTab === 'profile' ? 'active' : ''}`}
+                            onClick={() => { setActiveTab('profile'); setError(""); setSuccess(""); }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                            </svg>
+                            Profile Info
+                        </button>
+                        <button
+                            className={`ep-tab ${activeTab === 'security' ? 'active' : ''}`}
+                            onClick={() => { setActiveTab('security'); setError(""); setSuccess(""); }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                            </svg>
+                            Security
+                        </button>
+                    </div>
+
+                    {/* ── ALERT ── */}
+                    {error   && <div className="ep-alert ep-alert--error">  <span>⚠️</span>{error}   </div>}
+                    {success && <div className="ep-alert ep-alert--success"><span>✅</span>{success}</div>}
+
+                    {/* ── FORM ── */}
+                    <form className="ep-form" onSubmit={handleSubmit}>
+
+                        {activeTab === 'profile' && (
+                            <div className="ep-form-group">
+                                <label className="ep-label" htmlFor="username">Username</label>
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    className="ep-input"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    placeholder="Enter your username"
+                                    disabled={loading}
+                                    autoComplete="username"
+                                />
+                                <p className="ep-hint">3–20 characters. Letters, numbers, underscores only.</p>
                             </div>
                         )}
 
-                        {success && (
-                            <div className="edit-profile-message success">
-                                <span className="message-icon">✅</span>
-                                <span className="message-text">{success}</span>
-                            </div>
-                        )}
-
-                        {/* Current User Info */}
-                        <div className="current-profile-info">
-                            <div className="current-avatar">
-                                <div className="avatar-large">
-                                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                        {activeTab === 'security' && (
+                            <>
+                                <div className="ep-form-group">
+                                    <label className="ep-label" htmlFor="currentPassword">Current Password</label>
+                                    <input
+                                        id="currentPassword"
+                                        name="currentPassword"
+                                        type="password"
+                                        className="ep-input"
+                                        value={formData.currentPassword}
+                                        onChange={handleChange}
+                                        placeholder="Enter current password"
+                                        disabled={loading}
+                                        autoComplete="current-password"
+                                    />
                                 </div>
-                            </div>
-                            <div className="current-details">
-                                <h3 className="current-name">{user?.username || 'User'}</h3>
-                                <p className="current-email">{user?.phoneNumber || 'No phone number'}</p>
-                            </div>
-                        </div>
 
-                        {/* Edit Form */}
-                        <form className="edit-profile-form" onSubmit={handleSubmit}>
-                            {/* Profile Tab Content */}
-                            {activeTab === 'profile' && (
-                                <div className="form-section">
-                                    <div className="form-group">
-                                        <label htmlFor="username" className="form-label">
-                                            <span className="label-icon">👤</span>
-                                            Username
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="username"
-                                            name="username"
-                                            value={formData.username}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="Enter your new username"
-                                            disabled={loading}
-                                        />
-                                        <p className="form-hint">
-                                            Choose a username between 3 and 20 characters.
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Security Tab Content */}
-                            {activeTab === 'security' && (
-                                <div className="form-section">
-                                    <div className="form-group">
-                                        <label htmlFor="currentPassword" className="form-label">
-                                            <span className="label-icon">🔑</span>
-                                            Current Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="currentPassword"
-                                            name="currentPassword"
-                                            value={formData.currentPassword}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="Enter your current password"
-                                            disabled={loading}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="newPassword" className="form-label">
-                                            <span className="label-icon">🔄</span>
-                                            New Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="newPassword"
-                                            name="newPassword"
-                                            value={formData.newPassword}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="Enter new password (min 6 characters)"
-                                            disabled={loading}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="confirmPassword" className="form-label">
-                                            <span className="label-icon">✅</span>
-                                            Confirm New Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            value={formData.confirmPassword}
-                                            onChange={handleChange}
-                                            className="form-input"
-                                            placeholder="Confirm your new password"
-                                            disabled={loading}
-                                        />
-                                    </div>
-
-                                    <div className="password-requirements">
-                                        <h4 className="requirements-title">Password Requirements:</h4>
-                                        <ul className="requirements-list">
-                                            <li className={formData.newPassword.length >= 6 ? 'met' : ''}>
-                                                At least 6 characters long
-                                            </li>
-                                            <li>Can contain letters, numbers, and symbols</li>
-                                            <li>Should be different from your current password</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Action Buttons */}
-                            <div className="form-actions">
-                                <button
-                                    type="button"
-                                    className="btn-cancel"
-                                    onClick={handleCancel}
-                                    disabled={loading}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="btn-save"
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <span className="loading-spinner-small"></span>
-                                            Saving...
-                                        </>
-                                    ) : (
-                                        'Save Changes'
+                                <div className="ep-form-group">
+                                    <label className="ep-label" htmlFor="newPassword">New Password</label>
+                                    <input
+                                        id="newPassword"
+                                        name="newPassword"
+                                        type="password"
+                                        className={`ep-input ${formData.newPassword ? (pwStrength >= 2 ? 'ep-input--ok' : 'ep-input--warn') : ''}`}
+                                        value={formData.newPassword}
+                                        onChange={handleChange}
+                                        placeholder="Min. 6 characters"
+                                        disabled={loading}
+                                        autoComplete="new-password"
+                                    />
+                                    {/* Strength bar */}
+                                    {formData.newPassword.length > 0 && (
+                                        <div className="ep-strength">
+                                            <div className="ep-strength-bar">
+                                                {[1,2,3].map(n => (
+                                                    <div key={n} className={`ep-strength-seg ${pwStrength >= n ? `ep-strength-seg--${n}` : ''}`}/>
+                                                ))}
+                                            </div>
+                                            <span className="ep-strength-label">
+                                                {pwStrength === 1 && 'Weak'}
+                                                {pwStrength === 2 && 'Good'}
+                                                {pwStrength === 3 && 'Strong'}
+                                            </span>
+                                        </div>
                                     )}
-                                </button>
-                            </div>
-                        </form>
+                                </div>
 
-                        {/* Important Notes */}
-                        <div className="edit-profile-notes">
-                            <div className="note-card">
-                                <h4 className="note-title">💡 Important Notes</h4>
-                                <ul className="note-list">
-                                    <li>Username changes may take a few minutes to update across all systems</li>
-                                    <li>After changing your password, you'll need to login again on other devices</li>
-                                    <li>Keep your password secure and don't share it with anyone</li>
-                                    <li>Contact support if you have any issues updating your account</li>
-                                </ul>
-                            </div>
+                                <div className="ep-form-group">
+                                    <label className="ep-label" htmlFor="confirmPassword">Confirm Password</label>
+                                    <input
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        type="password"
+                                        className={`ep-input ${formData.confirmPassword ? (pwMatch ? 'ep-input--ok' : 'ep-input--warn') : ''}`}
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        placeholder="Re-enter new password"
+                                        disabled={loading}
+                                        autoComplete="new-password"
+                                    />
+                                    {formData.confirmPassword.length > 0 && (
+                                        <p className={`ep-match-hint ${pwMatch ? 'ep-match-hint--ok' : 'ep-match-hint--no'}`}>
+                                            {pwMatch ? '✓ Passwords match' : '✗ Passwords do not match'}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="ep-requirements">
+                                    <span className={`ep-req ${formData.newPassword.length >= 6 ? 'met' : ''}`}>
+                                        {formData.newPassword.length >= 6 ? '✓' : '○'} At least 6 characters
+                                    </span>
+                                    <span className={`ep-req ${formData.newPassword !== formData.currentPassword && formData.newPassword.length > 0 ? 'met' : ''}`}>
+                                        {formData.newPassword !== formData.currentPassword && formData.newPassword.length > 0 ? '✓' : '○'} Different from current
+                                    </span>
+                                </div>
+                            </>
+                        )}
+
+                        {/* ── ACTIONS ── */}
+                        <div className="ep-actions">
+                            <button type="button" className="ep-btn-cancel" onClick={onClose} disabled={loading}>
+                                Cancel
+                            </button>
+                            <button type="submit" className="ep-btn-save" disabled={loading}>
+                                {loading ? (
+                                    <><span className="ep-spinner" /> Saving…</>
+                                ) : (
+                                    <><svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                        <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg> Save Changes</>
+                                )}
+                            </button>
                         </div>
+                    </form>
+
+                    {/* ── NOTE ── */}
+                    <div className="ep-note">
+                        <span className="ep-note-icon">💡</span>
+                        <ul className="ep-note-list">
+                            <li>Username changes update within a few minutes.</li>
+                            <li>After changing your password, re-login on other devices.</li>
+                            <li>Contact support if you have any issues.</li>
+                        </ul>
                     </div>
+
                 </div>
             </div>
         </>

@@ -73,7 +73,7 @@ const HeroSlider = () => {
             title: "CHECKERS",
             image: checkers,
             points: "WIN UP TO 800 POINTS!",
-            accentColor: "#7b2fff",
+            accentColor: "#00c6ff",
             tags: [{ label: "NEW", type: "new" }],
             ctaText: "PLAY CHECKERS"
         }
@@ -218,12 +218,13 @@ const HeroSlider = () => {
                                     ))}
                                 </div>
 
-                                <h2 className="hs-title">{slide.title}</h2>
 
                                 <div className="hs-points-badge">
                                     <span className="hs-points-icon">⚡</span>
                                     {slide.points}
                                 </div>
+                                <h2 className="hs-title">{slide.title}</h2>
+
 
                                 <button
                                     className="hs-cta"

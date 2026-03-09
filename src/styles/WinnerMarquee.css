@@ -1,0 +1,350 @@
+/* ═══════════════════════════════════════════════
+   WinnerMarquee.css - Fixed Scrolling
+   ═══════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── Wrapper ── */
+.wm-wrapper {
+  width: 100%;
+}
+
+/* ── Header row ── */
+.wm-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 3px;
+  padding: 0 4px;
+}
+
+.wm-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ffd700;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.wm-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4444;
+  box-shadow: 0 0 8px #ff4444;
+  animation: wmLivePulse 1.4s ease-in-out infinite;
+}
+
+.wm-header-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), transparent);
+}
+
+.wm-header-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── Rail (the scrolling container) ── */
+.wm-rail {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04) 0%,
+          rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.02),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06),
+          0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Multicolour top-edge shimmer */
+.wm-rail::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+          90deg,
+          transparent           0%,
+          rgba(255, 215, 0, 0.6) 20%,
+          rgba(0, 245, 212, 0.4) 50%,
+          rgba(255, 60, 172, 0.4) 80%,
+          transparent           100%
+  );
+  z-index: 4;
+}
+
+/* ── Edge fade-outs ── */
+.wm-fade-left,
+.wm-fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.wm-fade-left {
+  left: 0;
+  background: linear-gradient(90deg, #080a14 30%, transparent);
+}
+
+.wm-fade-right {
+  right: 0;
+  background: linear-gradient(270deg, #080a14 30%, transparent);
+}
+
+/* ── Scrolling track ── */
+.wm-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap;
+  animation: wmScroll 35s linear infinite;
+  will-change: transform;
+  /* FIX: Ensure the track width is set by content */
+  width: max-content;
+}
+
+.wm-track.paused {
+  animation-play-state: paused;
+}
+
+/* ── Single winner card ── */
+.wm-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  height: 100%;
+  flex-shrink: 0;
+  cursor: default;
+  transition: background 0.2s ease;
+}
+
+.wm-card:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+/* Rank */
+.wm-rank {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Thin vertical divider */
+.wm-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+/* Avatar circle */
+.wm-avatar {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.wm-avatar span {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+/* Pulsing outer ring (top-3 only) */
+.wm-avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid;
+  opacity: 0.3;
+  animation: wmRingPulse 2s ease-in-out infinite;
+}
+
+/* Player name */
+.wm-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e8eaf6;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+/* Game pill */
+.wm-game-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.wm-game-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wm-game-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.2px;
+}
+
+/* Score */
+.wm-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.wm-score-icon {
+  font-size: 0.7rem;
+}
+
+/* Card separator glyph */
+.wm-sep {
+  color: rgba(255, 255, 255, 0.12);
+  font-size: 0.5rem;
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+/* ── Footer ── */
+.wm-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+  padding: 0 4px;
+}
+
+.wm-footer-count {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 1px;
+}
+
+.wm-footer-count strong {
+  color: #ffd700;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ── Keyframes - FIXED to scroll full width ── */
+@keyframes wmScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* This moves exactly half the total width (the first set of winners) */
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wmLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+@keyframes wmRingPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.3; }
+  50%       { transform: scale(1.15); opacity: 0.15; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .wm-track,
+  .wm-live-dot,
+  .wm-avatar-ring {
+    animation: none !important;
+  }
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 640px) {
+  .wm-fade-left,
+  .wm-fade-right {
+    width: 40px;
+  }
+
+  .wm-card {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .wm-name {
+    font-size: 0.8rem;
+  }
+
+  .wm-game-label {
+    font-size: 0.68rem;
+  }
+
+  .wm-score {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wm-card {
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .wm-name {
+    font-size: 0.75rem;
+  }
+
+  .wm-game-pill {
+    padding: 2px 6px;
+  }
+
+  .wm-game-label {
+    font-size: 0.6rem;
+  }
+
+  .wm-fade-left,
+  .wm-fade-right {
+    width: 30px;
+  }
+}

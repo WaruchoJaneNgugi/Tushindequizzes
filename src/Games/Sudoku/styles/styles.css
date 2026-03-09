@@ -47,6 +47,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0;
+  top:0;
+  left:0;
+  position: absolute;
+  z-index: 10000;
+  width: 100%;
 }
 
 .sudoku-card {
@@ -55,7 +60,7 @@ body {
   border-radius: 0;
   box-shadow: none;
   width: 100%;
-  max-width: 100%;
+  /*max-width: 100%;*/
   height: 100%;
   position: relative;
   display: flex;
@@ -71,6 +76,9 @@ body {
 .sudoku-card::-webkit-scrollbar {
   display: none;
 }
+canvas{
+  width: 100%;
+}
 
 @media (min-width: 768px) {
   .sudoku-wrapper {
@@ -78,7 +86,7 @@ body {
   }
   .sudoku-card {
     padding: 1.5rem;
-    max-width: 36rem;
+    /*max-width: 36rem;*/
     height: 100%;
     max-height: 100%;
     border-radius: 1rem;
@@ -91,9 +99,9 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.25rem;
-  margin-top: 0;
+  /*align-items: center;*/
+  /*margin-bottom: 0.25rem;*/
+  /*margin-top: 0;*/
 }
 
 .sudoku-header-title {
@@ -104,7 +112,7 @@ body {
 .sudoku-header-title h1 {
   font-size: 1.25rem;
   font-weight: 700;
-  color:var(--text-muted);
+  color:black
 }
 
 .sudoku-header-title span {
@@ -115,7 +123,7 @@ body {
 
 @media (min-width: 768px) {
   .sudoku-header {
-    margin-bottom: 1rem;
+    /*margin-bottom: 1rem;*/
     margin-top: 0.5rem;
   }
   .sudoku-header-title h1 {
@@ -596,6 +604,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+canvas {
+  width: 100%;
+  max-width: 800px;
+  height: 100vh;
+  max-height: 900px;
+}
+
 /* Congrats Modal */
 .sudoku-congrats-content {
   text-align: center;
@@ -695,7 +710,6 @@ body {
 
 .sudoku-canvas-wrapper {
   flex: 1;
-  width: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;

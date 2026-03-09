@@ -23,11 +23,11 @@ export const TopBar: FC = () => {
         setShowBuyPoints,
     } = useUI();
 
-    const { setActiveFilter, activeFilter, searchQuery, setSearchQuery, setIsSearchActive } = useGames();
+    const { setActiveFilter, searchQuery, setSearchQuery, setIsSearchActive } = useGames();
     const searchInputRef = useRef<HTMLInputElement>(null);
     const [showSearchOverlay, setShowSearchOverlay] = useState(false);
 
-    const [activeSidebarFilter, setActiveSidebarFilter] = useState(activeFilter || 'all');
+    // const [activeSidebarFilter, setActiveSidebarFilter] = useState(activeFilter || 'all');
     const [showSidebar, setShowSidebar] = useState(false);
     const [activeMobileNav, setActiveMobileNav] = useState('games');
     const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery || '');
@@ -40,10 +40,10 @@ export const TopBar: FC = () => {
     const [showEditProfile, setShowEditProfile] = useState(false);
 
     const sidebarRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setActiveSidebarFilter(activeFilter || 'all');
-    }, [activeFilter]);
+    //
+    // useEffect(() => {
+    //     setActiveSidebarFilter(activeFilter || 'all');
+    // }, [activeFilter]);
 
     const handleEditProfile = async () => {
         try {
@@ -53,6 +53,65 @@ export const TopBar: FC = () => {
             console.error('Failed to update profile:', error);
         }
     };
+    const NAV_ITEMS = [
+        {
+            key: 'games',
+            label: 'Games',
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="6" width="20" height="13" rx="3" stroke="currentColor" strokeWidth="1.5"/>
+                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="10" r="1.5" fill="currentColor"/>
+                    <circle cx="16" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="14" r="1.5" fill="currentColor"/>
+                    <path d="M7 3L12 6L17 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            ),
+        },
+        {
+            key: 'leaderboard',
+            label: 'Ranks',
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="2"  y="13" width="5" height="9"  rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                    <rect x="9"  y="8"  width="6" height="14" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                    <rect x="17" y="2"  width="5" height="20" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+            ),
+        },
+        {
+            key: 'achievements',
+            label: 'Awards',
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 15C15.866 15 19 11.866 19 8C19 4.134 15.866 1 12 1C8.134 1 5 4.134 5 8C5 11.866 8.134 15 12 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M8.5 14.5L7 23L12 20.5L17 23L15.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 8L11 10L15 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            ),
+        },
+        {
+            key: 'history',
+            label: 'History',
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12C3 7.029 7.029 3 12 3C16.971 3 21 7.029 21 12C21 16.971 16.971 21 12 21C10.14 21 8.418 20.423 7 19.438" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M12 7V12L15 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3 7.5L3 12.5L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+            ),
+        },
+        {
+            key: 'profile',
+            label: 'Profile',
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M4 20C4 17.239 7.582 15 12 15C16.418 15 20 17.239 20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+            ),
+        },
+    ];
 
     const toggleAuthModal = (mode: 'login' | 'signup') => {
         setAuthModalMode(mode);
@@ -104,20 +163,20 @@ export const TopBar: FC = () => {
         setShowProfileOverlay(false);
         setActiveMobileNav("games");
     };
-
-    const handleSidebarFilter = (filterId: string) => {
-        setActiveFilter(filterId);
-        setActiveSidebarFilter(filterId);
-        setShowSidebar(false);
-
-        setTimeout(() => {
-            const gamesSection = document.querySelector('.games-grid') ||
-                document.querySelector('.games-filter-container');
-            if (gamesSection) {
-                gamesSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 300);
-    };
+    //
+    // const handleSidebarFilter = (filterId: string) => {
+    //     setActiveFilter(filterId);
+    //     setActiveSidebarFilter(filterId);
+    //     setShowSidebar(false);
+    //
+    //     setTimeout(() => {
+    //         const gamesSection = document.querySelector('.games-grid') ||
+    //             document.querySelector('.games-filter-container');
+    //         if (gamesSection) {
+    //             gamesSection.scrollIntoView({ behavior: 'smooth' });
+    //         }
+    //     }, 300);
+    // };
 
     const handleMobileNavClick = (navItem: string) => {
         setActiveMobileNav(navItem);
@@ -126,7 +185,7 @@ export const TopBar: FC = () => {
             case 'games':
                 closeAllOverlays();
                 setActiveFilter('all');
-                setActiveSidebarFilter('all');
+                // setActiveSidebarFilter('all');
                 setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }, 100);
@@ -393,52 +452,20 @@ export const TopBar: FC = () => {
                 )}
             </nav>
 
-            {/* Mobile Bottom Navigation */}
-            {/* Mobile Bottom Navigation */}
             <div className="mobile-bottom-nav">
-                {['games', 'leaderboard', 'achievements', 'history', 'profile'].map(item => (
-                    <button
-                        key={item}
-                        className={`mobile-bottom-nav-item ${activeMobileNav === item ? 'active' : ''}`}
-                        onClick={() => isLoggedIn && handleMobileNavClick(item)}
+                {NAV_ITEMS.map(({ key, label, icon }) => (
+                    <div
+                        key={key}
+                        className={`mobile-bottom-nav-item ${activeMobileNav === key ? 'active' : ''}`}
+                        onClick={() => isLoggedIn && handleMobileNavClick(key)}
+                        aria-label={label}
+                        aria-current={activeMobileNav === key ? 'page' : undefined}
                     >
-            <span className="mobile-nav-icon">
-                {item === 'games' && (
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 8L8 12L12 16L16 12L12 8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                    </svg>
-                )}
-                {item === 'leaderboard' && (
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 12L12 8L8 12M12 16V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M20 21H4V4H20V21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                )}
-                {item === 'achievements' && (
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                )}
-                {item === 'history' && (
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                        <polyline points="12 7 12 12 15 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M4 4L7 7M20 4L17 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                    </svg>
-                )}
-                {item === 'profile' && (
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                        <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" strokeWidth="1.5"/>
-                    </svg>
-                )}
-            </span>
-                        <span className="mobile-nav-label">
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-            </span>
-                    </button>
+                        <div className="mobile-nav-icon">
+                            {icon}
+                        </div>
+                        <span className="mobile-nav-label">{label}</span>
+                    </div>
                 ))}
             </div>
 

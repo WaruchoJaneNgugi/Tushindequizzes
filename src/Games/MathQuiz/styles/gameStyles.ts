@@ -4,7 +4,7 @@ export const GameStyles = `
   /* Use a wrapper class instead of body for React/Vite stability */
   .game-wrapper { 
     font-family: 'Poppins', sans-serif; 
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+    background: white; 
     min-height: 100vh;
     width: 100vw;
     display: flex;

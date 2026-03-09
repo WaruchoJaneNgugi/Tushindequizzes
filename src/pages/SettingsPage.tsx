@@ -1,159 +1,105 @@
-import "../styles/settingspage.css";
 import { useAuth } from "../hooks/useAuth";
 import { useUI } from "../hooks/useUI";
+import "../styles/settings-page.css";
 
 export const SettingsPage = () => {
     const { user } = useAuth();
-    const {
-        showSettings,
-        setShowSettings,
-        setShowBuyPoints
-    } = useUI();
+    const { showSettings, setShowSettings, setShowBuyPoints } = useUI();
 
-    const handleClose = () => {
-        setShowSettings(false);
-    };
-
-    const handleBuyPoints = () => {
-        setShowSettings(false);
-        setShowBuyPoints(true);
-    };
-
-    // Don't render if not open
     if (!showSettings || !user) return null;
 
+    const handleClose = () => setShowSettings(false);
+    const handleBuyPoints = () => { setShowSettings(false); setShowBuyPoints(true); };
+
+    const stats = [
+        { icon: '🎮', label: 'Games',     value: '0'  },
+        { icon: '🏆', label: 'Wins',      value: '0'  },
+        { icon: '📈', label: 'Rank',      value: '#1' },
+        { icon: '⏱️', label: 'Play Time', value: '0h' },
+    ];
+
     return (
-        <div className="settings-overlay" onClick={handleClose}>
-            <div className="settings-popup" onClick={(e) => e.stopPropagation()}>
-                {/* Header */}
-                <div className="settings-header">
-                    <div className="header-content">
-                        <div className="header-icon">⚙️</div>
-                        <div className="header-text">
-                            <h2 className="settings-title">Account Settings</h2>
-                            <p className="settings-subtitle">Manage your profile and points</p>
+        <div className="sp-backdrop" onClick={handleClose}>
+            <div className="sp-card" onClick={e => e.stopPropagation()}>
+
+                {/* ── Header ── */}
+                <div className="sp-header">
+                    <div className="sp-header-left">
+                        <div className="sp-header-icon">⚙️</div>
+                        <div>
+                            <h2 className="sp-title">Account</h2>
+                            <p className="sp-subtitle">Profile & Points</p>
                         </div>
                     </div>
-                    <button className="settings-close-btn" onClick={handleClose} aria-label="Close settings">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <button className="sp-close" onClick={handleClose} aria-label="Close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
                         </svg>
                     </button>
                 </div>
 
-                <div className="settings-container">
-                    {/* Profile Section */}
-                    <div className="profile-section">
-                        <div className="profile-card">
-                            <div className="profile-header">
-                                <div className="profile-avatar-container">
-                                    <div className="profile-avatar-large">
-                                        {user.avatarInitials}
-                                    </div>
-                                    <div className="online-status"></div>
-                                </div>
-                                <div className="profile-info">
-                                    <h3 className="profile-username">{user.username}</h3>
-                                    <div className="profile-details">
-                                        <span className="detail-item">
-                                            {/*<span className="detail-icon">📱</span>*/}
-                                            {user.phoneNumber}
-                                        </span>
-                                        {/*<span className="detail-item">*/}
-                                        {/*    <span className="detail-icon">👤</span>*/}
-                                        {/*    Member since {new Date().getFullYear()}*/}
-                                        {/*</span>*/}
-                                    </div>
-                                </div>
-                            </div>
+                <div className="sp-body">
+
+                    {/* ── Profile row ── */}
+                    <div className="sp-profile-row">
+                        <div className="sp-avatar">
+                            {user.avatarInitials}
+                            <div className="sp-online" />
                         </div>
-
-                        {/* Points Section */}
-                        <div className="points-section">
-                            <div className="points-card">
-                                <div className="points-header">
-                                    <div className="points-icon-container">
-                                        <span className="points-icon">💎</span>
-                                    </div>
-                                    <div className="points-info">
-                                        <h4 className="points-title">Smart Points</h4>
-                                        <p className="points-subtitle">Your current balance</p>
-                                    </div>
-                                </div>
-
-                                <div className="balance-display">
-                                    <div className="balance-main">
-                                        <span className="balance-value">{user.pointsBalance}</span>
-                                        <span className="balance-label">points</span>
-                                    </div>
-                                    <div className="balance-details">
-                                        {/*<div className="detail-row">*/}
-                                        {/*    <span className="detail-label">Current Points</span>*/}
-                                        {/*    <span className="detail-value">{user.pointsBalance} pts</span>*/}
-                                        {/*</div>*/}
-                                        <div className="detail-row">
-                                            <span className="detail-label">Total Earned</span>
-                                            <span className="detail-value">{user.smartPoints} pts</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button className="btn-buy-points" onClick={handleBuyPoints}>
-                                    <span className="buy-icon">⚡</span>
-                                    <span className="buy-text">Buy Smart Points</span>
-                                    <span className="buy-arrow">→</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Quick Stats */}
-                        <div className="stats-section">
-                            <div className="stats-grid">
-                                <div className="stat-card">
-                                    <div className="stat-icon">🎮</div>
-                                    <div className="stat-info">
-                                        <div className="stat-value">0</div>
-                                        <div className="stat-label">Games Played</div>
-                                    </div>
-                                </div>
-                                <div className="stat-card">
-                                    <div className="stat-icon">🏆</div>
-                                    <div className="stat-info">
-                                        <div className="stat-value">0</div>
-                                        <div className="stat-label">Wins</div>
-                                    </div>
-                                </div>
-                                <div className="stat-card">
-                                    <div className="stat-icon">📈</div>
-                                    <div className="stat-info">
-                                        <div className="stat-value">#1</div>
-                                        <div className="stat-label">Rank</div>
-                                    </div>
-                                </div>
-                                <div className="stat-card">
-                                    <div className="stat-icon">⏱️</div>
-                                    <div className="stat-info">
-                                        <div className="stat-value">0h</div>
-                                        <div className="stat-label">Play Time</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="sp-profile-info">
+                            <span className="sp-username">{user.username}</span>
+                            <span className="sp-phone">{user.phoneNumber}</span>
                         </div>
                     </div>
-                    <div className="settings-footer">
-                        <div className="footer-content">
-                            <div className="footer-info">
-                                <span className="footer-icon">🔒</span>
-                                <span className="footer-text">Your data is securely encrypted</span>
+
+                    <div className="sp-divider" />
+
+                    {/* ── Points ── */}
+                    <div className="sp-points-block">
+                        <div className="sp-points-top">
+                            <div className="sp-points-left">
+                                <span className="sp-points-label">
+                                    <span>💎</span> Smart Points
+                                </span>
+                                <div className="sp-points-nums">
+                                    <span className="sp-points-balance">{user.pointsBalance}</span>
+                                    <span className="sp-points-unit">pts</span>
+                                </div>
                             </div>
-                            <div className="footer-version">
-                                <span className="version-text">v1.0.0 • TushindeQuiz</span>
+                            <div className="sp-points-detail">
+                                <span className="sp-detail-lbl">Total Earned</span>
+                                <span className="sp-detail-val">{user.smartPoints} pts</span>
                             </div>
                         </div>
+                        <button className="sp-buy-btn" onClick={handleBuyPoints}>
+                            <span>⚡</span>
+                            <span>Buy Smart Points</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
+
+                    <div className="sp-divider" />
+
+                    {/* ── Stats ── */}
+                    <div className="sp-stats">
+                        {stats.map((s, i) => (
+                            <div key={i} className="sp-stat">
+                                <span className="sp-stat-icon">{s.icon}</span>
+                                <span className="sp-stat-val">{s.value}</span>
+                                <span className="sp-stat-lbl">{s.label}</span>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
 
-                {/* Footer */}
+                {/* ── Footer ── */}
+                <div className="sp-footer">
+                    <span className="sp-footer-text">🔒 Data securely encrypted</span>
+                    <span className="sp-footer-version">v1.0.0 · TushindeQuiz</span>
+                </div>
 
             </div>
         </div>

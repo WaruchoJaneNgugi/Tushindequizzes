@@ -1,129 +1,44 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState,  } from 'react';
 import { useGames } from '../../hooks/useGames';
 import "../../styles/newgamesfilter.css";
-import "../../styles/marque.css";
 import HeroSlider from "./HeroSlider.tsx";
+import WinnerMarquee from "./WinnerMarquee.tsx";
 
 interface GamesFilterProps {
     onFilterChange?: (filter: string) => void;
     activeFilter?: string;
 }
 
-interface Description {
-    id: string;
-    category: string;
-    text: string;
-    icon: string;
-    color: string;
-    glowColor: string;
-}
+const filterCategories = [
+    { id: 'all',     label: 'All Games',    icon: '🎮', color: '#00f5d4' },
+    { id: 'latest',  label: 'New',          icon: '✨', color: '#ff3cac' },
+    { id: 'timed',   label: 'Timed Trivia', icon: '⏱️', color: '#f5a623' },
+    { id: 'popular', label: 'Hot',          icon: '🔥', color: '#ff4757' },
+    { id: 'quiz',    label: 'Quizzes',      icon: '🧠', color: '#7b2fff' },
+    { id: 'puzzle',  label: 'Puzzle',       icon: '🧩', color: '#26de81' },
+    { id: 'arcade',  label: 'Arcade',       icon: '👾', color: '#ff6b6b' },
+];
 
-const allDescriptions: Description[] = [
-    {
-        id: 'all',
-        category: 'All Games',
-        text: 'Explore our complete collection of games and quizzes',
-        icon: '🎮',
-        color: '#00f5d4',
-        glowColor: 'rgba(0,245,212,0.5)'
-    },
-    {
-        id: 'latest',
-        category: 'New Releases',
-        text: 'Discover our newest and most recent game additions',
-        icon: '✨',
-        color: '#ff3cac',
-        glowColor: 'rgba(255,60,172,0.5)'
-    },
-    {
-        id: 'timed',
-        category: 'Timed Trivia',
-        text: 'Test your speed and accuracy with time-based challenges',
-        icon: '⏱️',
-        color: '#f5a623',
-        glowColor: 'rgba(245,166,35,0.5)'
-    },
-    {
-        id: 'popular',
-        category: 'Trending Now',
-        text: 'Play the most loved and frequently played games',
-        icon: '🔥',
-        color: '#ff4757',
-        glowColor: 'rgba(255,71,87,0.5)'
-    },
-    {
-        id: 'quiz',
-        category: 'Quiz',
-        text: 'Test your knowledge in Quizzes',
-        icon: '🧠',
-        color: '#7b2fff',
-        glowColor: 'rgba(123,47,255,0.5)'
-    },
-    {
-        id: 'puzzle',
-        category: 'Brain Puzzles',
-        text: 'Solve brain-teasing puzzles and logic games',
-        icon: '🧩',
-        color: '#26de81',
-        glowColor: 'rgba(38,222,129,0.5)'
-    },
-    {
-        id: 'arcade',
-        category: 'Arcade Action',
-        text: 'Enjoy fast-paced action and arcade-style gameplay',
-        icon: '👾',
-        color: '#ff6b6b',
-        glowColor: 'rgba(255,107,107,0.5)'
-    }
+const allDescriptions = [
+    { id: 'all',     category: 'All Games',      color: '#00f5d4' },
+    { id: 'latest',  category: 'New Releases',   color: '#ff3cac' },
+    { id: 'timed',   category: 'Timed Trivia',   color: '#f5a623' },
+    { id: 'popular', category: 'Trending Now',   color: '#ff4757' },
+    { id: 'quiz',    category: 'Quiz',           color: '#7b2fff' },
+    { id: 'puzzle',  category: 'Brain Puzzles',  color: '#26de81' },
+    { id: 'arcade',  category: 'Arcade Action',  color: '#ff6b6b' },
 ];
 
 export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) => {
-    const {
-        setActiveFilter,
-        activeFilter: storeFilter,
-    } = useGames();
+    const { setActiveFilter, activeFilter: storeFilter } = useGames();
 
     const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-    const [glitchEffect, setGlitchEffect] = useState(false);
-    const marqueeRef = useRef<HTMLDivElement>(null);
 
     const currentFilter = activeFilter || storeFilter;
-    const marqueeSpeed = 'slow';
-
-    // Trigger glitch on filter change
-    useEffect(() => {
-        // setGlitchEffect(true);
-        const timer = setTimeout(() => setGlitchEffect(false), 300);
-        return () => clearTimeout(timer);
-    }, [currentFilter]);
-
-    // Get current category details
-    const currentCategory = allDescriptions.find(d => d.id === currentFilter) || allDescriptions[0];
-
-    // Get all descriptions for marquee with enhanced styling
-    const getMarqueeDescriptions = () => {
-        // Triple the array for smoother infinite scroll
-        const descriptions = [...allDescriptions, ...allDescriptions, ...allDescriptions];
-        return descriptions.map((desc, index) => ({
-            ...desc,
-            key: `${desc.id}-${index}`,
-            isCurrent: desc.id === currentFilter
-        }));
-    };
-
-    const filterCategories = [
-        { id: 'all', label: 'All Games', icon: '🎮', color: '#00f5d4' },
-        { id: 'latest', label: 'New', icon: '✨', color: '#ff3cac' },
-        { id: 'timed', label: 'Timed Trivia', icon: '⏱️', color: '#f5a623' },
-        { id: 'popular', label: 'Hot', icon: '🔥', color: '#ff4757' },
-        { id: 'quiz', label: 'Quizzes', icon: '🧠', color: '#7b2fff' },
-        { id: 'puzzle', label: 'Puzzle', icon: '🧩', color: '#26de81' },
-        { id: 'arcade', label: 'Arcade', icon: '👾', color: '#ff6b6b' },
-    ];
+    const currentCategory = allDescriptions.find(d => d.id === currentFilter) ?? allDescriptions[0];
 
     const handleFilterClick = (filterId: string) => {
         if (filterId === currentFilter) return;
-
         if (onFilterChange) {
             onFilterChange(filterId);
         } else {
@@ -140,40 +55,12 @@ export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) 
             </div>
 
             <div className="games-filter-container">
-                {/* Hero Section with Slider */}
+                {/* Hero Section with Slider + Winner Marquee */}
                 <div className="filter-hero-section">
                     <HeroSlider />
 
-                    {/* Animated Category Marquee */}
-                    <div
-                        ref={marqueeRef}
-                        className={`category-marquee ${glitchEffect ? 'marquee-glitch' : ''}`}
-                        style={{ '--accent-color': currentCategory.color } as React.CSSProperties}
-                    >
-                        <div className="marquee-gradient-left" />
-                        <div className={`marquee-track marquee-${marqueeSpeed}`}>
-                            {getMarqueeDescriptions().map((desc) => (
-                                <div
-                                    key={desc.key}
-                                    className={`marquee-item ${desc.isCurrent ? 'current' : ''}`}
-                                    onClick={() => handleFilterClick(desc.id)}
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <span className="marquee-icon" style={{ color: desc.color }}>
-                                        {desc.icon}
-                                    </span>
-                                    <span className="marquee-text">{desc.text}</span>
-                                    <span className="marquee-category" style={{
-                                        background: `linear-gradient(135deg, ${desc.color}20, ${desc.color}40)`,
-                                        borderColor: `${desc.color}40`
-                                    }}>
-                                        {desc.category}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="marquee-gradient-right" />
-                    </div>
+                    {/* ── Winner Marquee (replaces old category marquee) ── */}
+                    <WinnerMarquee />
                 </div>
 
                 {/* Filter Controls */}
@@ -186,7 +73,7 @@ export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) 
                         </div>
                         <div className="categories-grid">
                             {filterCategories.map((category) => {
-                                const isActive = currentFilter === category.id;
+                                const isActive  = currentFilter === category.id;
                                 const isHovered = hoveredCategory === category.id;
 
                                 return (
@@ -233,7 +120,7 @@ export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) 
                                         onClick={() => handleFilterClick(category.id)}
                                         style={{
                                             '--chip-color': category.color,
-                                            '--chip-glow': `${category.color}40`
+                                            '--chip-glow': `${category.color}40`,
                                         } as React.CSSProperties}
                                     >
                                         <span className="chip-icon">{category.icon}</span>
@@ -249,9 +136,15 @@ export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) 
 
                     {/* Active Filter Indicator */}
                     <div className="active-filter-indicator">
-                        <div className="indicator-pulse" style={{ background: currentCategory.color }} />
+                        <div
+                            className="indicator-pulse"
+                            style={{ background: currentCategory.color }}
+                        />
                         <span className="indicator-text">
-                            Currently viewing: <strong style={{ color: currentCategory.color }}>{currentCategory.category}</strong>
+                            Currently viewing:{' '}
+                            <strong style={{ color: currentCategory.color }}>
+                                {currentCategory.category}
+                            </strong>
                         </span>
                     </div>
                 </div>

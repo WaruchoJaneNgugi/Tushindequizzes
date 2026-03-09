@@ -7,21 +7,20 @@
 /* ── Root Container ── */
 .hs-root {
     --accent: #00f5d4;
-
     width: 100%;
     font-family: 'Montserrat', sans-serif;
     position: relative;
-    background: #0a0c14;
+    background: transparent;
     overflow: hidden;
-    padding: 20px 0;
+    /*padding: 20px 0;*/
 }
 
 /* ── Main Stage ── */
 .hs-stage {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100% );
     /*max-width: 1400px;*/
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     border-radius: 20px;
     overflow: hidden;
     height: 400px;
@@ -319,6 +318,10 @@
         border-radius: 16px;
     }
 
+    .hs-title{
+        display: none;
+
+    }
     .hs-content {
         padding: 20px;
     }

@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Difficulty } from '../types';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
+import {Difficulty} from '../types';
 import type {
     Category,
     GameState,
@@ -11,15 +10,16 @@ import {
     DIFFICULTY_SETTINGS,
     CATEGORIES
 } from '../constants';
-import { generateGrid } from '../utils/gridGenerator';
-import { fetchWordList } from '../services/geminiService';
-import { soundService } from '../services/soundService';
+import {generateGrid} from '../utils/gridGenerator';
+import {fetchWordList} from '../services/geminiService';
+import {soundService} from '../services/soundService';
 import GameCanvas from './GameCanvas';
 import CategorySelection from './CategorySelection';
 import DifficultySelection from './DifficultySelection';
 import GameHeader from './GameHeader';
 import QuestTracker from './QuestTracker';
 import "../styles.css"
+
 const GAMES_PER_DIFFICULTY = 3;
 const DIFFICULTY_ORDER = [Difficulty.BEGINNER, Difficulty.INTERMEDIATE, Difficulty.ADVANCED, Difficulty.EXPERT];
 const MISSION_SUCCESS_BONUS = 500;
@@ -27,7 +27,7 @@ const GAME_START_COST = 1;
 
 const createParticles = (count: number) => {
     const colors = ['#38bdf8', '#10b981', '#f59e0b', '#ef4444', '#818cf8', '#a78bfa'];
-    return Array.from({ length: count }).map((_, i) => ({
+    return Array.from({length: count}).map((_, i) => ({
         id: i,
         left: Math.random() * 100,
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -37,7 +37,7 @@ const createParticles = (count: number) => {
     }));
 };
 
-export const Confetti: React.FC<{ intensity?: 'normal' | 'high' }> = ({ intensity = 'normal' }) => {
+export const Confetti: React.FC<{ intensity?: 'normal' | 'high' }> = ({intensity = 'normal'}) => {
     const count = intensity === 'high' ? 200 : 100;
     const [particles] = useState(() => createParticles(count));
 
@@ -68,7 +68,7 @@ interface QuestOverlayProps {
     onProceed: () => void;
 }
 
-export const QuestOverlay: React.FC<QuestOverlayProps> = ({ questNum, score, questScore, onProceed }) => {
+export const QuestOverlay: React.FC<QuestOverlayProps> = ({questNum, score, questScore, onProceed}) => {
     return (
         <div className="overlay splash-overlay" onClick={onProceed}>
             <div className="result-card quest-clear-card" onClick={(e) => e.stopPropagation()}>
@@ -125,7 +125,13 @@ const WordQuest: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [view, setView] = useState<'MENU' | 'PLAYING'>('MENU');
     const [showQuestOverlay, setShowQuestOverlay] = useState(false);
-    const [canvasConfig, setCanvasConfig] = useState({ width: 560, height: 560, rows: 12, cols: 12, isMobile: window.innerWidth < 768 });
+    const [canvasConfig, setCanvasConfig] = useState({
+        width: 560,
+        height: 560,
+        rows: 12,
+        cols: 12,
+        isMobile: window.innerWidth < 768
+    });
 
     const [prefetchedGames, setPrefetchedGames] = useState<Record<string, PrefetchedGame>>({});
     const prefetchTimeoutRef = useRef<number | null>(null);
@@ -164,7 +170,7 @@ const WordQuest: React.FC = () => {
             const width = cols * cellSide;
             const height = rows * cellSide;
 
-            return { width, height, rows, cols, isMobile };
+            return {width, height, rows, cols, isMobile};
         } else {
             const padding = 40;
             const sidebarWidth = w >= 1024 ? 280 : 240;
@@ -175,7 +181,7 @@ const WordQuest: React.FC = () => {
             const cols = config.gridSize;
             const rows = config.gridSize;
             const size = Math.min(availableWidth, availableHeight, 720);
-            return { width: size, height: size, rows, cols, isMobile };
+            return {width: size, height: size, rows, cols, isMobile};
         }
     }, []);
 
@@ -194,11 +200,11 @@ const WordQuest: React.FC = () => {
             const config = DIFFICULTY_SETTINGS[diff];
             const wordGroups = await fetchWordList(cat, config);
             const settings = calculateCanvasSettings(diff);
-            const { grid, placedWords } = generateGrid(wordGroups, config, settings.rows, settings.cols);
+            const {grid, placedWords} = generateGrid(wordGroups, config, settings.rows, settings.cols);
 
             setPrefetchedGames(prev => ({
                 ...prev,
-                [key]: { key, grid, placedWords, rows: settings.rows, cols: settings.cols }
+                [key]: {key, grid, placedWords, rows: settings.rows, cols: settings.cols}
             }));
         } catch (e) {
             console.error(`Failed to pre-generate ${key}`, e);
@@ -270,7 +276,7 @@ const WordQuest: React.FC = () => {
         try {
             const settings = calculateCanvasSettings(diff);
             const wordGroups = await fetchWordList(cat, config);
-            const { grid, placedWords } = generateGrid(wordGroups, config, settings.rows, settings.cols);
+            const {grid, placedWords} = generateGrid(wordGroups, config, settings.rows, settings.cols);
 
             setGameState({
                 grid, rows: settings.rows, cols: settings.cols, placedWords,
@@ -328,7 +334,7 @@ const WordQuest: React.FC = () => {
             if (wordIdx !== -1) {
                 soundService.playSuccess();
                 const updatedWords = [...prev.placedWords];
-                updatedWords[wordIdx] = { ...updatedWords[wordIdx], found: true };
+                updatedWords[wordIdx] = {...updatedWords[wordIdx], found: true};
 
                 const currentQuestWords = updatedWords.filter(w => w.part === prev.subLevel);
                 const isQuestComplete = currentQuestWords.every(w => w.found);
@@ -355,13 +361,13 @@ const WordQuest: React.FC = () => {
                             });
                         }
 
-                        return { ...prev, placedWords: updatedWords, status: 'WON', score: finalMissionScore };
+                        return {...prev, placedWords: updatedWords, status: 'WON', score: finalMissionScore};
                     } else {
                         setShowQuestOverlay(true);
-                        return { ...prev, placedWords: updatedWords, score: newScore, status: 'IDLE' };
+                        return {...prev, placedWords: updatedWords, score: newScore, status: 'IDLE'};
                     }
                 }
-                return { ...prev, placedWords: updatedWords, score: newScore };
+                return {...prev, placedWords: updatedWords, score: newScore};
             }
             return prev;
         });
@@ -382,7 +388,7 @@ const WordQuest: React.FC = () => {
             soundService.playHint();
             const randomWord = unfound[Math.floor(Math.random() * unfound.length)];
             const updatedWords = prev.placedWords.map(pw =>
-                pw.word === randomWord.word ? { ...pw, found: true } : pw
+                pw.word === randomWord.word ? {...pw, found: true} : pw
             );
 
             const currentQuestWords = updatedWords.filter(w => w.part === prev.subLevel);
@@ -406,14 +412,14 @@ const WordQuest: React.FC = () => {
                             return updated;
                         });
                     }
-                    return { ...prev, placedWords: updatedWords, status: 'WON', score: finalMissionScore };
+                    return {...prev, placedWords: updatedWords, status: 'WON', score: finalMissionScore};
                 } else {
                     setShowQuestOverlay(true);
-                    return { ...prev, placedWords: updatedWords, score: newScore, status: 'IDLE' };
+                    return {...prev, placedWords: updatedWords, score: newScore, status: 'IDLE'};
                 }
             }
 
-            return { ...prev, placedWords: updatedWords, hintsUsed: prev.hintsUsed + 1, score: newScore };
+            return {...prev, placedWords: updatedWords, hintsUsed: prev.hintsUsed + 1, score: newScore};
         });
     };
 
@@ -480,183 +486,209 @@ const WordQuest: React.FC = () => {
     const questScoreForOverlay = wordsPerQuest * pointsPerWord;
 
     return (
-        <div className="game-layout-container">
-            <div className="game-view">
-                {gameState.status === 'WON' && <Confetti key="won-high" intensity="high" />}
-                {showQuestOverlay && (
-                    <QuestOverlay
-                        questNum={gameState.subLevel}
-                        score={totalPoints + gameState.score}
-                        questScore={questScoreForOverlay}
-                        onProceed={nextQuest}
+            <div className="game-layout-container">
+                <div className="game-view">
+                    {gameState.status === 'WON' && <Confetti key="won-high" intensity="high"/>}
+                    {showQuestOverlay && (
+                        <QuestOverlay
+                            questNum={gameState.subLevel}
+                            score={totalPoints + gameState.score}
+                            questScore={questScoreForOverlay}
+                            onProceed={nextQuest}
+                        />
+                    )}
+
+                    <GameHeader
+                        gameState={gameState}
+                        totalPoints={totalPoints}
+                        isMuted={isMuted}
+                        onQuit={handleQuit}
+                        onHint={useHint}
+                        onToggleMute={toggleMute}
+                        onShowHowTo={() => setShowInstructions(true)}
                     />
-                )}
 
-                <GameHeader
-                    gameState={gameState}
-                    totalPoints={totalPoints}
-                    isMuted={isMuted}
-                    onQuit={handleQuit}
-                    onHint={useHint}
-                    onToggleMute={toggleMute}
-                    onShowHowTo={() => setShowInstructions(true)}
-                />
+                    <div className="game-body">
+                        {/*<section className="board-area">*/}
+                        {/*    <div className="board-wrapper">*/}
+                                <GameCanvas
+                                    gameState={gameState}
+                                    onWordSelection={onWordSelection}
+                                    width={canvasConfig.width}
+                                    height={canvasConfig.height}
+                                    isMobile={canvasConfig.isMobile}
+                                />
+                            {/*</div>*/}
+                        {/*</section>*/}
 
-                <div className="game-body">
-                    <section className="board-area">
-                        <div className="board-wrapper">
-                            <GameCanvas
-                                gameState={gameState}
-                                onWordSelection={onWordSelection}
-                                width={canvasConfig.width}
-                                height={canvasConfig.height}
-                                isMobile={canvasConfig.isMobile}
-                            />
-                        </div>
-                    </section>
-
-                    <QuestTracker
-                        subLevel={gameState.subLevel}
-                        maxSubLevels={GAMES_PER_DIFFICULTY}
-                        currentWords={currentQuestWords}
-                    />
-                </div>
-
-                {showInstructions && (
-                    <div className="overlay splash-overlay" onClick={() => setShowInstructions(false)}>
-                        <div className="result-card instructions-card" onClick={(e) => e.stopPropagation()}>
-                            <div className="quest-indicator">INTELLIGENCE BRIEFING</div>
-
-                            <div className="instr-tabs">
-                                <button
-                                    className={`instr-tab-btn ${activeInstructionTab === 'gameplay' ? 'active' : ''}`}
-                                    onClick={() => setActiveInstructionTab('gameplay')}
-                                    aria-label="Gameplay Instructions"
-                                >
-                                    <i className="fa-solid fa-gamepad"></i>
-                                    <span>Gameplay</span>
-                                </button>
-                                <button
-                                    className={`instr-tab-btn ${activeInstructionTab === 'progression' ? 'active' : ''}`}
-                                    onClick={() => setActiveInstructionTab('progression')}
-                                    aria-label="Progression Instructions"
-                                >
-                                    <i className="fa-solid fa-shoe-prints"></i>
-                                    <span>Progression</span>
-                                </button>
-                                <button
-                                    className={`instr-tab-btn ${activeInstructionTab === 'scoring' ? 'active' : ''}`}
-                                    onClick={() => setActiveInstructionTab('scoring')}
-                                    aria-label="Scoring Instructions"
-                                >
-                                    <i className="fa-solid fa-star"></i>
-                                    <span>Scoring</span>
-                                </button>
-                            </div>
-
-                            <div className="instructions-body">
-                                {activeInstructionTab === 'gameplay' && (
-                                    <div className="instr-tab-content" key="gameplay">
-                                        <div className="instr-section">
-                                            <div className="section-title"><i className="fa-solid fa-crosshairs"></i> Objective</div>
-                                            <p>Find all hidden words in the grid. Select words by dragging from the first letter to the last. Words can be forwards, backwards, up, down, and diagonal.</p>
-                                        </div>
-                                        <div className="instr-section">
-                                            <div className="section-title"><i className="fa-solid fa-coins"></i> Point System</div>
-                                            <p>You have a total point balance. Earn points by completing missions. Spend a small fee to start new missions.</p>
-                                        </div>
-                                    </div>
-                                )}
-                                {activeInstructionTab === 'progression' && (
-                                    <div className="instr-tab-content" key="progression">
-                                        <div className="instr-grid-info">
-                                            <div className="info-box">
-                                                <div className="info-title">QUESTS</div>
-                                                <p>Each difficulty level consists of <strong>3 Quests</strong>. Clear all words in a quest to advance to the next one.</p>
-                                            </div>
-                                            <div className="info-box">
-                                                <div className="info-title">UNLOCKS</div>
-                                                <p>Complete all 3 quests in a level to unlock the <strong>next difficulty tier</strong> and face a greater challenge.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeInstructionTab === 'scoring' && (
-                                    <div className="instr-tab-content" key="scoring">
-                                        <div className="instr-section">
-                                            <div className="section-title"><i className="fa-solid fa-star"></i> Scoring</div>
-                                            <p style={{marginBottom: '0.5rem'}}>Points are awarded for each word found. The total score for completing a quest is based on difficulty, distributed evenly per word.</p>
-                                            <div className="scoring-table">
-                                                <div className="score-item"><span>Beginner Quest Total</span> <span className="pts">200 (20/word)</span></div>
-                                                <div className="score-item"><span>Intermediate Quest Total</span> <span className="pts">300 (30/word)</span></div>
-                                                <div className="score-item"><span>Advanced Quest Total</span> <span className="pts">400 (40/word)</span></div>
-                                                <div className="score-item"><span>Expert Quest Total</span> <span className="pts">500 (50/word)</span></div>
-                                            </div>
-                                            <div className="bonus-info">
-                                                <div><span className="accent">Mission Success:</span> +{MISSION_SUCCESS_BONUS} Bonus (for clearing all 3 quests)</div>
-                                                <div className="penalty"><span className="danger">Hint Usage:</span> -20 pts</div>
-                                                <div className="penalty"><span className="danger">Mission Start:</span> -{GAME_START_COST} pt</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            <button className="primary-btn full-width" onClick={() => setShowInstructions(false)}>
-                                UNDERSTOOD <i className="fa-solid fa-check"></i>
-                            </button>
-                        </div>
+                        <QuestTracker
+                            subLevel={gameState.subLevel}
+                            maxSubLevels={GAMES_PER_DIFFICULTY}
+                            currentWords={currentQuestWords}
+                        />
                     </div>
-                )}
 
-                {gameState.status === 'WON' && (
-                    <div className="overlay end-game-overlay">
-                        <div className="summary-card result-card">
-                            <h2 className="success">MISSION SUCCESS!</h2>
-                            <div className="score-detail-group">
-                                <div className="score-row-item">
-                                    <span className="label">MISSION SCORE</span>
-                                    <span className="val success-text">+{gameState.score}</span>
+                    {showInstructions && (
+                        <div className="overlay splash-overlay" onClick={() => setShowInstructions(false)}>
+                            <div className="result-card instructions-card" onClick={(e) => e.stopPropagation()}>
+                                <div className="quest-indicator">INTELLIGENCE BRIEFING</div>
+
+                                <div className="instr-tabs">
+                                    <button
+                                        className={`instr-tab-btn ${activeInstructionTab === 'gameplay' ? 'active' : ''}`}
+                                        onClick={() => setActiveInstructionTab('gameplay')}
+                                        aria-label="Gameplay Instructions"
+                                    >
+                                        <i className="fa-solid fa-gamepad"></i>
+                                        <span>Gameplay</span>
+                                    </button>
+                                    <button
+                                        className={`instr-tab-btn ${activeInstructionTab === 'progression' ? 'active' : ''}`}
+                                        onClick={() => setActiveInstructionTab('progression')}
+                                        aria-label="Progression Instructions"
+                                    >
+                                        <i className="fa-solid fa-shoe-prints"></i>
+                                        <span>Progression</span>
+                                    </button>
+                                    <button
+                                        className={`instr-tab-btn ${activeInstructionTab === 'scoring' ? 'active' : ''}`}
+                                        onClick={() => setActiveInstructionTab('scoring')}
+                                        aria-label="Scoring Instructions"
+                                    >
+                                        <i className="fa-solid fa-star"></i>
+                                        <span>Scoring</span>
+                                    </button>
                                 </div>
-                                <div className="score-row-item total-focus">
-                                    <span className="label">NEW TOTAL POINTS</span>
-                                    <span className="val">{totalPoints}</span>
+
+                                <div className="instructions-body">
+                                    {activeInstructionTab === 'gameplay' && (
+                                        <div className="instr-tab-content" key="gameplay">
+                                            <div className="instr-section">
+                                                <div className="section-title"><i
+                                                    className="fa-solid fa-crosshairs"></i> Objective
+                                                </div>
+                                                <p>Find all hidden words in the grid. Select words by dragging from the
+                                                    first letter to the last. Words can be forwards, backwards, up,
+                                                    down, and diagonal.</p>
+                                            </div>
+                                            <div className="instr-section">
+                                                <div className="section-title"><i
+                                                    className="fa-solid fa-coins"></i> Point System
+                                                </div>
+                                                <p>You have a total point balance. Earn points by completing missions.
+                                                    Spend a small fee to start new missions.</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {activeInstructionTab === 'progression' && (
+                                        <div className="instr-tab-content" key="progression">
+                                            <div className="instr-grid-info">
+                                                <div className="info-box">
+                                                    <div className="info-title">QUESTS</div>
+                                                    <p>Each difficulty level consists of <strong>3 Quests</strong>.
+                                                        Clear all words in a quest to advance to the next one.</p>
+                                                </div>
+                                                <div className="info-box">
+                                                    <div className="info-title">UNLOCKS</div>
+                                                    <p>Complete all 3 quests in a level to unlock the <strong>next
+                                                        difficulty tier</strong> and face a greater challenge.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {activeInstructionTab === 'scoring' && (
+                                        <div className="instr-tab-content" key="scoring">
+                                            <div className="instr-section">
+                                                <div className="section-title"><i
+                                                    className="fa-solid fa-star"></i> Scoring
+                                                </div>
+                                                <p style={{marginBottom: '0.5rem'}}>Points are awarded for each word
+                                                    found. The total score for completing a quest is based on
+                                                    difficulty, distributed evenly per word.</p>
+                                                <div className="scoring-table">
+                                                    <div className="score-item"><span>Beginner Quest Total</span> <span
+                                                        className="pts">200 (20/word)</span></div>
+                                                    <div className="score-item"><span>Intermediate Quest Total</span>
+                                                        <span className="pts">300 (30/word)</span></div>
+                                                    <div className="score-item"><span>Advanced Quest Total</span> <span
+                                                        className="pts">400 (40/word)</span></div>
+                                                    <div className="score-item"><span>Expert Quest Total</span> <span
+                                                        className="pts">500 (50/word)</span></div>
+                                                </div>
+                                                <div className="bonus-info">
+                                                    <div><span
+                                                        className="accent">Mission Success:</span> +{MISSION_SUCCESS_BONUS} Bonus
+                                                        (for clearing all 3 quests)
+                                                    </div>
+                                                    <div className="penalty"><span
+                                                        className="danger">Hint Usage:</span> -20 pts
+                                                    </div>
+                                                    <div className="penalty"><span
+                                                        className="danger">Mission Start:</span> -{GAME_START_COST} pt
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+
+                                <button className="primary-btn full-width" onClick={() => setShowInstructions(false)}>
+                                    UNDERSTOOD <i className="fa-solid fa-check"></i>
+                                </button>
                             </div>
-                            <div className="action-row">
-                                {(() => {
-                                    const currentIndex = DIFFICULTY_ORDER.indexOf(gameState.difficulty);
-                                    const nextDiff = (currentIndex !== -1 && currentIndex < DIFFICULTY_ORDER.length - 1) ? DIFFICULTY_ORDER[currentIndex + 1] : null;
-                                    return nextDiff && (
-                                        <button className="primary-btn full-width" onClick={() => {
-                                            setDifficulty(nextDiff);
-                                            startLevel(category, nextDiff, 1, true);
-                                        }}>
-                                            NEXT LEVEL: {nextDiff} <i className="fa-solid fa-forward"></i>
+                        </div>
+                    )}
+
+                    {gameState.status === 'WON' && (
+                        <div className="overlay end-game-overlay">
+                            <div className="summary-card result-card">
+                                <h2 className="success">MISSION SUCCESS!</h2>
+                                <div className="score-detail-group">
+                                    <div className="score-row-item">
+                                        <span className="label">MISSION SCORE</span>
+                                        <span className="val success-text">+{gameState.score}</span>
+                                    </div>
+                                    <div className="score-row-item total-focus">
+                                        <span className="label">NEW TOTAL POINTS</span>
+                                        <span className="val">{totalPoints}</span>
+                                    </div>
+                                </div>
+                                <div className="action-row">
+                                    {(() => {
+                                        const currentIndex = DIFFICULTY_ORDER.indexOf(gameState.difficulty);
+                                        const nextDiff = (currentIndex !== -1 && currentIndex < DIFFICULTY_ORDER.length - 1) ? DIFFICULTY_ORDER[currentIndex + 1] : null;
+                                        return nextDiff && (
+                                            <button className="primary-btn full-width" onClick={() => {
+                                                setDifficulty(nextDiff);
+                                                startLevel(category, nextDiff, 1, true);
+                                            }}>
+                                                NEXT LEVEL: {nextDiff} <i className="fa-solid fa-forward"></i>
+                                            </button>
+                                        );
+                                    })()}
+                                    <div className="split-row">
+                                        <button className="secondary-btn"
+                                                onClick={() => startLevel(category, difficulty, 1, true)}>REPLAY
                                         </button>
-                                    );
-                                })()}
-                                <div className="split-row">
-                                    <button className="secondary-btn" onClick={() => startLevel(category, difficulty, 1, true)}>REPLAY</button>
-                                    <button className="secondary-btn" onClick={handleQuit}>MENU</button>
+                                        <button className="secondary-btn" onClick={handleQuit}>MENU</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {isLoading && (
-                    <div className="overlay">
-                        <div className="loading-card">
-                            <div className="loading-icon"><i className="fa-solid fa-circle-notch fa-spin"></i></div>
-                            <h2>GENERATING BOARD</h2>
-                            <p>Gathering themed words for {category.name}...</p>
+                    {isLoading && (
+                        <div className="overlay">
+                            <div className="loading-card">
+                                <div className="loading-icon"><i className="fa-solid fa-circle-notch fa-spin"></i></div>
+                                <h2>GENERATING BOARD</h2>
+                                <p>Gathering themed words for {category.name}...</p>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-        </div>
     );
 };
 

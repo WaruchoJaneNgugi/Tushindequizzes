@@ -13,7 +13,7 @@ export const useSudoku = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>('Easy');
   const [stage, setStage] = useState<number>(1);
   const [unlockedLevels, setUnlockedLevels] = useState<Difficulty[]>(['Easy']);
-  const [score, setScore] = useState<number>(0);
+  const [score, setScore] = useState<number>(10);
 
   const [board, setBoard] = useState<Board>(() => generatePuzzle('Easy'));
   const [selected, setSelected] = useState<{r: number, c: number} | null>(null);
@@ -124,6 +124,10 @@ export const useSudoku = () => {
 
   const handleHint = useCallback(() => {
     if (!solution) return;
+    if (score < 2) {
+      soundEngine.playError();
+      return;
+    }
     const size = board.length;
 
     const triggerHintHighlight = (r: number, c: number) => {
@@ -158,7 +162,7 @@ export const useSudoku = () => {
         }
       }
     }
-  }, [board, selected, solution]);
+  }, [board, selected, solution, score]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

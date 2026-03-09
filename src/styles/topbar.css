@@ -720,8 +720,7 @@
 }
 
 /* Active states */
-.nav-tab.active,
-.mobile-bottom-nav-item.active {
+.nav-tab.active{
     position: relative;
 }
 @media(max-width:700px){

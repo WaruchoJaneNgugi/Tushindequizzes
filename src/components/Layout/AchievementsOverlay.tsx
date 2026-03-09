@@ -1,18 +1,17 @@
 import type { FC } from "react";
 import { useEffect, useState } from "react";
-import "../../styles/featureoverlay.css";
 import { useAchievements } from "../../hooks/useAchievements.ts";
+import "../../styles/achievements-overlay.css";
 
 interface RewardsOverlayProps {
     onClose: () => void;
 }
 
 export const AchievementsOverlay: FC<RewardsOverlayProps> = ({ onClose }) => {
-    const { stats, achievements, loading, error, claimAchievement, fetchUserAchievements } = useAchievements(); // Make sure this matches: achievements, not userAchievements
+    const { stats, achievements, loading, error, claimAchievement, fetchUserAchievements } = useAchievements();
     const [claimingId, setClaimingId] = useState<string | number | null>(null);
     const [filter, setFilter] = useState<'all' | 'available' | 'claimed' | 'locked'>('all');
 
-    // Refresh achievements when overlay opens
     useEffect(() => {
         fetchUserAchievements();
     }, [fetchUserAchievements]);
@@ -21,237 +20,271 @@ export const AchievementsOverlay: FC<RewardsOverlayProps> = ({ onClose }) => {
         setClaimingId(achievementId);
         try {
             await claimAchievement(achievementId);
-            // Show success message (you can add a toast notification here)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            // Error is handled by the hook
+            // Error handled by hook
         } finally {
             setClaimingId(null);
         }
     };
 
-    // Filter achievements based on selected filter
     const filteredAchievements = achievements.filter(achievement => {
         if (filter === 'all') return true;
         return achievement.status === filter;
     });
 
-    // Calculate stats from actual achievements
     const claimedCount = achievements.filter(a => a.status === 'claimed').length;
+    const availableCount = achievements.filter(a => a.status === 'available').length;
+    const lockedCount = achievements.filter(a => a.status === 'locked').length;
     const totalPoints = achievements
         .filter(a => a.status === 'claimed')
         .reduce((sum, a) => sum + (a.points || 0), 0);
 
+    const completionPct = achievements.length > 0
+        ? Math.round((claimedCount / achievements.length) * 100)
+        : 0;
+
+    const FILTERS: { key: typeof filter; label: string; emoji: string; count: number }[] = [
+        { key: 'all',       label: 'All',       emoji: '✦', count: achievements.length },
+        { key: 'available', label: 'Ready',      emoji: '🎁', count: availableCount },
+        { key: 'claimed',   label: 'Claimed',    emoji: '✅', count: claimedCount },
+        { key: 'locked',    label: 'Locked',     emoji: '🔒', count: lockedCount },
+    ];
+
     return (
         <>
-            <div className="overlay-overlay" onClick={onClose} />
-            <div className="feature-overlay">
-                <div className="feature-overlay-header">
-                    <div className="feature-header-left">
-                        <button className="feature-back-button" onClick={onClose}>
-                            <svg className="back-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <div className="ach-backdrop" onClick={onClose} />
+            <div className="ach-shell">
+
+                {/* ── TOP BAR ── */}
+                <header className="ach-topbar">
+                    <button className="ach-back" onClick={onClose} aria-label="Close">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span>Back</span>
+                    </button>
+
+                    <div className="ach-topbar-title">
+                        <span className="ach-topbar-eyebrow">Player Profile</span>
+                        <h1 className="ach-topbar-heading">Achievements</h1>
+                    </div>
+
+                    <button className="ach-refresh" onClick={fetchUserAchievements} disabled={loading} aria-label="Refresh">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={loading ? 'spinning' : ''}>
+                            <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
+                </header>
+
+                <div className="ach-body">
+
+                    {/* ── LEFT SIDEBAR ── */}
+                    <aside className="ach-sidebar">
+                        {/* Ring progress */}
+                        <div className="ach-ring-card">
+                            <svg className="ach-ring-svg" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10"/>
+                                <circle
+                                    cx="60" cy="60" r="50" fill="none"
+                                    stroke="url(#ringGrad)" strokeWidth="10"
+                                    strokeLinecap="round"
+                                    strokeDasharray={`${2 * Math.PI * 50}`}
+                                    strokeDashoffset={`${2 * Math.PI * 50 * (1 - completionPct / 100)}`}
+                                    transform="rotate(-90 60 60)"
+                                    style={{ transition: 'stroke-dashoffset 1s ease' }}
+                                />
+                                <defs>
+                                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#00C9FF"/>
+                                        <stop offset="100%" stopColor="#92FE9D"/>
+                                    </linearGradient>
+                                </defs>
                             </svg>
-                        </button>
-                    </div>
-
-                    <div className="feature-header-center">
-                        <h2 className="feature-title">Achievements</h2>
-                        <p className="feature-subtitle">Earn points and unlock achievements</p>
-                    </div>
-
-                    <div className="feature-header-right">
-                        <button className="feature-action-button" onClick={fetchUserAchievements} disabled={loading}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2"/>
-                                <path d="M19.4 15C19.2668 15.3059 19.1336 15.6118 19.0004 15.9177C18.9802 16.0405 18.9599 16.1633 18.9397 16.2861C18.8494 16.8992 18.759 17.5123 18.6687 18.1254C18.5107 18.7988 18.0713 19.3714 17.4594 19.6942C17.178 19.8378 16.8966 19.9814 16.6153 20.125C16.5045 20.184 16.3937 20.243 16.283 20.302C15.8218 20.56 15.3008 20.5 14.8981 20.1483C14.4953 19.7966 14.0926 19.4449 13.6898 19.0932C13.6287 19.0422 13.5675 18.9912 13.5064 18.9401C13.183 18.6587 12.8595 18.3774 12.5361 18.096C12.146 17.7566 11.8567 17.312 11.8567 16.7997C11.8567 16.2874 12.146 15.8428 12.5361 15.5034C12.8595 15.222 13.183 14.9407 13.5064 14.6593C13.5675 14.6082 13.6287 14.5572 13.6898 14.5062C14.0926 14.1545 14.4953 13.8028 14.8981 13.4511C15.3008 13.0994 15.8218 13.0394 16.283 13.2974C16.3937 13.3564 16.5045 13.4154 16.6153 13.4744C16.8966 13.618 17.178 13.7616 17.4594 13.9052C18.0713 14.228 18.5107 14.8006 18.6687 15.474C18.759 16.0871 18.8494 16.7002 18.9397 17.3133C18.9599 17.4361 18.9802 17.5589 19.0004 17.6817C19.1336 17.9876 19.2668 18.2935 19.4 18.5994" stroke="currentColor" strokeWidth="2"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div className="feature-overlay-content">
-                    {loading && achievements.length === 0 && (
-                        <div className="loading-container">
-                            <div className="loading-spinner"></div>
-                            <p>Loading achievements...</p>
+                            <div className="ach-ring-inner">
+                                <span className="ach-ring-pct">{completionPct}%</span>
+                                <span className="ach-ring-label">Complete</span>
+                            </div>
                         </div>
-                    )}
 
-                    {error && (
-                        <div className="error-container">
-                            <p className="error-message">{error}</p>
-                            <button onClick={fetchUserAchievements} className="retry-button">
-                                Retry
-                            </button>
-                        </div>
-                    )}
-
-                    <div className="rewards-container">
-                        <div className="rewards-summary">
-                            <div className="summary-card">
-                                <div className="summary-icon">🏆</div>
-                                <div className="summary-info">
-                                    <h3 className="summary-title">Total Points Earned</h3>
-                                    <p className="summary-value">
-                                        {totalPoints.toLocaleString()} Points
-                                    </p>
+                        {/* Stats */}
+                        <div className="ach-stat-stack">
+                            <div className="ach-stat-row">
+                                <span className="ach-stat-icon">🪙</span>
+                                <div>
+                                    <div className="ach-stat-val">{totalPoints.toLocaleString()}</div>
+                                    <div className="ach-stat-lbl">Points Earned</div>
                                 </div>
                             </div>
-                            <div className="summary-card">
-                                <div className="summary-icon">📊</div>
-                                <div className="summary-info">
-                                    <h3 className="summary-title">Achievements</h3>
-                                    <p className="summary-value">
-                                        {claimedCount}/{stats?.totalAchievements || achievements.length} Completed
-                                    </p>
+                            <div className="ach-divider"/>
+                            <div className="ach-stat-row">
+                                <span className="ach-stat-icon">🏆</span>
+                                <div>
+                                    <div className="ach-stat-val">{claimedCount}<span className="ach-stat-denom">/{stats?.totalAchievements || achievements.length}</span></div>
+                                    <div className="ach-stat-lbl">Achievements</div>
                                 </div>
                             </div>
                             {stats?.totalPointsAvailable ? (
-                                <div className="summary-card">
-                                    <div className="summary-icon">🎯</div>
-                                    <div className="summary-info">
-                                        <h3 className="summary-title">Points Available</h3>
-                                        <p className="summary-value">
-                                            {stats.totalPointsAvailable.toLocaleString()} Points
-                                        </p>
+                                <>
+                                    <div className="ach-divider"/>
+                                    <div className="ach-stat-row">
+                                        <span className="ach-stat-icon">🎯</span>
+                                        <div>
+                                            <div className="ach-stat-val">{stats.totalPointsAvailable.toLocaleString()}</div>
+                                            <div className="ach-stat-lbl">Points Available</div>
+                                        </div>
                                     </div>
-                                </div>
+                                </>
                             ) : null}
                         </div>
 
-                        {/* Filter Tabs */}
-                        <div className="achievement-filters">
-                            <button
-                                className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-                                onClick={() => setFilter('all')}
-                            >
-                                All ({achievements.length})
-                            </button>
-                            <button
-                                className={`filter-btn ${filter === 'available' ? 'active' : ''}`}
-                                onClick={() => setFilter('available')}
-                            >
-                                Available ({achievements.filter(a => a.status === 'available').length})
-                            </button>
-                            <button
-                                className={`filter-btn ${filter === 'claimed' ? 'active' : ''}`}
-                                onClick={() => setFilter('claimed')}
-                            >
-                                Claimed ({achievements.filter(a => a.status === 'claimed').length})
-                            </button>
-                            <button
-                                className={`filter-btn ${filter === 'locked' ? 'active' : ''}`}
-                                onClick={() => setFilter('locked')}
-                            >
-                                Locked ({achievements.filter(a => a.status === 'locked').length})
-                            </button>
-                        </div>
+                        {/* Filter pills */}
+                        <nav className="ach-filter-nav">
+                            {FILTERS.map(f => (
+                                <button
+                                    key={f.key}
+                                    className={`ach-filter-pill ${filter === f.key ? 'active' : ''}`}
+                                    onClick={() => setFilter(f.key)}
+                                >
+                                    <span className="ach-filter-emoji">{f.emoji}</span>
+                                    <span className="ach-filter-text">{f.label}</span>
+                                    <span className="ach-filter-count">{f.count}</span>
+                                </button>
+                            ))}
+                        </nav>
 
-                        {/* Recent Achievements from API */}
+                        {/* Tip card */}
+                        <div className="ach-tip-card">
+                            <p className="ach-tip-head">💡 Earn More Points</p>
+                            <ul className="ach-tip-list">
+                                <li>🎮 Play games daily</li>
+                                <li>🏆 Win for bonus pts</li>
+                                <li>📅 Login streaks</li>
+                            </ul>
+                        </div>
+                    </aside>
+
+                    {/* ── MAIN CONTENT ── */}
+                    <main className="ach-main">
+
+                        {error && (
+                            <div className="ach-error">
+                                <span>⚠️ {error}</span>
+                                <button onClick={fetchUserAchievements}>Retry</button>
+                            </div>
+                        )}
+
+                        {loading && achievements.length === 0 && (
+                            <div className="ach-loading">
+                                <div className="ach-spinner"/>
+                                <p>Loading achievements…</p>
+                            </div>
+                        )}
+
+                        {/* Recent activity */}
                         {stats?.recentAchievements && stats.recentAchievements.length > 0 && (
-                            <div className="recent-achievements">
-                                <h3 className="rewards-section-title">Recent Activity</h3>
-                                <div className="recent-badge">
-                                    {stats.recentAchievements.map((achievementId, index) => {
-                                        const achievement = achievements.find(a => a.id === achievementId);
+                            <section className="ach-recent">
+                                <h2 className="ach-section-label">Recent Activity</h2>
+                                <div className="ach-recent-chips">
+                                    {stats.recentAchievements.map((id, i) => {
+                                        const a = achievements.find(x => x.id === id);
                                         return (
-                                            <span key={index} className="recent-achievement-badge">
-                                                {achievement ? achievement.name : `Achievement #${achievementId}`}
+                                            <span key={i} className="ach-recent-chip">
+                                                {a ? a.name : `Achievement #${id}`}
                                             </span>
                                         );
                                     })}
                                 </div>
-                            </div>
+                            </section>
                         )}
 
-                        {/* Achievements Grid - Using real data */}
-                        <div className="rewards-grid">
-                            <h3 className="rewards-section-title">
-                                {filter === 'all' && 'All Achievements'}
-                                {filter === 'available' && 'Available to Claim'}
-                                {filter === 'claimed' && 'Completed Achievements'}
-                                {filter === 'locked' && 'Locked Achievements'}
-                            </h3>
-
-                            {filteredAchievements.length === 0 ? (
-                                <div className="empty-state">
-                                    <p>No achievements found in this category.</p>
-                                </div>
-                            ) : (
-                                <div className="rewards-list">
-                                    {filteredAchievements.map((achievement) => (
-                                        <div key={achievement.id} className={`reward-card ${achievement.status}`}>
-                                            <div className="reward-icon">
-                                                {achievement.icon || (
-                                                    achievement.status === 'claimed' ? '✅' :
-                                                        achievement.status === 'available' ? '🎁' : '🔒'
-                                                )}
-                                            </div>
-                                            <div className="reward-content">
-                                                <h4 className="reward-name">{achievement.name}</h4>
-                                                <p className="reward-description">{achievement.description}</p>
-
-                                                {/* Progress bar if achievement has progress */}
-                                                {achievement.progress !== undefined && achievement.maxProgress && (
-                                                    <div className="achievement-progress">
-                                                        <div className="progress-bar">
-                                                            <div
-                                                                className="progress-fill"
-                                                                style={{ width: `${(achievement.progress / achievement.maxProgress) * 100}%` }}
-                                                            />
-                                                        </div>
-                                                        <span className="progress-text">
-                                                            {achievement.progress}/{achievement.maxProgress}
-                                                        </span>
-                                                    </div>
-                                                )}
-
-                                                <div className="reward-points">
-                                                    <span className="points-icon">🪙</span>
-                                                    <span className="points-value">{achievement.points} Points</span>
-                                                </div>
-
-                                                {/* Show earned date if claimed */}
-                                                {achievement.earnedAt && (
-                                                    <div className="earned-date">
-                                                        Earned: {new Date(achievement.earnedAt).toLocaleDateString()}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <button
-                                                className={`reward-claim-btn ${achievement.status}`}
-                                                onClick={() => achievement.status === 'available' && handleClaim(achievement.id)}
-                                                disabled={achievement.status !== 'available' || claimingId === achievement.id}
-                                            >
-                                                {claimingId === achievement.id ? (
-                                                    <span className="loading-spinner-small"></span>
-                                                ) : (
-                                                    <>
-                                                        {achievement.status === 'claimed' && 'Claimed'}
-                                                        {achievement.status === 'available' && 'Claim Now'}
-                                                        {achievement.status === 'locked' && 'Locked'}
-                                                    </>
-                                                )}
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                        {/* Section heading */}
+                        <div className="ach-grid-header">
+                            <h2 className="ach-section-label">
+                                {filter === 'all'       && 'All Achievements'}
+                                {filter === 'available' && '🎁 Ready to Claim'}
+                                {filter === 'claimed'   && '✅ Completed'}
+                                {filter === 'locked'    && '🔒 Locked'}
+                            </h2>
+                            <span className="ach-grid-count">{filteredAchievements.length} items</span>
                         </div>
 
-                        {/* Info Card */}
-                        <div className="rewards-info">
-                            <div className="info-card">
-                                <h4 className="info-title">How to Earn More Points</h4>
-                                <ul className="info-list">
-                                    <li>🎮 Play games daily</li>
-                                    <li>🏆 Win games to get bonus points</li>
-                                    <li>📅 Login consecutively for streak bonuses</li>
-                                </ul>
+                        {/* Achievement grid */}
+                        {filteredAchievements.length === 0 ? (
+                            <div className="ach-empty">
+                                <span className="ach-empty-icon">🔍</span>
+                                <p>No achievements in this category.</p>
                             </div>
-                        </div>
-                    </div>
+                        ) : (
+                            <div className="ach-grid">
+                                {filteredAchievements.map((a) => (
+                                    <div key={a.id} className={`ach-card ach-card--${a.status}`}>
+
+                                        {/* Glow blob */}
+                                        <div className="ach-card-glow"/>
+
+                                        {/* Icon column */}
+                                        <div className="ach-card-icon-wrap">
+                                            <div className="ach-card-icon">
+                                                {a.icon || (
+                                                    a.status === 'claimed'   ? '✅' :
+                                                    a.status === 'available' ? '🎁' : '🔒'
+                                                )}
+                                            </div>
+                                            {a.status === 'claimed' && <div className="ach-card-check">✓</div>}
+                                        </div>
+
+                                        {/* Text column */}
+                                        <div className="ach-card-body">
+                                            <div className="ach-card-top">
+                                                <h3 className="ach-card-name">{a.name}</h3>
+                                                <div className="ach-card-pts">
+                                                    <span>🪙</span>
+                                                    <span>{a.points}</span>
+                                                </div>
+                                            </div>
+                                            <p className="ach-card-desc">{a.description}</p>
+
+                                            {a.progress !== undefined && a.maxProgress && (
+                                                <div className="ach-card-progress">
+                                                    <div className="ach-progress-track">
+                                                        <div
+                                                            className="ach-progress-fill"
+                                                            style={{ width: `${Math.min((a.progress / a.maxProgress) * 100, 100)}%` }}
+                                                        />
+                                                    </div>
+                                                    <span className="ach-progress-txt">{a.progress}/{a.maxProgress}</span>
+                                                </div>
+                                            )}
+
+                                            {a.earnedAt && (
+                                                <p className="ach-card-date">
+                                                    Earned {new Date(a.earnedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Claim button */}
+                                        <button
+                                            className={`ach-claim-btn ach-claim-btn--${a.status}`}
+                                            onClick={() => a.status === 'available' && handleClaim(a.id)}
+                                            disabled={a.status !== 'available' || claimingId === a.id}
+                                        >
+                                            {claimingId === a.id ? (
+                                                <span className="ach-btn-spinner"/>
+                                            ) : (
+                                                <>
+                                                    {a.status === 'claimed'   && <><span>✓</span> Claimed</>}
+                                                    {a.status === 'available' && <><span>↑</span> Claim</>}
+                                                    {a.status === 'locked'    && <><span>🔒</span> Locked</>}
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </main>
                 </div>
             </div>
         </>

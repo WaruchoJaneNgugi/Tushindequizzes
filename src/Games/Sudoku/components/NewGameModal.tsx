@@ -1,16 +1,16 @@
 import React from 'react';
 import { X, Lock } from 'lucide-react';
 import type {Difficulty} from '../utils/sudoku';
-import "../styles/styles.css"
 
 type NewGameModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onStart: (difficulty: Difficulty) => void;
   unlockedLevels: Difficulty[];
+  score: number;
 };
 
-export const NewGameModal: React.FC<NewGameModalProps> = ({ isOpen, onClose, onStart, unlockedLevels }) => {
+export const NewGameModal: React.FC<NewGameModalProps> = ({ isOpen, onClose, onStart, unlockedLevels, score }) => {
   if (!isOpen) return null;
 
   return (
@@ -27,19 +27,24 @@ export const NewGameModal: React.FC<NewGameModalProps> = ({ isOpen, onClose, onS
           </div>
 
           <div className="sudoku-modal-body">
+            <p style={{ marginBottom: '1rem', fontWeight: 'bold', color: score < 10 ? '#dc2626' : 'inherit' }}>
+              Available Points: {score} (Requires 10 points to start a new game)
+            </p>
             {(['Easy', 'Medium', 'Hard'] as Difficulty[]).map((diff) => {
               const isUnlocked = unlockedLevels.includes(diff);
+              const canAfford = score >= 10;
+              const isDisabled = !isUnlocked || !canAfford;
               return (
                   <button
                       key={diff}
                       onClick={() => {
-                        if (isUnlocked) {
+                        if (!isDisabled) {
                           onStart(diff);
                           onClose();
                         }
                       }}
-                      className={`sudoku-difficulty-btn ${!isUnlocked ? 'sudoku-locked' : 'sudoku-unlocked'}`}
-                      disabled={!isUnlocked}
+                      className={`sudoku-difficulty-btn ${isDisabled ? 'sudoku-locked' : 'sudoku-unlocked'}`}
+                      disabled={isDisabled}
                   >
                     <div className="sudoku-difficulty-btn-content">
                       <span>{diff}</span>

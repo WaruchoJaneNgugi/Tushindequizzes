@@ -22,15 +22,15 @@ export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultyConfig> = {
     maxWordLength: 7,
   },
   [Difficulty.INTERMEDIATE]: {
-    gridSize: 15,
-    wordCount: 50,
+    gridSize: 12,
+    wordCount: 30,
     directions: [DIRECTIONS.HORIZONTAL, DIRECTIONS.VERTICAL, DIRECTIONS.DIAGONAL_DOWN],
     minWordLength: 4,
     maxWordLength: 9,
   },
   [Difficulty.ADVANCED]: {
-    gridSize: 20,
-    wordCount: 80,
+    gridSize: 12,
+    wordCount: 30,
     directions: [
       DIRECTIONS.HORIZONTAL,
       DIRECTIONS.VERTICAL,
@@ -38,15 +38,15 @@ export const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultyConfig> = {
       DIRECTIONS.DIAGONAL_UP,
       DIRECTIONS.BACK_HORIZONTAL
     ],
-    minWordLength: 4,
+    minWordLength: 5,
     maxWordLength: 11,
   },
   [Difficulty.EXPERT]: {
-    gridSize: 26,
-    wordCount: 120,
+    gridSize: 12,
+    wordCount: 30,
     directions: Object.values(DIRECTIONS),
-    minWordLength: 4,
-    maxWordLength: 14,
+    minWordLength: 6,
+    maxWordLength: 12,
   }
 };
 
@@ -62,12 +62,12 @@ export const CATEGORIES: Category[] = [
 
 export const COLORS = {
   bg: '#0f172a',
-  gridBg: '#1e293b',
+  gridBg: '#ffffff',
   accent: '#38bdf8',
   success: '#22c55e',
   highlight: 'rgba(56, 189, 248, 0.4)',
   foundHighlight: 'rgba(34, 197, 94, 0.4)',
-  text: '#f8fafc',
+  text: '#000000',
   textSecondary: '#94a3b8'
 };
 
