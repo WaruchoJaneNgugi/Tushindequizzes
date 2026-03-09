@@ -52,10 +52,10 @@ const allDescriptions: Description[] = [
         glowColor: 'rgba(255,71,87,0.5)'
     },
     {
-        id: 'bible',
-        category: 'Bible Quiz',
-        text: 'Test your biblical knowledge with scripture-based quizzes',
-        icon: '📖',
+        id: 'quiz',
+        category: 'Quiz',
+        text: 'Test your knowledge in Quizzes',
+        icon: '🧠',
         color: '#7b2fff',
         glowColor: 'rgba(123,47,255,0.5)'
     },
@@ -116,7 +116,7 @@ export const GamesFilter = ({ onFilterChange, activeFilter }: GamesFilterProps) 
         { id: 'latest', label: 'New', icon: '✨', color: '#ff3cac' },
         { id: 'timed', label: 'Timed Trivia', icon: '⏱️', color: '#f5a623' },
         { id: 'popular', label: 'Hot', icon: '🔥', color: '#ff4757' },
-        { id: 'bible', label: 'Bible Quiz', icon: '📖', color: '#7b2fff' },
+        { id: 'quiz', label: 'Quizzes', icon: '🧠', color: '#7b2fff' },
         { id: 'puzzle', label: 'Puzzle', icon: '🧩', color: '#26de81' },
         { id: 'arcade', label: 'Arcade', icon: '👾', color: '#ff6b6b' },
     ];

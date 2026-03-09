@@ -294,12 +294,12 @@ export const TopBar: FC = () => {
                                     </div>
 
                                     <div className="sidebar-points">
-                                        <div className="points-info">
-                                            <div className="points-label-sidebar">Smart Points</div>
-                                            <div className="points-amount-sidebar">{user.pointsBalance || 0}</div>
-                                        </div>
+                                        {/*<div className="points-info">*/}
+                                        {/*    <div className="points-label-sidebar">Smart Points</div>*/}
+                                        {/*    <div className="points-amount-sidebar">{user.pointsBalance || 0}</div>*/}
+                                        {/*</div>*/}
                                         <button className="buy-points-btn" onClick={handleBuyPointsClick}>
-                                            Buy
+                                            Buy Points
                                         </button>
                                     </div>
                                 </div>
@@ -314,35 +314,35 @@ export const TopBar: FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="sidebar-nav-section">
-                                    <div className="sidebar-nav-title">Game Categories</div>
-                                    {['all', 'latest', 'timed', 'popular', 'bible', 'puzzle', 'arcade'].map(filter => (
-                                        <button
-                                            key={filter}
-                                            className={`sidebar-menu-item game-category ${activeSidebarFilter === filter ? 'active' : ''}`}
-                                            onClick={() => handleSidebarFilter(filter)}
-                                        >
-                                            <span className="sidebar-icon">
-                                                {filter === 'all' && '🎮'}
-                                                {filter === 'latest' && '🆕'}
-                                                {filter === 'timed' && '⏱️'}
-                                                {filter === 'popular' && '🔥'}
-                                                {filter === 'bible' && '📖'}
-                                                {filter === 'puzzle' && '🧩'}
-                                                {filter === 'arcade' && '👾'}
-                                            </span>
-                                            <span>
-                                                {filter === 'all' && 'All Games'}
-                                                {filter === 'latest' && 'Latest Games'}
-                                                {filter === 'timed' && 'Timed Trivia'}
-                                                {filter === 'popular' && 'Popular Games'}
-                                                {filter === 'bible' && 'Bible Quiz'}
-                                                {filter === 'puzzle' && 'Puzzle Games'}
-                                                {filter === 'arcade' && 'Arcade Games'}
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
+                                {/*<div className="sidebar-nav-section">*/}
+                                {/*    <div className="sidebar-nav-title">Game Categories</div>*/}
+                                {/*    {['all', 'latest', 'timed', 'popular', 'bible', 'puzzle', 'arcade'].map(filter => (*/}
+                                {/*        <button*/}
+                                {/*            key={filter}*/}
+                                {/*            className={`sidebar-menu-item game-category ${activeSidebarFilter === filter ? 'active' : ''}`}*/}
+                                {/*            onClick={() => handleSidebarFilter(filter)}*/}
+                                {/*        >*/}
+                                {/*            <span className="sidebar-icon">*/}
+                                {/*                {filter === 'all' && '🎮'}*/}
+                                {/*                {filter === 'latest' && '🆕'}*/}
+                                {/*                {filter === 'timed' && '⏱️'}*/}
+                                {/*                {filter === 'popular' && '🔥'}*/}
+                                {/*                {filter === 'bible' && '📖'}*/}
+                                {/*                {filter === 'puzzle' && '🧩'}*/}
+                                {/*                {filter === 'arcade' && '👾'}*/}
+                                {/*            </span>*/}
+                                {/*            <span>*/}
+                                {/*                {filter === 'all' && 'All Games'}*/}
+                                {/*                {filter === 'latest' && 'Latest Games'}*/}
+                                {/*                {filter === 'timed' && 'Timed Trivia'}*/}
+                                {/*                {filter === 'popular' && 'Popular Games'}*/}
+                                {/*                {filter === 'bible' && 'Bible Quiz'}*/}
+                                {/*                {filter === 'puzzle' && 'Puzzle Games'}*/}
+                                {/*                {filter === 'arcade' && 'Arcade Games'}*/}
+                                {/*            </span>*/}
+                                {/*        </button>*/}
+                                {/*    ))}*/}
+                                {/*</div>*/}
 
                                 <div className="sidebar-nav-section features">
                                     <div className="sidebar-nav-title">Features</div>
