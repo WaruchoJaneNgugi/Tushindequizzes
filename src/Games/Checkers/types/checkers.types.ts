@@ -1,43 +1,47 @@
-// ─────────────────────────────────────────────────────────
-// types/checkers.types.ts
-// All shared TypeScript types for Checkers Arena
-// ─────────────────────────────────────────────────────────
+// ─── Piece ────────────────────────────────────────────────────────────────────
 
-export type PieceColor = 'red' | 'black'
+export type PieceColor = 'red' | 'black';
 
-export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert'
-
-export type Screen = 'menu' | 'game' | 'result'
-
-export type GameResult = 'win' | 'lose' | null
-
-// A single checker piece on the board
-export interface Piece {
-  id: number
-  type: PieceColor
-  king: boolean
+export interface CheckerPiece {
+  color: PieceColor;
+  isKing: boolean;
 }
 
-// A board cell is either a Piece or empty
-export type Cell = Piece | null
+// ─── Board ────────────────────────────────────────────────────────────────────
 
-// The full 8×8 board
-export type Board = Cell[][]
+export type Square = CheckerPiece | null;
+export type Board = Square[][];
 
-// Represents one legal move
+// ─── Position & Move ─────────────────────────────────────────────────────────
+
+export interface Position {
+  row: number;
+  col: number;
+}
+
 export interface Move {
-  from: [number, number]
-  to:   [number, number]
-  cap:  [number, number] | null   // position of captured piece, null for simple move
+  from: Position;
+  to: Position;
+  captures: Position[]; // all captured positions (supports multi-jump chains)
 }
 
-// Configuration for each difficulty level
-export interface LevelConfig {
-  label:  string
-  cost:   number    // points wagered to enter
-  reward: number    // points awarded on win
-  depth:  number    // minimax search depth
-  color:  string    // UI accent hex color
+// ─── Game State ───────────────────────────────────────────────────────────────
+
+export interface GameState {
+  board: Board;
+  currentTurn: PieceColor;
+  selectedSquare: Position | null;
+  legalMovesForSelected: Move[];
+  allLegalMoves: Move[];
+  isGameOver: boolean;
+  winner: PieceColor | null;
+  capturedByRed: CheckerPiece[];
+  capturedByBlack: CheckerPiece[];
+  moveHistory: HistoryEntry[];
+  halfMoveClock: number;
 }
 
-export type LevelMap = Record<Difficulty, LevelConfig>
+export interface HistoryEntry {
+  move: Move;
+  notation: string;
+}
