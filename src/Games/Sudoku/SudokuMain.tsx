@@ -115,7 +115,7 @@ export function SudokuMain() {
                             onClick={() => setIsNewGameOpen(true)}
                             className="sudoku-btn-new-game"
                         >
-                            New Game
+                            {difficulty}
                         </button>
                         <SettingsDropdown
                             isSettingsOpen={isSettingsOpen}
