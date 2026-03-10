@@ -7,6 +7,7 @@ import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
 import checkers from '../assests/checkers.png';
 import Sodoku from '../assests/sodoku.png';
+import TicTacImg from '../assests/tictactoe.png'
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -118,6 +119,20 @@ const DEFAULT_GAMES: GameCard[] = [
         duration: '15-20 min',
         isFeatured: true,
     },
+    {
+        id: "tictac",
+        title: "TicTac Toe",
+        content: "Arcade games collection",
+        imageUrl: TicTacImg,
+        category: 'arcade',
+        tags: ['new','arcade', 'fun', 'entertainment'],
+        description: "A collection of fun, casual arcade games perfect for relaxing and having a good time.",
+        players: 4200,
+        difficulty: 'Easy',
+        points: 40,
+        duration: '3-6 min',
+        isFeatured: false,
+    },
     // {
     //     id: 7,
     //     title: "Trivia Showdown",
@@ -146,20 +161,7 @@ const DEFAULT_GAMES: GameCard[] = [
     //     duration: '2-4 min',
     //     isFeatured: false,
     // },
-    // {
-    //     id: 9,
-    //     title: "Fun Zone",
-    //     content: "Arcade games collection",
-    //     imageUrl: RandomQuiz2IMG,
-    //     category: 'arcade',
-    //     tags: ['arcade', 'fun', 'entertainment'],
-    //     description: "A collection of fun, casual arcade games perfect for relaxing and having a good time.",
-    //     players: 4200,
-    //     difficulty: 'Easy',
-    //     points: 40,
-    //     duration: '3-6 min',
-    //     isFeatured: false,
-    // },
+
     // {
     //     id: 10,
     //     title: "Popular Quiz",

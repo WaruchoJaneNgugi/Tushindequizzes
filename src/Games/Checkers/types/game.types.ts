@@ -56,7 +56,7 @@ export const LEVEL_CONFIGS: Record<DifficultyLevel, LevelConfig> = {
   },
 };
 
-// ─── App Screen ───────────────────────────────────────────────────────────────
+// ─── TictacToe Screen ───────────────────────────────────────────────────────────────
 
 export type GameScreen = 'lobby' | 'playing' | 'result';
 
