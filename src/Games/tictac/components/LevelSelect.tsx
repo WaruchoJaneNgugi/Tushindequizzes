@@ -90,7 +90,7 @@ export const LevelSelect: React.FC<LevelSelectProps> = ({ balance, onSelectLevel
             <span className="title-dot"> · </span>
             <span className="title-o">O</span>
           </h1>
-          {/*<p className="game-subtitle">GALACTIC ARENA</p>*/}
+          <p className="game-subtitle">GALACTIC ARENA</p>
         </div>
         <div className="balance-display">
           <span className="balance-label">BALANCE</span>

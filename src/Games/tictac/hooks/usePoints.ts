@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import type { GameLevel, PointsState, Transaction } from '../types/game.types';
+import type{ GameLevel, PointsState, Transaction } from '../types/game.types';
 
-const INITIAL_BALANCE = 1000;
+const INITIAL_BALANCE = 15;
 
 const makeId = () => Math.random().toString(36).slice(2, 9);
 

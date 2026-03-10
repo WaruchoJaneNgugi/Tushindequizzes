@@ -22,7 +22,9 @@
 }
 
 html, body, #root {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   background: var(--bg);
   color: var(--text);
   /*font-family: var(--font-body);*/
@@ -30,11 +32,15 @@ html, body, #root {
   user-select: none;
 }
 
+/*.app {*/
+/*  height: 100dvh;*/
+/*}*/
+
 /* ─── Background blobs ──────────────────────────────────────────────────── */
 .app {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  /*width: 100vw;*/
+  /*height: 100vh;*/
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -87,7 +93,7 @@ html, body, #root {
 .title-wrapper { text-align: left; }
 
 .game-title {
-  /**/
+  /*font-family: var(--font-display);*/
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -99,7 +105,7 @@ html, body, #root {
 .title-ttt { color: var(--text); }
 
 .game-subtitle {
-  /**/
+  /*font-family: var(--font-display);*/
   font-size: 0.7rem;
   letter-spacing: 0.3em;
   color: var(--text-dim);
@@ -118,13 +124,13 @@ html, body, #root {
   box-shadow: 0 0 20px rgba(100, 120, 255, 0.1), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 .balance-label {
-  /**/
+  /*font-family: var(--font-display);*/
   font-size: 0.55rem;
   letter-spacing: 0.2em;
   color: var(--text-dim);
 }
 .balance-value {
-  /**/
+  /*font-family: var(--font-display);*/
   font-size: 2rem;
   font-weight: 700;
   color: var(--gold);
@@ -133,7 +139,7 @@ html, body, #root {
 .balance-unit {
   font-size: 0.85rem;
   color: var(--text-dim);
-  /**/
+  /*font-family: var(--font-display);*/
 }
 
 .level-select__prompt {
@@ -207,6 +213,7 @@ html, body, #root {
 }
 
 .level-card__label {
+  /*font-family: var(--font-display);*/
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--accent);
@@ -234,12 +241,13 @@ html, body, #root {
 
 .economy-item { display: flex; flex-direction: column; gap: 2px; }
 .economy-label {
+  /*font-family: var(--font-display);*/
   font-size: 0.5rem;
   letter-spacing: 0.2em;
   color: var(--text-dim);
 }
 .economy-value {
-
+  /*font-family: var(--font-display);*/
   font-size: 1rem;
   font-weight: 700;
 }
@@ -257,6 +265,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /*font-family: var(--font-display);*/
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -290,6 +299,7 @@ html, body, #root {
   display: flex;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   gap: 0;
   overflow: hidden;
 }
@@ -318,12 +328,13 @@ html, body, #root {
   border: 1px solid rgba(255,215,0,0.2);
 }
 .sb-balance-label {
+  /*font-family: var(--font-display);*/
   font-size: 0.5rem;
   letter-spacing: 0.25em;
   color: var(--text-dim);
 }
 .sb-balance-value {
-
+  /*font-family: var(--font-display);*/
   font-size: 2.2rem;
   font-weight: 900;
   color: var(--gold);
@@ -333,7 +344,7 @@ html, body, #root {
 .sb-balance-unit {
   font-size: 0.7rem;
   color: var(--text-dim);
-
+  /*font-family: var(--font-display);*/
 }
 
 .sb-level {
@@ -346,11 +357,13 @@ html, body, #root {
   border: 1px solid rgba(var(--accent, 255,255,255), 0.2);
 }
 .sb-level-label {
+  /*font-family: var(--font-display);*/
   font-size: 0.5rem;
   letter-spacing: 0.2em;
   color: var(--text-dim);
 }
 .sb-level-name {
+  /*font-family: var(--font-display);*/
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent);
@@ -366,6 +379,7 @@ html, body, #root {
   gap: 8px;
   padding: 10px 16px;
   border-radius: 30px;
+  /*font-family: var(--font-display);*/
   font-size: 0.65rem;
   letter-spacing: 0.1em;
   font-weight: 600;
@@ -412,8 +426,8 @@ html, body, #root {
   border: 1px solid var(--border);
 }
 .wager-row { display: flex; align-items: center; justify-content: space-between; }
-.wager-label { font-size: 0.5rem; letter-spacing: 0.2em; color: var(--text-dim); }
-.wager-val {font-size: 0.85rem; font-weight: 700; }
+.wager-label { ; font-size: 0.5rem; letter-spacing: 0.2em; color: var(--text-dim); }
+.wager-val { ; font-size: 0.85rem; font-weight: 700; }
 .wager-val--cost { color: #ff6666; }
 .wager-val--earn { color: #44ffaa; }
 
@@ -425,6 +439,7 @@ html, body, #root {
   flex: 1;
 }
 .sb-history-title {
+
   font-size: 0.5rem;
   letter-spacing: 0.25em;
   color: var(--text-dim);
@@ -439,6 +454,7 @@ html, body, #root {
   padding: 5px 8px;
   border-radius: 6px;
   font-size: 0.72rem;
+
 }
 .hi--credit { background: rgba(68,255,170,0.08); }
 .hi--debit { background: rgba(255,100,100,0.08); }
@@ -617,17 +633,102 @@ html, body, #root {
   .sb-balance-value { font-size: 1.6rem; }
 }
 
-@media (max-width: 500px) {
-  .game-layout { flex-direction: column; }
+/* ── Mobile: compact top bar + full-height canvas ── */
+@media (max-width: 600px) {
+  /* Stack vertically: top bar → canvas */
+  .game-layout {
+    flex-direction: column;
+    height: 100dvh;
+  }
+
+  /* Scoreboard becomes a slim horizontal bar */
   .scoreboard {
     width: 100%;
     flex-direction: row;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-shrink: 0;
     height: auto;
-    padding: 10px;
+    max-height: 56px;
+    padding: 0 10px;
+    gap: 10px;
     border-right: none;
     border-bottom: 1px solid var(--border);
-    gap: 8px;
+    overflow: hidden;
   }
-  .sb-history { display: none; }
+
+  /* Hide heavy sidebar sections on mobile */
+  .sb-history,
+  .sb-wager,
+  .move-count { display: none; }
+
+  /* Compact balance */
+  .sb-balance {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .sb-balance-label { display: none; }
+  .sb-balance-value { font-size: 1.3rem; }
+  .sb-balance-unit { font-size: 0.65rem; }
+
+  /* Compact level badge */
+  .sb-level {
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .sb-level-label { display: none; }
+  .sb-level-name { font-size: 0.7rem; }
+
+  /* Turn pill stays but shrinks */
+  .sb-turn {
+    flex: 1;
+    align-items: flex-end;
+  }
+  .turn-pill {
+    padding: 5px 10px;
+    font-size: 0.58rem;
+    gap: 4px;
+  }
+  .turn-symbol { font-size: 0.85rem; }
+
+  /* Canvas fills all remaining height */
+  .canvas-wrapper {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .canvas-header {
+    padding: 6px 12px;
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    font-size: 0.55rem;
+    padding: 4px 8px;
+  }
+
+  .canvas-level-badge { font-size: 0.65rem; }
+
+  /* Level select adjustments */
+  .level-select {
+    padding: 16px 12px;
+    gap: 16px;
+    overflow-y: auto;
+    height: 100dvh;
+    justify-content: flex-start;
+  }
+  .level-select__header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .game-title { font-size: 1.8rem; }
+  .level-grid { grid-template-columns: 1fr; gap: 10px; }
+  .level-card__inner { padding: 14px; }
+  .level-select__footer { flex-direction: column; gap: 4px; font-size: 0.65rem; }
+
+  /* Overlay on mobile */
+  .overlay-card { padding: 28px 20px; }
+  .overlay-headline { font-size: 1.8rem; }
+  .overlay-emoji { font-size: 2.5rem; }
 }

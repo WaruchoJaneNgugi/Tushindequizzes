@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import type { CellValue, Particle, Player, StarField } from '../types/game.types';
+import type{ CellValue, Particle, Player, StarField } from '../types/game.types';
 
 interface CanvasConfig {
   board: CellValue[];
@@ -42,7 +42,7 @@ export const useCanvas3D = (canvasRef: React.RefObject<HTMLCanvasElement | null>
   const getBoardParams = useCallback(() => {
     const W = displayWRef.current;
     const H = displayHRef.current;
-    const size = Math.min(W, H) * 0.60;
+    const size = Math.min(W, H) * 0.80;
     const cx = W / 2;
     const cy = H / 2;
     const cellSize = size / 3;

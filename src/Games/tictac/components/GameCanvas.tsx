@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import type { GameState } from '../types/game.types';
+import {type GameState } from '../types/game.types';
 import { LEVEL_CONFIGS } from '../utils/gameLogic';
 import { useCanvas3D } from '../hooks/useCanvas3D';
 
@@ -16,7 +16,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
   onCellPlaced,
   onWinAnimTrigger,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const prevBoardRef = useRef<(string | null)[]>(Array(9).fill(null));
   const prevWinRef = useRef<number[] | null>(null);
 

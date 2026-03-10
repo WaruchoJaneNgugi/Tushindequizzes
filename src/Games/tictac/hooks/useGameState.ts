@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CellValue, GameLevel, GameState } from '../types/game.types';
+import type{ CellValue, GameLevel, GameState } from '../types/game.types';
 import { checkWinner, isDraw } from '../utils/gameLogic';
 import { useAI } from './useAI';
 

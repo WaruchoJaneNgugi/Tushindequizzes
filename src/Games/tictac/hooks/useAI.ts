@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import type { CellValue, GameLevel } from '../types/game.types';
+import type{ CellValue, GameLevel } from '../types/game.types';
 import { getBestAIMove } from '../utils/gameLogic';
 
 interface UseAIReturn {
