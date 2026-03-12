@@ -497,6 +497,7 @@ export const AuthModal: FC = () => {
                   Enter the 6-digit code sent to <strong style={{ color: "#fff" }}>{formData.phoneNumber}</strong>
                 </span>
               </div>
+
               <div className="am-otp-digits">
                 {otp.map((digit, i) => (
                     <input
