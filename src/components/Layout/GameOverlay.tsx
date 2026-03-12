@@ -3,6 +3,7 @@ import {useGameStore} from '../../Store/gameStore';
 import {useAuth} from '../../hooks/useAuth';
 import {getGameComponent} from '../../utils/gameComponent';
 import {useState, useEffect, useRef} from 'react';
+import "../../styles/globals.css"
 
 export const GameOverlay = () => {
     const {selectedGame, showGameOverlay, setShowGameOverlay} = useGameStore();
