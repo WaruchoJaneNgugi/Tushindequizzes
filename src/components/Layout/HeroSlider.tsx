@@ -8,7 +8,7 @@ import BongoQuiz from '../../assests/banners/bongoquizb.png';
 import Sudoku from '../../assests/banners/sudokub.png';
 import checkers from '../../assests/banners/checkers-banner.png';
 import chessbanner from '../../assests/banners/chess-banner.png';
-import { useGameClick } from "../../hooks/useGameClick.ts";
+// import { useGameClick } from "../../hooks/useGameClick.ts";
 
 interface Tag {
     label: string;
@@ -36,7 +36,7 @@ const HeroSlider = () => {
     const sliderRef = useRef<HTMLDivElement>(null);
     const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const { handleGameClick } = useGameClick();
+    // const { handleGameClick } = useGameClick();
     const minSwipeDistance = 50;
 
     const slides: Slide[] = [
