@@ -78,7 +78,6 @@ const LevelCard: React.FC<{
 
 export const LevelSelect: React.FC<LevelSelectProps> = ({ balance, onSelectLevel }) => {
   const levels = Object.values(LEVEL_CONFIGS) as LevelConfig[];
-
   return (
     <div className="level-select">
       <div className="level-select__header">
@@ -100,7 +99,6 @@ export const LevelSelect: React.FC<LevelSelectProps> = ({ balance, onSelectLevel
       </div>
 
       <div className="level-select__prompt">Choose your difficulty — place your wager</div>
-
       <div className="level-grid">
         {levels.map((cfg) => (
           <LevelCard

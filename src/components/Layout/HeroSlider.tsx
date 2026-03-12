@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import '../../styles/carousel.css';
 import '../../styles/shimmer.css';
-import bibleQuizBanner from '../../assests/banners/BibleQuiz-banner.png';
-import chemshabongo from '../../assests/banners/ChemshaBongo-banner.png';
+import bibleQuizBanner from '../../assests/banners/BibleQuizb.png';
+import ConnectFour from '../../assests/banners/connectfourb.png';
+import BongoQuiz from '../../assests/banners/bongoquizb.png';
+import Sudoku from '../../assests/banners/sudokub.png';
 import checkers from '../../assests/banners/checkers-banner.png';
 import chessbanner from '../../assests/banners/chess-banner.png';
 import { useGameClick } from "../../hooks/useGameClick.ts";
@@ -39,21 +41,21 @@ const HeroSlider = () => {
     const slides: Slide[] = [
         {
             id: 1,
-            gameId: "bible-quiz",
-            title: "BIBLE QUIZ",
-            image: bibleQuizBanner,
-            points: "WIN UP TO 1000 POINTS!",
-            accentColor: "#00f5d4",
+            gameId: "",
+            title: "BongoQuiz",
+            image: BongoQuiz,
+            points: "",
+            accentColor: "#00c6ff",
             tags: [{ label: "NEW", type: "new" }],
             ctaText: "PLAY NOW"
         },
         {
             id: 2,
-            gameId: "chemsha-bongo",
-            title: "CHEMSHA BONGO",
-            image: chemshabongo,
-            points: "WIN UP TO 1000 POINTS!",
-            accentColor: "#ff3cac",
+            gameId: "connect-four",
+            title: "Connect Four",
+            image: ConnectFour,
+            points: "",
+            accentColor: "#fd0000",
             tags: [{ label: "HOT", type: "hot" }],
             ctaText: "PLAY NOW"
         },
@@ -65,7 +67,7 @@ const HeroSlider = () => {
             points: "WIN UP TO 1500 POINTS!",
             accentColor: "#f5a623",
             tags: [{ label: "TRENDING", type: "trending" }],
-            ctaText: "PLAY CHESS"
+            ctaText: "PLAY NOW"
         },
         {
             id: 4,
@@ -75,7 +77,26 @@ const HeroSlider = () => {
             points: "WIN UP TO 800 POINTS!",
             accentColor: "#00c6ff",
             tags: [{ label: "NEW", type: "new" }],
-            ctaText: "PLAY CHECKERS"
+            ctaText: "PLAY NOW"
+        }, {
+            id: 5,
+            gameId: "bible-quiz",
+            title: "BIBLE QUIZ",
+            image: bibleQuizBanner,
+            points: "WIN UP TO 1000 POINTS!",
+            accentColor: "#00f5d4",
+            tags: [{ label: "NEW", type: "new" }],
+            ctaText: "PLAY NOW"
+        },
+        {
+            id: 6,
+            gameId: "sodoku",
+            title: "Sudoku",
+            image: Sudoku,
+            points: "",
+            accentColor: "#00c6ff",
+            tags: [{ label: "NEW", type: "new" }],
+            ctaText: "PLAY NOW"
         }
     ];
 
@@ -219,10 +240,10 @@ const HeroSlider = () => {
                                 </div>
 
 
-                                <div className="hs-points-badge">
-                                    <span className="hs-points-icon">⚡</span>
-                                    {slide.points}
-                                </div>
+                                {/*<div className="hs-points-badge">*/}
+                                {/*    <span className="hs-points-icon">⚡</span>*/}
+                                {/*    {slide.points}*/}
+                                {/*</div>*/}
                                 <h2 className="hs-title">{slide.title}</h2>
 
 

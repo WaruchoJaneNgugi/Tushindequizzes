@@ -8,6 +8,7 @@ import wordQuest from '../assests/wordquest.png';
 import checkers from '../assests/checkers.png';
 import Sodoku from '../assests/sodoku.png';
 import TicTacImg from '../assests/tictactoe.png'
+import ConnectFour from '../assests/connectfour.png'
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -77,6 +78,35 @@ const DEFAULT_GAMES: GameCard[] = [
         isFeatured: true,
     },
     {
+        id: 'sodoku',
+        title: "Sudoku",
+        content: "Logic and reasoning game",
+        imageUrl: Sodoku,
+        category: 'popular',
+        tags: ['hot','puzzle', 'brain', 'logic'],
+        description: "Exercise your brain with challenging logic puzzles that require creative thinking and pattern recognition.",
+        players: 2400,
+        difficulty: 'Medium',
+        points: 120,
+        duration: '8-12 min',
+        isFeatured: true,
+    },
+    {
+        id: "connect-four",
+        title: "Connect Four",
+        content: "Arcade games collection",
+        imageUrl: ConnectFour,
+        category: 'popular',
+        tags: ['hot','arcade', 'fun', 'entertainment'],
+        description: "A collection of fun, casual arcade games perfect for relaxing and having a good time.",
+        players: 4200,
+        difficulty: 'Easy',
+        points: 40,
+        duration: '3-6 min',
+        isFeatured: false,
+    },
+
+    {
         id: "checkers",
         title: "checkers",
         content: "Fun arcade challenges",
@@ -91,26 +121,13 @@ const DEFAULT_GAMES: GameCard[] = [
         isFeatured: false,
     },
 
-    {
-        id: 'sodoku',
-        title: "Sudoku",
-        content: "Logic and reasoning game",
-        imageUrl: Sodoku,
-        category: 'puzzle',
-        tags: ['new','puzzle', 'brain', 'logic'],
-        description: "Exercise your brain with challenging logic puzzles that require creative thinking and pattern recognition.",
-        players: 2400,
-        difficulty: 'Medium',
-        points: 120,
-        duration: '8-12 min',
-        isFeatured: true,
-    },
+
     {
         id: "chess",
         title: "chess",
         content: "Fun arcade challenges",
         imageUrl: IMGChess,
-        category: 'popular',
+        category: '',
         tags: ['new','arcade', 'fun'],
         description: "An action-packed arcade game with multiple mini-games. Perfect for quick gaming sessions!",
         players: 1900,
@@ -124,7 +141,7 @@ const DEFAULT_GAMES: GameCard[] = [
         title: "TicTac Toe",
         content: "Arcade games collection",
         imageUrl: TicTacImg,
-        category: 'arcade',
+        category: 'latest',
         tags: ['new','arcade', 'fun', 'entertainment'],
         description: "A collection of fun, casual arcade games perfect for relaxing and having a good time.",
         players: 4200,
@@ -133,6 +150,7 @@ const DEFAULT_GAMES: GameCard[] = [
         duration: '3-6 min',
         isFeatured: false,
     },
+
     // {
     //     id: 7,
     //     title: "Trivia Showdown",
