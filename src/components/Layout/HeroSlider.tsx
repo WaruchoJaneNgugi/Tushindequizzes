@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import '../../styles/carousel.css';
 import '../../styles/shimmer.css';
 import bibleQuizBanner from '../../assests/banners/BibleQuizb.png';
+import KiswahiliB from '../../assests/banners/kiswahilib.png';
 import ConnectFour from '../../assests/banners/connectfourb.png';
 import BongoQuiz from '../../assests/banners/bongoquizb.png';
 import Sudoku from '../../assests/banners/sudokub.png';
@@ -41,7 +42,7 @@ const HeroSlider = () => {
     const slides: Slide[] = [
         {
             id: 1,
-            gameId: "",
+            gameId: "bongo-quiz",
             title: "BongoQuiz",
             image: BongoQuiz,
             points: "",
@@ -55,7 +56,7 @@ const HeroSlider = () => {
             title: "Connect Four",
             image: ConnectFour,
             points: "",
-            accentColor: "#fd0000",
+            accentColor: "#fd3f3f",
             tags: [{ label: "HOT", type: "hot" }],
             ctaText: "PLAY NOW"
         },
@@ -97,13 +98,22 @@ const HeroSlider = () => {
             accentColor: "#00c6ff",
             tags: [{ label: "NEW", type: "new" }],
             ctaText: "PLAY NOW"
+        }, {
+            id: 7,
+            gameId: "kiswahili-quiz",
+            title: "Kiswahili Quiz",
+            image: KiswahiliB,
+            points: "",
+            accentColor: "#ff7d37",
+            tags: [{ label: "NEW", type: "new" }],
+            ctaText: "PLAY NOW"
         }
     ];
 
-    const handleGameButtonClick = (gameId: string) => {
-        const gameData = slides.find(s => s.gameId === gameId);
-        handleGameClick(gameId, gameData as any);
-    };
+    // const handleGameButtonClick = (gameId: string) => {
+    //     const gameData = slides.find(s => s.gameId === gameId);
+    //     handleGameClick(gameId, gameData as any);
+    // };
 
     const goToSlide = useCallback((index: number) => {
         setCurrentSlide(index);
@@ -244,15 +254,15 @@ const HeroSlider = () => {
                                 {/*    <span className="hs-points-icon">⚡</span>*/}
                                 {/*    {slide.points}*/}
                                 {/*</div>*/}
-                                <h2 className="hs-title">{slide.title}</h2>
+                                {/*<h2 className="hs-title">{slide.title}</h2>*/}
 
 
-                                <button
-                                    className="hs-cta"
-                                    onClick={() => handleGameButtonClick(slide.gameId)}
-                                >
-                                    {slide.ctaText}
-                                </button>
+                                {/*<button*/}
+                                {/*    className="hs-cta"*/}
+                                {/*    onClick={() => handleGameButtonClick(slide.gameId)}*/}
+                                {/*>*/}
+                                {/*    {slide.ctaText}*/}
+                                {/*</button>*/}
                             </div>
                         )}
                     </div>

@@ -7,8 +7,9 @@ import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
 import checkers from '../assests/checkers.png';
 import Sodoku from '../assests/sodoku.png';
-import TicTacImg from '../assests/tictactoe.png'
-import ConnectFour from '../assests/connectfour.png'
+import TicTacImg from '../assests/tictactoe.png';
+import ConnectFour from '../assests/connectfour.png';
+import KiswahiliQuiz from '../assests/kiswahili.png';
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -55,7 +56,7 @@ const DEFAULT_GAMES: GameCard[] = [
         content: "Test your Bible knowledge",
         imageUrl: BibleQuiz,
         category: 'latest',
-        tags: ['featured','bible', 'quiz','trivia', 'religion'],
+        tags: ['','bible', 'quiz','trivia', 'religion'],
         description: "A comprehensive Bible trivia game with questions from both Old and New Testaments. Test your knowledge of scriptures, characters, and biblical events.",
         players: 4500,
         difficulty: 'Medium',
@@ -69,7 +70,7 @@ const DEFAULT_GAMES: GameCard[] = [
         content: "Solve challenging math Quiz",
         imageUrl: mathQuiz,
         category: 'latest',
-        tags: ['featured','puzzle','quiz', 'logic', 'brain-teaser'],
+        tags: ['','puzzle','quiz', 'logic', 'brain-teaser'],
         description: "A brain-teasing Math Quiz game that challenges your logic and problem-solving skills. Each level gets progressively harder!",
         players: 3200,
         difficulty: 'Hard',
@@ -149,7 +150,20 @@ const DEFAULT_GAMES: GameCard[] = [
         points: 40,
         duration: '3-6 min',
         isFeatured: false,
-    },
+    },{
+        id: "kiswahili-quiz",
+        title: "Kiswahili Quiz",
+        content: "Test your Swahili Knowledge",
+        imageUrl: KiswahiliQuiz,
+        category: 'latest',
+        tags: ['new','bible', 'quiz','trivia', 'religion'],
+        description: "A comprehensive Bible trivia game with questions from both Old and New Testaments. Test your knowledge of scriptures, characters, and biblical events.",
+        players: 4500,
+        difficulty: 'Medium',
+        points: 100,
+        duration: '5-10 min',
+        isFeatured: true,
+    }
 
     // {
     //     id: 7,
