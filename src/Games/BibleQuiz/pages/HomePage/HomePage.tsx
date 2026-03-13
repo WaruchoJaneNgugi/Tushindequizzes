@@ -1,4 +1,4 @@
-// src/pages/HomePage/HomePage.tsx - Updated to use props
+// Mahjong/pages/HomePage/HomePage.tsx - Updated to use props
 import React from 'react';
 import QuizCard from '../../components/QuizCard/QuizCard';
 import { quizzes } from '../../components/data/quizzes';

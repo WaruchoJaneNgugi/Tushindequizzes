@@ -1,4 +1,4 @@
-// src/components/GameOverModal/GameOverModal.tsx - UPDATED
+// Mahjong/components/GameOverModal/GameOverModal.tsx - UPDATED
 import React from 'react';
 import './GameOverModal.css';
 

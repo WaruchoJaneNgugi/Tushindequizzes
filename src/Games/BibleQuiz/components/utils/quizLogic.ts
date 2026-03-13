@@ -1,4 +1,4 @@
-// src/utils/quizLogic.ts
+// Mahjong/utils/quizLogic.ts
 import type { Question, UserAnswer } from '../types/quiz';
 
 export const calculateScore = (questions: Question[], userAnswers: UserAnswer[]): number => {

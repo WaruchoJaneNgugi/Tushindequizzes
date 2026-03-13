@@ -1,4 +1,4 @@
-// src/pages/ResultsPage/ResultPage.tsx - CORRECTED INTERFACE
+// Mahjong/pages/ResultsPage/ResultPage.tsx - CORRECTED INTERFACE
 import React from 'react';
 import ScoreDisplay from '../../components/ScoreDisplay/ScoreDisplay';
 import { getQuizById } from '../../components/data/quizzes.ts';

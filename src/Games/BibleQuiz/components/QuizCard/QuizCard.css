@@ -1,4 +1,4 @@
-/* src/components/QuizCard/QuizCard.css - REDUCED SIZE, MORE COMPACT */
+/* Mahjong/components/QuizCard/QuizCard.css - REDUCED SIZE, MORE COMPACT */
 .quizCard {
     background: white;
     border-radius: 16px;
@@ -338,7 +338,7 @@
     }
 }
 
-/* Add to src/components/QuizCard/QuizCard.css */
+/* Add to Mahjong/components/QuizCard/QuizCard.css */
 
 /* Category-specific accent colors */
 .quizCard[data-category="people"]::before { background: #3498db; }

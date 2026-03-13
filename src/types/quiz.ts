@@ -15,7 +15,7 @@
 //     participationRate: number;
 //     createQuizPercentage: number;
 // }
-// In src/types/quiz.ts, add these properties to Quiz interface
+// In Mahjong/types/quiz.ts, add these properties to Quiz interface
 export interface Quiz {
     id: string;
     title: string;

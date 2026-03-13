@@ -1,5 +1,5 @@
-// src/data/categories.ts
-// src/data/categories.ts
+// Mahjong/data/categories.ts
+// Mahjong/data/categories.ts
 import type {QuizCategory} from '../types/quiz.ts';
 
 export const categories: { id: QuizCategory; name: string; description: string }[] = [

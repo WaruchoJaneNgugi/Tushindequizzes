@@ -1,4 +1,4 @@
-// src/components/SoundControl/SoundControl.tsx - UPDATED with props
+// Mahjong/components/SoundControl/SoundControl.tsx - UPDATED with props
 import React, { useState } from 'react';
 import './SoundControl.css';
 

@@ -1,4 +1,4 @@
-// src/components/Layout/Header.tsx
+// Mahjong/components/Layout/Header.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SoundControl from '../SoundControl/SoundControl';

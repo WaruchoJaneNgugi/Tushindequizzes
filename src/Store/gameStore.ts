@@ -10,6 +10,9 @@ import Sodoku from '../assests/sodoku.png';
 import TicTacImg from '../assests/tictactoe.png';
 import ConnectFour from '../assests/connectfour.png';
 import KiswahiliQuiz from '../assests/kiswahili.png';
+import BongoQuiz from '../assests/bongoquiz.png';
+import Mahjong from '../assests/mahjong.png';
+
 import type {GameCard} from "../types/game.ts";
 
 interface GameState {
@@ -163,22 +166,34 @@ const DEFAULT_GAMES: GameCard[] = [
         points: 100,
         duration: '5-10 min',
         isFeatured: true,
-    }
-
-    // {
-    //     id: 7,
-    //     title: "Trivia Showdown",
-    //     content: "Latest questions",
-    //     imageUrl: RandomQuiz2IMG,
-    //     category: 'latest',
-    //     tags: ['latest', 'trivia', 'new'],
-    //     description: "Fresh trivia questions added daily! Compete with players worldwide in this constantly updated game.",
-    //     players: 3700,
-    //     difficulty: 'Easy',
-    //     points: 60,
-    //     duration: '5-7 min',
-    //     isFeatured: false,
-    // },
+    },
+    {
+        id: 'bongo-quiz',
+        title: "Bongo Quiz",
+        content: "Latest questions",
+        imageUrl: BongoQuiz,
+        category: 'latest',
+        tags: ['latest', 'trivia', 'new'],
+        description: "Fresh trivia questions added daily! Compete with players worldwide in this constantly updated game.",
+        players: 3700,
+        difficulty: 'Easy',
+        points: 60,
+        duration: '5-7 min',
+        isFeatured: false,
+    },{
+        id: 'mahjong-game',
+        title: "Mahjong",
+        content: "Puzzle game",
+        imageUrl: Mahjong,
+        category: '',
+        tags: ['soon', 'trivia', ''],
+        description: "Fresh Puzzle Game",
+        players: 3700,
+        difficulty: 'Easy',
+        points: 60,
+        duration: '5-7 min',
+        isFeatured: false,
+    },
     // {
     //     id: 8,
     //     title: "Speed Quiz",

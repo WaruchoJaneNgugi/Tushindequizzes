@@ -1,4 +1,4 @@
-// src/hooks/useGameSounds.ts
+// Mahjong/hooks/useGameSounds.ts
 import { useCallback, useEffect } from 'react';
 import correctSound from '../sounds/correct.mp3';
 import wrongSound from '../sounds/wrong.mp3';

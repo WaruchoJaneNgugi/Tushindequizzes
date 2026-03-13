@@ -1,4 +1,4 @@
-// src/components/MainGameLayout.tsx - COMPLETE WORKING VERSION
+// Mahjong/components/MainGameLayout.tsx - COMPLETE WORKING VERSION
 import type { FC } from "react";
 import { useState } from 'react';
 import { QuizProvider } from './contexts/QuizContext/QuizContext';

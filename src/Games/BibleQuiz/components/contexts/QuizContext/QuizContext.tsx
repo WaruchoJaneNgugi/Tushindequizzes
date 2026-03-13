@@ -1,4 +1,4 @@
-// src/contexts/QuizContext/QuizContext.tsx
+// Mahjong/contexts/QuizContext/QuizContext.tsx
 import React, { createContext, useState, type ReactNode } from 'react';
 import type {QuizSession, QuizResult, UserAnswer} from '../../types/quiz';
 

@@ -1,4 +1,4 @@
-// src/components/Layout/Footer.tsx
+// Mahjong/components/Layout/Footer.tsx
 import React from 'react';
 import './Footer.css'
 

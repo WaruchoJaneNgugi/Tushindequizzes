@@ -1,4 +1,4 @@
-// src/types/quiz.types.ts
+// Mahjong/types/quiz.types.ts
 export type QuizCategory = 'people' | 'places' | 'events' | 'concepts' | 'verses' | 'general';
 
 export interface QuizConfig {

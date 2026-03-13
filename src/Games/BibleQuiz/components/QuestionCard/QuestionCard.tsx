@@ -1,4 +1,4 @@
-// src/components/QuestionCard/QuestionCard.tsx
+// Mahjong/components/QuestionCard/QuestionCard.tsx
 import React from 'react';
 import type { Question } from '../types/quiz';
 import './QuestionCard.css'

@@ -1,4 +1,4 @@
-// src/utils/storage.ts
+// Mahjong/utils/storage.ts
 const QUIZ_RESULTS_KEY = 'bible_quiz_results';
 const USER_PROGRESS_KEY = 'bible_quiz_progress';
 

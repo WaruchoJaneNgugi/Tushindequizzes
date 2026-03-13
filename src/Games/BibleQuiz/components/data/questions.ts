@@ -1,4 +1,4 @@
-// src/data/questions.ts - COMPLETELY BALANCED
+// Mahjong/data/questions.ts - COMPLETELY BALANCED
 // All quizzes have 10 questions, total 100 points each
 import type {Question} from '../types/quiz';
 

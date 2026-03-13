@@ -8,6 +8,8 @@ import {SudokuMain} from "../Games/Sudoku/SudokuMain.tsx";
 import {TictacToe} from "../Games/tictac/TictacToe.tsx";
 import {ConnectFour} from "../Games/ConnecFour/ConnectFour.tsx";
 import {KiswahiliQuiz} from "../Games/KiswahiliQuiz/Kiswahili.tsx";
+import {BongoMain} from "../Games/BongoQuiz/component/BongoMain.tsx";
+// import {ZenMain} from "../Games/Mahjong/components/ZenMain.tsx";
 
 export const gameComponents: Record<string, ComponentType<{}>> = {
     'bible-quiz': MainGameLayout,
@@ -18,7 +20,9 @@ export const gameComponents: Record<string, ComponentType<{}>> = {
     'sodoku':SudokuMain,
     'tictac':TictacToe,
     'connect-four':ConnectFour,
-    'kiswahili-quiz':KiswahiliQuiz
+    'kiswahili-quiz':KiswahiliQuiz,
+    'bongo-quiz':BongoMain,
+    // 'mahjong-game':ZenMain
 };
 
 export const getGameComponent = (gameId: string | number): ComponentType<{}> | null => {

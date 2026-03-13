@@ -1,0 +1,476 @@
+/* HomeScreen.css */
+
+.home-root {
+    min-height: 100vh;
+    /*width: 100vw;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: radial-gradient(ellipse at 20% 50%, #0f0035 0%, #000 40%, #0a001a 100%);
+}
+
+/* ── Canvas ── */
+.home-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/*── Faded Background Logo ──*/
+/*── Faded Rotating Background Logo ──*/
+.home-logo-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: min(900px, 85vw);
+    height: auto;
+
+    opacity: 0.2;
+    filter: blur(1px);
+    mix-blend-mode: screen;
+
+    z-index: 1;
+    pointer-events: none;
+
+    animation: logoSway 22s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+@keyframes logoSway {
+    0% {
+        transform: translate(-50%, -50%) rotate(-15deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(15deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(-15deg);
+    }
+}
+
+/* ── Orbs ── */
+.home-orbs {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.home-orb1 {
+    position: absolute;
+    top: 10%; left: 5%;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(123,97,255,0.25) 0%, transparent 70%);
+    animation: orb1 12s ease-in-out infinite;
+}
+.home-orb2 {
+    position: absolute;
+    bottom: 10%; right: 5%;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,107,0.2) 0%, transparent 70%);
+    animation: orb2 15s ease-in-out infinite;
+}
+.home-orb3 {
+    position: absolute;
+    top: 40%; right: 20%;
+    width: 350px; height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,217,61,0.15) 0%, transparent 70%);
+    animation: orb3 10s ease-in-out infinite;
+}
+
+/* ── Scanline ── */
+.home-scanline-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    opacity: 0.03;
+}
+.home-scanline {
+    width: 100%;
+    height: 3px;
+    background: white;
+    animation: scanline 6s linear infinite;
+}
+
+/* ── Content ── */
+.home-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 780px;
+    padding: 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100svh;
+    justify-content: center;
+}
+
+/* ── Live badge ── */
+.home-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,80,80,0.15);
+    border: 1px solid rgba(255,80,80,0.5);
+    border-radius: 100px;
+    padding: 6px 18px;
+    margin-bottom: 12px;
+    animation: badgePop 0.6s ease forwards;
+    backdrop-filter: blur(10px);
+}
+.home-badge-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ff4444;
+    box-shadow: 0 0 8px #ff4444;
+    display: inline-block;
+    animation: titlePulse 1.5s ease-in-out infinite;
+}
+.home-badge-text {
+    color: #ff9999;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ── Title ── */
+.home-title-wrap {
+    text-align: center;
+    margin-bottom: 4px;
+    animation: floatUp 0.7s ease 0.1s both;
+}
+
+.home-title-image {
+    width: clamp(180px, 38vw, 420px);
+    height: auto;
+    display: block;
+    margin: 0 auto;
+
+    animation: logoPulse 4s ease-in-out infinite;
+
+    filter: drop-shadow(0 0 40px rgba(255,0,150,0.4))
+    drop-shadow(0 0 80px rgba(0,100,255,0.3));
+}
+
+/* ── Subtitle ── */
+.home-subtitle {
+    color: rgba(255,255,255,0.5);
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    max-width: 480px;
+    animation: floatUp 0.7s ease 0.25s both;
+    opacity: 0;
+}
+
+/* ── Round cards grid ── */
+.home-rounds {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 20px;
+    animation: floatUp 0.7s ease 0.4s both;
+    opacity: 0;
+}
+.home-round-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 14px 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.home-round-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: rgba(255,255,255,0.2);
+}
+.home-round-num {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.home-round-icon {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+}
+.home-round-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+.home-round-divider {
+    width: 30px;
+    height: 2px;
+    margin: 0 auto 6px;
+}
+.home-round-desc {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+}
+
+/* ── CTA buttons ── */
+.home-cta-wrap {
+    animation: floatUp 0.7s ease 0.65s both;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Shared base for both CTA buttons */
+.home-btn,
+.home-lb-btn {
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: transform 0.2s ease;
+}
+
+/* Primary — PLAY NOW */
+.home-btn {
+    position: relative;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF4444 30%, #7B61FF 70%, #5B41DF 100%);
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 900;
+    padding: 14px 52px;
+    animation: btnGlow 2.5s ease-in-out infinite;
+    overflow: hidden;
+}
+.home-btn:hover { transform: scale(1.06) translateY(-2px); }
+.home-btn:active { transform: scale(0.98); }
+.home-btn-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+}
+
+/* Secondary — Leaderboard ghost style */
+.home-lb-btn {
+    background: transparent;
+    border: 2px solid rgba(255,215,0,0.4);
+    color: #ffd200;
+    font-size: 0.92rem;
+    padding: 9px 28px;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+.home-lb-btn:hover {
+    background: rgba(255,215,0,0.1);
+    border-color: rgba(255,215,0,0.75);
+    color: #ffe84d;
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 0 22px rgba(255,215,0,0.25);
+}
+.home-lb-btn:active { transform: scale(0.97); }
+
+
+/* ── Player bar ── */
+.home-player-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    animation: floatUp 0.7s ease 0.3s both;
+    opacity: 0;
+    width: 100%;
+}
+.home-player-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.home-player-name-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.home-player-name-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+    transform: scale(1.03);
+}
+.home-player-edit { font-size: 0.75rem; opacity: 0.5; }
+.home-best-score {
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.4);
+    border-radius: 100px;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.home-best-score strong { color: #ffd200; font-size: 1rem; }
+.home-streak-badge {
+    background: rgba(255,107,107,0.15);
+    border: 1px solid rgba(255,107,107,0.45);
+    border-radius: 100px;
+    color: #ff9966;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    animation: streakPulse 2s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+@keyframes streakPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(255,107,107,0); }
+    50%       { box-shadow: 0 0 12px rgba(255,107,107,0.3); }
+}
+
+/* ── Secondary buttons row ── */
+.home-secondary-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* ── Footer hint ── */
+.home-hint {
+    color: rgba(255,255,255,0.2);
+    font-size: 0.75rem;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    animation: floatUp 0.7s ease 0.8s both;
+    opacity: 0;
+}
+
+/* ── Keyframes ── */
+@keyframes titlePulse {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(255,107,107,0.6)) drop-shadow(0 0 60px rgba(123,97,255,0.4)); }
+    50%       { filter: drop-shadow(0 0 50px rgba(255,217,61,0.8)) drop-shadow(0 0 100px rgba(123,97,255,0.6)); }
+}
+@keyframes orb1 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(60px,-40px) scale(1.1); }
+    66%      { transform: translate(-30px,30px) scale(0.95); }
+}
+@keyframes orb2 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(-50px,60px) scale(1.05); }
+    66%      { transform: translate(40px,-20px) scale(1.1); }
+}
+@keyframes orb3 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(30px,50px) scale(1.08); }
+}
+@keyframes floatUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes badgePop {
+    0%   { transform: scale(0.8); opacity: 0; }
+    70%  { transform: scale(1.08); }
+    100% { transform: scale(1); opacity: 1; }
+}
+@keyframes btnGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(255,107,107,0.5), 0 0 60px rgba(123,97,255,0.3), inset 0 1px 0 rgba(255,255,255,0.2); }
+    50%       { box-shadow: 0 0 50px rgba(255,217,61,0.6), 0 0 100px rgba(255,107,107,0.4), inset 0 1px 0 rgba(255,255,255,0.2); }
+}
+@keyframes scanline {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+}
+
+
+/* ── Mobile squeeze fixes ── */
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — HomeScreen.css
+═══════════════════════════════════════════════════ */
+
+@media (max-width: 1279px) {
+    .home-content  { max-width: 680px; }
+}
+
+@media (max-width: 899px) {
+    .home-content       { max-width: 560px; padding: 16px; }
+    .home-title-image   { width: clamp(180px, 42vw, 320px); }
+    .home-rounds        { gap: 10px; }
+    .home-btn           { font-size: 1.1rem; padding: 13px 44px; }
+}
+
+@media (max-width: 600px) {
+    .home-content {
+        padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+        min-height: 100svh;
+        justify-content: center;
+    }
+    .home-title-image   { width: clamp(160px, 68vw, 300px); }
+    .home-badge         { margin-bottom: 8px; }
+    .home-subtitle      { font-size: 0.88rem; margin-bottom: 12px; }
+    .home-rounds        { gap: 8px; margin-bottom: 14px; }
+    .home-round-card    { padding: 10px 8px; }
+    .home-round-icon    { font-size: 1.5rem; margin-bottom: 4px; }
+    .home-round-desc    { font-size: 0.65rem; }
+    .home-player-bar    { gap: 6px; margin-bottom: 12px; }
+    .home-best-score,
+    .home-streak-badge  { font-size: 0.78rem; padding: 5px 12px; }
+    .home-btn           { font-size: 1rem; padding: 12px 36px; }
+    .home-lb-btn        { font-size: 0.8rem; padding: 8px 20px; }
+}
+
+@media (max-width: 375px) {
+    .home-title-image   { width: clamp(140px, 62vw, 240px); }
+    .home-rounds        { gap: 6px; }
+    .home-round-card    { padding: 8px 6px; border-radius: 14px; }
+    .home-round-icon    { font-size: 1.3rem; }
+    .home-round-label   { font-size: 0.78rem; }
+    .home-round-desc    { font-size: 0.6rem; }
+    .home-btn           { font-size: 0.92rem; padding: 11px 28px; }
+    .home-best-score,
+    .home-streak-badge  { font-size: 0.72rem; padding: 4px 10px; }
+}
+
+@media (max-height: 700px) {
+    .home-badge         { margin-bottom: 4px; }
+    .home-title-image   { width: clamp(120px, 28vw, 240px); }
+    .home-subtitle      { margin-bottom: 8px; font-size: 0.85rem; }
+    .home-rounds        { margin-bottom: 10px; }
+    .home-round-card    { padding: 8px; }
+    .home-player-bar    { margin-bottom: 8px; }
+    .home-hint          { margin-top: 6px; }
+}

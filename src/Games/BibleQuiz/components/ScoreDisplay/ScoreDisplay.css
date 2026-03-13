@@ -1,5 +1,5 @@
-/* src/components/ScoreDisplay/ScoreDisplay.module.css */
-/* src/components/ScoreDisplay/ScoreDisplay.css - ADD scoring styles */
+/* Mahjong/components/ScoreDisplay/ScoreDisplay.module.css */
+/* Mahjong/components/ScoreDisplay/ScoreDisplay.css - ADD scoring styles */
 .scoreHeader {
     display: flex;
     justify-content: space-between;

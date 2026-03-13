@@ -1,4 +1,4 @@
-// src/types/common.types.ts
+// Mahjong/types/common.types.ts
 export interface ApiResponse<T> {
     data: T;
     success: boolean;

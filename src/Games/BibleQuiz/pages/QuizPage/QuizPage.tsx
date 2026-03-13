@@ -1,4 +1,4 @@
-// src/pages/QuizPage/QuizPage.tsx - COMPLETE VERSION
+// Mahjong/pages/QuizPage/QuizPage.tsx - COMPLETE VERSION
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameSounds } from '../../hooks/useGameSounds';
 import QuestionCard from '../../components/QuestionCard/QuestionCard';

@@ -1,5 +1,5 @@
-// src/data/quizzes.ts
-// src/data/quizzes.ts
+// Mahjong/data/quizzes.ts
+// Mahjong/data/quizzes.ts
 import type {Quiz} from '../types/quiz';
 
 export const quizzes: Quiz[] = [
