@@ -218,7 +218,7 @@ export const Round1Screen: FC<Props> = ({ power, onComplete }) => {
                     }
                     return (
                         <div key={i} className={cls}
-                                disabled={answered !== null || isElim}
+                                // disabled={answered !== null || isElim}
                                 onClick={() => handleAnswer(i)}
                                 style={isElim ? { opacity: 0.3, textDecoration: "line-through" } : undefined}>
                             {["A","B","C","D"][i]}. {opt}

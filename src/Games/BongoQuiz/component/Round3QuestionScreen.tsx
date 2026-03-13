@@ -102,7 +102,7 @@ export const Round3QuestionScreen: FC<Props> = ({ segment, currentScore, onCompl
                         : i === question.answer ? "correct"
                         : i === answered ? "wrong" : "default";
                     return (
-                        <div key={i} disabled={answered !== null} onClick={() => handleAnswer(i)} style={{
+                        <div key={i}  onClick={() => handleAnswer(i)} style={{
                             width: "100%", textAlign: "left", fontFamily: "inherit",
                             background: state === "correct" ? "rgba(56,239,125,0.2)" : state === "wrong" ? "rgba(229,45,39,0.2)" : "rgba(255,255,255,0.07)",
                             border: `2px solid ${state === "correct" ? "#38ef7d" : state === "wrong" ? "#e52d27" : "rgba(255,255,255,0.15)"}`,

@@ -214,7 +214,7 @@ export const Round2QuestionScreen: FC<Props> = ({ power, category, r1Score, onCo
                     }
                     return (
                         <div key={i} className={cls}
-                                disabled={answered !== null || isElim}
+                                // disabled={answered !== null || isElim}
                                 onClick={() => handleAnswer(i)}
                                 style={isElim ? { opacity: 0.3, textDecoration: "line-through" } : undefined}>
                             {["A","B","C","D"][i]}. {opt}
