@@ -1,122 +1,63 @@
-/*@tailwind base;*/
-/*@tailwind components;*/
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
-@layer base {
-  :root {
-    --emerald-50: #ecfdf5;
-    --emerald-100: #d1fae5;
-    --emerald-200: #a7f3d0;
-    --emerald-300: #6ee7b7;
-    --emerald-400: #34d399;
-    --emerald-500: #10b981;
-    --emerald-600: #059669;
-    --emerald-700: #047857;
-    --emerald-800: #065f46;
-    --emerald-900: #064e3b;
-    --emerald-950: #022c22;
 
-    --amber-50: #fffbeb;
-    --amber-100: #fef3c7;
-    --amber-400: #fbbf24;
-
-    --stone-50: #fafaf9;
-    --stone-100: #f5f5f4;
-    --stone-200: #e7e5e4;
-    --stone-300: #d6d3d1;
-    --stone-400: #a8a29e;
-    --stone-500: #78716c;
-    --stone-600: #57534e;
-    --stone-700: #44403c;
-    --stone-800: #292524;
-
-    --red-400: #f87171;
-    --red-500: #ef4444;
-    --red-600: #dc2626;
-    --red-800: #991b1b;
-    --red-950: #450a0a;
-
-    --blue-400: #60a5fa;
-    --blue-500: #3b82f6;
-    --blue-600: #2563eb;
-
-    --green-500: #22c55e;
-    --green-600: #16a34a;
-
-    --slate-200: #e2e8f0;
-    --slate-800: #1e293b;
-
-    --purple-400: #c084fc;
-    --rose-400: #fb7185;
-    --yellow-400: #facc15;
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Inter', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
-/*@theme {*/
-/*  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;*/
-/*  --font-serif: "Playfair Display", ui-serif, Georgia, serif;*/
-/*  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;*/
-/*}*/
 
-/*!**/
-/*  Custom styles for the project.*/
-/**!*/
+/*
+  Custom styles for the project.
+*/
 
-/*:root {*/
-/*  --emerald-50: #ecfdf5;*/
-/*  --emerald-100: #d1fae5;*/
-/*  --emerald-200: #a7f3d0;*/
-/*  --emerald-300: #6ee7b7;*/
-/*  --emerald-400: #34d399;*/
-/*  --emerald-500: #10b981;*/
-/*  --emerald-600: #059669;*/
-/*  --emerald-700: #047857;*/
-/*  --emerald-800: #065f46;*/
-/*  --emerald-900: #064e3b;*/
-/*  --emerald-950: #022c22;*/
+:root {
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-200: #a7f3d0;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+  --emerald-800: #065f46;
+  --emerald-900: #064e3b;
+  --emerald-950: #022c22;
 
-/*  --amber-50: #fffbeb;*/
-/*  --amber-100: #fef3c7;*/
-/*  --amber-400: #fbbf24;*/
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-400: #fbbf24;
 
-/*  --stone-50: #fafaf9;*/
-/*  --stone-100: #f5f5f4;*/
-/*  --stone-200: #e7e5e4;*/
-/*  --stone-300: #d6d3d1;*/
-/*  --stone-400: #a8a29e;*/
-/*  --stone-500: #78716c;*/
-/*  --stone-600: #57534e;*/
-/*  --stone-700: #44403c;*/
-/*  --stone-800: #292524;*/
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
 
-/*  --red-400: #f87171;*/
-/*  --red-500: #ef4444;*/
-/*  --red-600: #dc2626;*/
-/*  --red-800: #991b1b;*/
-/*  --red-950: #450a0a;*/
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-800: #991b1b;
+  --red-950: #450a0a;
 
-/*  --blue-400: #60a5fa;*/
-/*  --blue-500: #3b82f6;*/
-/*  --blue-600: #2563eb;*/
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
 
-/*  --green-500: #22c55e;*/
-/*  --green-600: #16a34a;*/
+  --green-500: #22c55e;
+  --green-600: #16a34a;
 
-/*  --slate-200: #e2e8f0;*/
-/*  --slate-800: #1e293b;*/
+  --slate-200: #e2e8f0;
+  --slate-800: #1e293b;
 
-/*  --purple-400: #c084fc;*/
-/*  --rose-400: #fb7185;*/
-/*  --yellow-400: #facc15;*/
-/*}*/
+  --purple-400: #c084fc;
+  --rose-400: #fb7185;
+  --yellow-400: #facc15;
+}
 
 /* Base App Styles */
 @layer components {

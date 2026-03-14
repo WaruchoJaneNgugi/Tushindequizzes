@@ -1,12 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-// import tailwindcss from "@tailwindcss/vite";
-// import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
     react(),
-    // tailwindcss(),
+    tailwindcss(),
   ],
   server:{
     host:true
@@ -15,7 +14,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    // Add this for SPA routing
+    // this is for SPA routing
     rollupOptions: {
       input: {
         main: 'index.html',

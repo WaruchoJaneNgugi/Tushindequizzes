@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import RandomQuizIMG from '../assests/Bible-IMG.png';
 import BibleQuiz from '../assests/Bible-IMG.png';
 import IMGChess from '../assests/chess.png';
-import ChemshaBongo from '../assests/chemsha-bongo-new.png';
+// import ChemshaBongo from '../assests/chemsha-bongo-new.png';
 import mathQuiz from '../assests/mathquiz.png';
 import wordQuest from '../assests/wordquest.png';
 import checkers from '../assests/checkers.png';
@@ -283,48 +283,48 @@ const FEATURED_GAMES: GameCard[] = [
         duration: '8-12 min',
         isFeatured: true
     },
+    // // {
+    // //     id: "featured-2",
+    // //     title: "ROCKET GOAL",
+    // //     content: "Fast-paced action game",
+    // //     imageUrl: RandomQuiz2IMG, // Use existing image or add new one
+    // //     category: 'arcade',
+    // //     tags: ['arcade', 'action', 'featured'],
+    // //     description: "Fast-paced action game with rocket challenges",
+    // //     players: 4200,
+    // //     difficulty: 'Easy',
+    // //     points: 80,
+    // //     duration: '5-8 min',
+    // //     isFeatured: true
+    // // },
     // {
-    //     id: "featured-2",
-    //     title: "ROCKET GOAL",
-    //     content: "Fast-paced action game",
-    //     imageUrl: RandomQuiz2IMG, // Use existing image or add new one
+    //     id: "featured-3",
+    //     title: "EPIC BATTLE",
+    //     content: "Strategic combat game",
+    //     imageUrl: BibleQuiz, // Use existing image or add new one
     //     category: 'arcade',
-    //     tags: ['arcade', 'action', 'featured'],
-    //     description: "Fast-paced action game with rocket challenges",
-    //     players: 4200,
-    //     difficulty: 'Easy',
-    //     points: 80,
-    //     duration: '5-8 min',
+    //     tags: ['arcade', 'strategy', 'featured'],
+    //     description: "Engage in strategic battles and defeat your opponents",
+    //     players: 3500,
+    //     difficulty: 'Hard',
+    //     points: 160,
+    //     duration: '12-18 min',
     //     isFeatured: true
     // },
-    {
-        id: "featured-3",
-        title: "EPIC BATTLE",
-        content: "Strategic combat game",
-        imageUrl: BibleQuiz, // Use existing image or add new one
-        category: 'arcade',
-        tags: ['arcade', 'strategy', 'featured'],
-        description: "Engage in strategic battles and defeat your opponents",
-        players: 3500,
-        difficulty: 'Hard',
-        points: 160,
-        duration: '12-18 min',
-        isFeatured: true
-    },
-    {
-        id: "featured-4",
-        title: "MYSTERY QUEST",
-        content: "Adventure mystery game",
-        imageUrl: ChemshaBongo, // Use existing image or add new one
-        category: 'puzzle',
-        tags: ['puzzle', 'mystery', 'featured'],
-        description: "Solve mysteries and uncover hidden secrets in this adventure game",
-        players: 2900,
-        difficulty: 'Medium',
-        points: 130,
-        duration: '9-14 min',
-        isFeatured: true
-    },
+    // {
+    //     id: "featured-4",
+    //     title: "MYSTERY QUEST",
+    //     content: "Adventure mystery game",
+    //     imageUrl: ChemshaBongo, // Use existing image or add new one
+    //     category: 'puzzle',
+    //     tags: ['puzzle', 'mystery', 'featured'],
+    //     description: "Solve mysteries and uncover hidden secrets in this adventure game",
+    //     players: 2900,
+    //     difficulty: 'Medium',
+    //     points: 130,
+    //     duration: '9-14 min',
+    //     isFeatured: true
+    // },
 ];
 
 export const useGameStore = create<GameState>((set, get) => ({

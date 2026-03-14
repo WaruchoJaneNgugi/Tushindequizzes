@@ -10,7 +10,7 @@ import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { WaveBackground } from './WaveBackground';
-import "../styles/styles.css"
+import "../App.css"
 function initStage(stageIndex: number, carryOverScore: number = 0): { gameState: GameState, timeRemaining: number } | null {
   const stage = STAGES[stageIndex];
   if (!stage) return null;

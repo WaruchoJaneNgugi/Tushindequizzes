@@ -137,23 +137,47 @@ export const TopBar: FC = () => {
     };
 
     const handleLeaderboardClick = () => {
-        setShowLeaderboardOverlay(true);
-        setShowSidebar(false);
+        if (isLoggedIn) {
+            setShowLeaderboardOverlay(true);
+            setShowSidebar(false);
+        } else {
+            toggleAuthModal('login');
+        }
     };
 
     const handleRewardsClick = () => {
-        setShowRewardsOverlay(true);
-        setShowSidebar(false);
+        if (isLoggedIn) {
+            setShowRewardsOverlay(true);
+            setShowSidebar(false);
+        } else {
+            toggleAuthModal('login');
+        }
     };
 
     const handleHistoryClick = () => {
-        setShowHistoryOverlay(true);
-        setShowSidebar(false);
+        if (isLoggedIn) {
+            setShowHistoryOverlay(true);
+            setShowSidebar(false);
+        } else {
+            toggleAuthModal('login');
+        }
     };
 
     const handleProfileClick = () => {
-        setShowProfileOverlay(true);
-        setShowSidebar(false);
+        if (isLoggedIn) {
+            setShowProfileOverlay(true);
+            setShowSidebar(false);
+        } else {
+            toggleAuthModal('login');
+        }
+    };
+
+    const handleSearchIconClick = () => {
+        if (isLoggedIn) {
+            setShowSearchOverlay(true);
+        } else {
+            toggleAuthModal('login');
+        }
     };
 
     const closeAllOverlays = () => {
@@ -179,6 +203,11 @@ export const TopBar: FC = () => {
     // };
 
     const handleMobileNavClick = (navItem: string) => {
+        if (!isLoggedIn && navItem !== 'games') {
+            toggleAuthModal('login');
+            return;
+        }
+
         setActiveMobileNav(navItem);
 
         switch (navItem) {
@@ -219,10 +248,6 @@ export const TopBar: FC = () => {
         if (searchInputRef.current) {
             searchInputRef.current.focus();
         }
-    };
-
-    const handleSearchIconClick = () => {
-        setShowSearchOverlay(true);
     };
 
     const closeSearchOverlay = () => {
@@ -457,7 +482,7 @@ export const TopBar: FC = () => {
                     <div
                         key={key}
                         className={`mobile-bottom-nav-item ${activeMobileNav === key ? 'active' : ''}`}
-                        onClick={() => isLoggedIn && handleMobileNavClick(key)}
+                        onClick={() => handleMobileNavClick(key)}
                         aria-label={label}
                         aria-current={activeMobileNav === key ? 'page' : undefined}
                     >
@@ -470,7 +495,7 @@ export const TopBar: FC = () => {
             </div>
 
             {/* Search Overlay */}
-            {showSearchOverlay && (
+            {showSearchOverlay && isLoggedIn && (
                 <SearchOverlay
                     searchQuery={localSearchQuery}
                     onSearchChange={handleSearchChange}
@@ -480,28 +505,28 @@ export const TopBar: FC = () => {
             )}
 
             {/* Other Overlays */}
-            {showLeaderboardOverlay && (
+            {showLeaderboardOverlay && isLoggedIn && (
                 <LeaderboardOverlay onClose={() => {
                     setShowLeaderboardOverlay(false);
                     setActiveMobileNav("games");
                 }} />
             )}
 
-            {showRewardsOverlay && (
+            {showRewardsOverlay && isLoggedIn && (
                 <AchievementsOverlay onClose={() => {
                     setShowRewardsOverlay(false);
                     setActiveMobileNav("games");
                 }} />
             )}
 
-            {showHistoryOverlay && (
+            {showHistoryOverlay && isLoggedIn && (
                 <HistoryOverlay onClose={() => {
                     setShowHistoryOverlay(false);
                     setActiveMobileNav("games");
                 }} />
             )}
 
-            {showProfileOverlay && (
+            {showProfileOverlay && isLoggedIn && (
                 <ProfileOverlay
                     onClose={() => {
                         setShowProfileOverlay(false);
@@ -514,7 +539,7 @@ export const TopBar: FC = () => {
                 />
             )}
 
-            {showEditProfile && (
+            {showEditProfile && isLoggedIn && (
                 <EditProfileOverlay
                     onClose={() => {
                         setShowEditProfile(false);
