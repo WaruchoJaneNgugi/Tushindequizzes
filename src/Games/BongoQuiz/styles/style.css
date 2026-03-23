@@ -37,16 +37,16 @@
 
 body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-dark);
+    /*background: var(--bg-dark);*/
     color: var(--text-primary);
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* Prevent body scrolling */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*overflow: hidden; !* Prevent body scrolling *!*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
 }
 
 @keyframes backgroundPulse {

@@ -233,8 +233,8 @@
 
 /* ── Desktop Categories ── */
 .desktop-categories {
-    display: block;
-    margin-bottom: 15px;
+    display: none;
+    /*margin-bottom: 15px;*/
 }
 
 .categories-header {
@@ -397,9 +397,9 @@
 }
 
 /* ── Mobile Categories ── */
-.mobile-categories {
-    display: none;
-}
+/*.mobile-categories {*/
+/*    display: none;*/
+/*}*/
 
 .mobile-categories-header {
     display: flex;
@@ -538,9 +538,9 @@
 
 /* Tablet Landscape */
 @media (max-width: 1024px) {
-    .categories-grid {
-        justify-content: center;
-    }
+    /*.categories-grid {*/
+    /*    justify-content: center;*/
+    /*}*/
 
     .category-card {
         min-width: 100px;
